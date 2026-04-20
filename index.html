@@ -3,98 +3,233 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>MOMIZO</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
+  <title>MOMIZO Relaxation Salon</title>
+
+  <link rel="preload" as="image" href="image_1.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    html, body {
-      margin: 0; padding: 0;
-      background: #000;
-      height: 100%;
+    :root {
+      --bg: #000;
+      --gold: rgba(184, 146, 92, 0.65); 
+      --gold-soft: rgba(184, 146, 92, 0.2);
+      --text: rgba(235, 235, 235, 0.72);
+      --jp: rgba(235, 235, 235, 0.85);
+      --muted: rgba(235, 235, 235, 0.45);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1); 
     }
 
-    /* 🧠 1. 全体を「一本の芯」で通す。absoluteを使わない */
-    .viewport {
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
+      font-size: 16px;
+      color: var(--text);
+      min-height: 100vh;
       min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      /* 背景：面として広がる */
+    }
+
+    /* 🧠 ノイズ：soft-lightで空気の粒子を定着 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      opacity: 0.18;
+      z-index: 10; /* コンテンツの背後、背景の前面 */
+      mix-blend-mode: soft-light;
+    }
+
+    .site-header, .main, .footer {
+      position: relative;
+      z-index: 20;
+    }
+
+    .site-header {
+      position: absolute;
+      top: env(safe-area-inset-top);
+      left: 0;
+      width: 100%;
+      padding: 6vw;
+      opacity: 0.3;
+    }
+
+    .header-logo {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.6em;
+      color: var(--gold);
+      font-weight: 300;
+      margin: 0;
+    }
+
+    .main {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: calc(env(safe-area-inset-top) + 8vh) 6vw calc(env(safe-area-inset-bottom) + 8vh);
       background:
         radial-gradient(circle at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,1)),
+        linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.98)),
         url('image_1.jpg') center / cover no-repeat;
     }
 
-    /* 🧠 2. コンテンツ：中央に浮かせるのではなく、上の余白を自動調整(margin-top: auto)にする */
     .content {
-      width: 85%;
-      max-width: 500px;
+      width: min(90vw, 640px);
       text-align: center;
-      margin-top: auto; /* 上下のオートマージンで中央を維持 */
-      margin-bottom: auto;
-      padding: 10% 0; /* 最低限の隙間を確保 */
+      transition: all 0.8s var(--ease);
     }
 
-    .block { margin-bottom: 12%; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .block {
+      margin-bottom: clamp(3rem, 7vmin, 4.5rem);
+      opacity: 0;
+      animation: fadeUp 1.8s var(--ease) forwards;
+    }
+
+    .block:nth-child(1) { animation-delay: 0.4s; }
+    .block:nth-child(2) { animation-delay: 1.0s; }
 
     .en {
-      font-family: system-ui, sans-serif;
-      font-weight: 300; font-size: 1.4rem;
-      line-height: 1.6; letter-spacing: 0.05em;
-      color: rgba(235, 235, 235, 0.85);
-      margin: 0 0 5%;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.1rem, 4.2vw, 1.8rem);
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+      color: rgba(235, 235, 235, 0.82);
+      margin: 0 0 0.8rem;
     }
 
     .jp {
       font-family: 'Shippori Mincho', serif;
-      font-size: 0.9rem; letter-spacing: 0.2em;
-      line-height: 2; color: rgba(235, 235, 235, 0.7);
+      font-size: clamp(0.88rem, 2.6vw, 1rem);
+      letter-spacing: 0.22em;
+      line-height: 2.2;
+      color: var(--jp);
+      margin: 0;
     }
 
-    .cta-wrap { margin-top: 15%; }
+    .cta-wrap {
+      margin-top: clamp(4rem, 12vh, 6rem);
+      opacity: 0;
+      animation: fadeUp 1.6s var(--ease) forwards;
+      animation-delay: 1.6s;
+    }
 
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 100%; max-width: 280px; padding: 1.1rem 0;
-      border: 1px solid rgba(184, 146, 92, 0.4);
-      color: rgba(184, 146, 92, 0.8);
-      font-family: system-ui, sans-serif;
-      text-decoration: none; letter-spacing: 0.3em; font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: min(85vw, 320px);
+      padding: 1.1rem 0;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: all 0.4s var(--ease);
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .btn-sub { display: block; margin-top: 5%; font-size: 0.65rem; color: rgba(235,235,235,0.3); }
+    .btn:active {
+      transform: scale(0.985);
+      background: rgba(184, 146, 92, 0.08);
+      border-color: var(--gold);
+    }
 
-    /* 🧠 3. コピーライト：芯の「一番下」に置く。これで絶対に重ならない */
+    .btn-sub {
+      display: block;
+      margin-top: 1rem;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      color: rgba(235,235,235,0.35);
+    }
+
+    /* 🧠 横画面（Landscape）専用：空間構造への転換 */
+    @media (orientation: landscape) and (max-height: 600px) {
+      .main {
+        padding: 10vh 8vw;
+      }
+
+      .content {
+        width: min(92vw, 960px);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4vh 6vw;
+        align-items: start;
+        text-align: left;
+        /* 写真との分離を美しくする微細なボケ */
+        backdrop-filter: blur(1.5px);
+        -webkit-backdrop-filter: blur(1.5px);
+      }
+
+      .block {
+        margin-bottom: 0;
+      }
+
+      .cta-wrap {
+        grid-column: span 2;
+        margin-top: 4vh;
+        text-align: center;
+      }
+
+      .en {
+        font-size: clamp(1rem, 3vh, 1.4rem);
+        margin-bottom: 0.5rem;
+      }
+
+      .jp {
+        font-size: clamp(0.8rem, 2.5vh, 0.95rem);
+        letter-spacing: 0.18em;
+      }
+
+      .btn {
+        width: min(60vw, 320px);
+        padding: 0.9rem 0;
+      }
+    }
+
     .footer {
+      position: absolute;
+      bottom: calc(env(safe-area-inset-bottom) + 3vh);
       width: 100%;
-      padding-bottom: 5%; /* 下からの距離 */
       text-align: center;
-      opacity: 0.2;
+      opacity: 0.12;
     }
 
     .copyright {
       font-size: 0.55rem;
-      letter-spacing: 0.15em;
-      color: rgba(235, 235, 235, 0.6);
-      margin: 0;
-    }
-
-    /* 空気感（ノイズ） */
-    body::before {
-      content: ""; position: fixed; inset: 0; pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-      opacity: 0.12; z-index: 5; mix-blend-mode: soft-light;
+      letter-spacing: 0.12em;
     }
   </style>
 </head>
 <body>
 
-  <div class="viewport">
-    <main class="content">
+  <header class="site-header">
+    <h1 class="header-logo">MOMIZO</h1>
+  </header>
+
+  <main class="main">
+    <div class="content">
+
       <section class="block">
         <p class="en">Pause the noise.<br>Return to your breath.</p>
         <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
@@ -106,15 +241,18 @@
       </section>
 
       <nav class="cta-wrap">
-        <a class="btn" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">RESERVE</a>
+        <a class="btn" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">
+          RESERVE
+        </a>
         <span class="btn-sub">予約・静かにお入りください</span>
       </nav>
-    </main>
 
-    <footer class="footer">
-      <p class="copyright">&copy; 2026 MOMIZO</p>
-    </footer>
-  </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="copyright">&copy; 2026 MOMIZO</p>
+  </footer>
 
 </body>
 </html>
