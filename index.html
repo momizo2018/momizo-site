@@ -17,68 +17,41 @@
     :root {
       --bg: #000;
       --gold: rgba(184, 146, 92, 0.65); 
-      --gold-soft: rgba(184, 146, 92, 0.2);
-      --text: rgba(235, 235, 235, 0.72);
+      --text: rgba(235, 235, 235, 0.82);
       --jp: rgba(235, 235, 235, 0.85);
-      --muted: rgba(235, 235, 235, 0.45);
       --ease: cubic-bezier(0.16, 1, 0.3, 1); 
     }
 
     * { box-sizing: border-box; }
 
     html, body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       background: var(--bg);
       -webkit-font-smoothing: antialiased;
-      overscroll-behavior: none;
       font-size: 16px;
       color: var(--text);
-      min-height: 100vh;
       min-height: 100dvh;
     }
 
-    /* 🧠 ノイズ：soft-lightで空気の粒子を定着 */
+    /* 🧠 ノイズ：空気感として薄く重ねるだけ */
     body::before {
       content: "";
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-      opacity: 0.18;
-      z-index: 10; /* コンテンツの背後、背景の前面 */
-      mix-blend-mode: soft-light;
+      opacity: 0.18; z-index: 5; mix-blend-mode: soft-light;
     }
 
-    .site-header, .main, .footer {
-      position: relative;
-      z-index: 20;
-    }
-
-    .site-header {
-      position: absolute;
-      top: env(safe-area-inset-top);
-      left: 0;
-      width: 100%;
-      padding: 6vw;
-      opacity: 0.3;
-    }
-
-    .header-logo {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.6em;
-      color: var(--gold);
-      font-weight: 300;
-      margin: 0;
-    }
-
+    /* 🧠 レイアウト：縦も横も「1本の中心軸」だけ */
     .main {
-      min-height: 100vh;
       min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: calc(env(safe-area-inset-top) + 8vh) 6vw calc(env(safe-area-inset-bottom) + 8vh);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8vh 6vw;
+      /* 背景：はみ出す方向へいっぱいに伸ばす（Cover） */
       background:
         radial-gradient(circle at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%),
         linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.98)),
@@ -86,49 +59,47 @@
     }
 
     .content {
-      width: min(90vw, 640px);
-      text-align: center;
-      transition: all 0.8s var(--ease);
+      width: 100%;
+      max-width: 640px;
+      z-index: 10;
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .block {
-      margin-bottom: clamp(3rem, 7vmin, 4.5rem);
+      margin-bottom: clamp(2.5rem, 8vh, 4rem);
       opacity: 0;
       animation: fadeUp 1.8s var(--ease) forwards;
     }
+    .block:nth-child(1) { animation-delay: 0.3s; }
+    .block:nth-child(2) { animation-delay: 0.8s; }
 
-    .block:nth-child(1) { animation-delay: 0.4s; }
-    .block:nth-child(2) { animation-delay: 1.0s; }
-
+    /* 🧠 フォント：はみ出さないよう clamp で可変。それ以外は何もいじらない */
     .en {
       font-family: system-ui, -apple-system, sans-serif;
       font-weight: 300;
-      font-size: clamp(1.1rem, 4.2vw, 1.8rem);
-      line-height: 1.7;
+      font-size: clamp(1.1rem, 5vw, 1.8rem);
+      line-height: 1.6;
       letter-spacing: 0.02em;
-      color: rgba(235, 235, 235, 0.82);
       margin: 0 0 0.8rem;
     }
 
     .jp {
       font-family: 'Shippori Mincho', serif;
-      font-size: clamp(0.88rem, 2.6vw, 1rem);
-      letter-spacing: 0.22em;
+      font-size: clamp(0.85rem, 3vw, 1rem);
+      letter-spacing: 0.2em;
       line-height: 2.2;
       color: var(--jp);
-      margin: 0;
     }
 
     .cta-wrap {
-      margin-top: clamp(4rem, 12vh, 6rem);
+      margin-top: clamp(3rem, 10vh, 5rem);
       opacity: 0;
       animation: fadeUp 1.6s var(--ease) forwards;
-      animation-delay: 1.6s;
+      animation-delay: 1.4s;
     }
 
     .btn {
@@ -137,99 +108,39 @@
       justify-content: center;
       width: min(85vw, 320px);
       padding: 1.1rem 0;
-      border: 1px solid var(--gold-soft);
+      border: 1px solid rgba(184, 146, 92, 0.3);
       color: var(--gold);
       font-family: system-ui, -apple-system, sans-serif;
-      font-weight: 300;
       letter-spacing: 0.3em;
       font-size: 0.88rem;
       text-decoration: none;
-      transition: all 0.4s var(--ease);
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .btn:active {
-      transform: scale(0.985);
-      background: rgba(184, 146, 92, 0.08);
-      border-color: var(--gold);
+      transition: all 0.4s;
     }
 
     .btn-sub {
       display: block;
       margin-top: 1rem;
-      font-family: 'Shippori Mincho', serif;
       font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      color: rgba(235,235,235,0.35);
+      color: rgba(235,235,235,0.3);
     }
 
-    /* 🧠 横画面（Landscape）専用：空間構造への転換 */
-    @media (orientation: landscape) and (max-height: 600px) {
-      .main {
-        padding: 10vh 8vw;
-      }
-
-      .content {
-        width: min(92vw, 960px);
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4vh 6vw;
-        align-items: start;
-        text-align: left;
-        /* 写真との分離を美しくする微細なボケ */
-        backdrop-filter: blur(1.5px);
-        -webkit-backdrop-filter: blur(1.5px);
-      }
-
-      .block {
-        margin-bottom: 0;
-      }
-
-      .cta-wrap {
-        grid-column: span 2;
-        margin-top: 4vh;
-        text-align: center;
-      }
-
-      .en {
-        font-size: clamp(1rem, 3vh, 1.4rem);
-        margin-bottom: 0.5rem;
-      }
-
-      .jp {
-        font-size: clamp(0.8rem, 2.5vh, 0.95rem);
-        letter-spacing: 0.18em;
-      }
-
-      .btn {
-        width: min(60vw, 320px);
-        padding: 0.9rem 0;
-      }
+    /* 🧠 横画面：構造は変えず、ただ「収まり」を整えるだけ */
+    @media (orientation: landscape) and (max-height: 500px) {
+      .main { padding: 4vh 4vw; }
+      .block { margin-bottom: 4vh; }
+      .cta-wrap { margin-top: 5vh; }
     }
 
     .footer {
-      position: absolute;
-      bottom: calc(env(safe-area-inset-bottom) + 3vh);
-      width: 100%;
-      text-align: center;
-      opacity: 0.12;
-    }
-
-    .copyright {
-      font-size: 0.55rem;
-      letter-spacing: 0.12em;
+      position: absolute; bottom: 3vh; width: 100%;
+      text-align: center; opacity: 0.15; font-size: 0.55rem;
     }
   </style>
 </head>
 <body>
 
-  <header class="site-header">
-    <h1 class="header-logo">MOMIZO</h1>
-  </header>
-
   <main class="main">
     <div class="content">
-
       <section class="block">
         <p class="en">Pause the noise.<br>Return to your breath.</p>
         <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
@@ -241,18 +152,13 @@
       </section>
 
       <nav class="cta-wrap">
-        <a class="btn" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">
-          RESERVE
-        </a>
+        <a class="btn" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">RESERVE</a>
         <span class="btn-sub">予約・静かにお入りください</span>
       </nav>
-
     </div>
   </main>
 
-  <footer class="footer">
-    <p class="copyright">&copy; 2026 MOMIZO</p>
-  </footer>
+  <footer class="footer">&copy; 2026 MOMIZO</footer>
 
 </body>
 </html>
