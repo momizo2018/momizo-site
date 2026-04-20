@@ -38,7 +38,7 @@
       min-height: 100dvh;
     }
 
-    /* 🧠 ① ノイズ：soft-lightで空気の粒子として定着 */
+    /* 🧠 ノイズ：soft-lightで空気の粒子を定着 */
     body::before {
       content: "";
       position: fixed;
@@ -46,13 +46,13 @@
       pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
       opacity: 0.18;
-      z-index: 0;
+      z-index: 10; /* コンテンツの背後、背景の前面 */
       mix-blend-mode: soft-light;
     }
 
     .site-header, .main, .footer {
       position: relative;
-      z-index: 2;
+      z-index: 20;
     }
 
     .site-header {
@@ -88,6 +88,7 @@
     .content {
       width: min(90vw, 640px);
       text-align: center;
+      transition: all 0.8s var(--ease);
     }
 
     @keyframes fadeUp {
@@ -110,7 +111,6 @@
       font-size: clamp(1.1rem, 4.2vw, 1.8rem);
       line-height: 1.7;
       letter-spacing: 0.02em;
-      /* 🧠 ② 英文：導線としての強度を微増 */
       color: rgba(235, 235, 235, 0.82);
       margin: 0 0 0.8rem;
     }
@@ -131,7 +131,6 @@
       animation-delay: 1.6s;
     }
 
-    /* 🧠 ③ CTA：幅を広げ、安定した重心へ */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -162,6 +161,50 @@
       font-size: 0.65rem;
       letter-spacing: 0.18em;
       color: rgba(235,235,235,0.35);
+    }
+
+    /* 🧠 横画面（Landscape）専用：空間構造への転換 */
+    @media (orientation: landscape) and (max-height: 600px) {
+      .main {
+        padding: 10vh 8vw;
+      }
+
+      .content {
+        width: min(92vw, 960px);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4vh 6vw;
+        align-items: start;
+        text-align: left;
+        /* 写真との分離を美しくする微細なボケ */
+        backdrop-filter: blur(1.5px);
+        -webkit-backdrop-filter: blur(1.5px);
+      }
+
+      .block {
+        margin-bottom: 0;
+      }
+
+      .cta-wrap {
+        grid-column: span 2;
+        margin-top: 4vh;
+        text-align: center;
+      }
+
+      .en {
+        font-size: clamp(1rem, 3vh, 1.4rem);
+        margin-bottom: 0.5rem;
+      }
+
+      .jp {
+        font-size: clamp(0.8rem, 2.5vh, 0.95rem);
+        letter-spacing: 0.18em;
+      }
+
+      .btn {
+        width: min(60vw, 320px);
+        padding: 0.9rem 0;
+      }
     }
 
     .footer {
