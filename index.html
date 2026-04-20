@@ -1,172 +1,223 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>momizo relaxation salon</title>
-    
-    <link rel="preload" as="image" href="image_1.jpg" fetchpriority="high">
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Shippori+Mincho:wght@400;500&display=swap" 
-          rel="stylesheet" 
-          media="print" 
-          onload="this.media='all'">
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
-    </noscript>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-    <style>
-        a, button {
-            -webkit-tap-highlight-color: transparent;
-            cursor: pointer;
-            touch-action: manipulation;
-        }
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            background-color: #000;
-            -webkit-font-smoothing: antialiased;
-            -webkit-text-size-adjust: 100%;
-        }
+  <title>momizo relaxation salon</title>
 
-        .main-container {
-            position: relative;
-            width: 100%;
-            /* SafariのUIバー格納を誘発する動的スクロール余白設計 */
-            min-height: calc(100dvh + max(60px, 8vh));
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; 
-            padding: calc(env(safe-area-inset-top) + 10vh) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-            background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.8) 100%), 
-                        url('image_1.jpg') center center / cover no-repeat;
-            box-sizing: border-box;
-        }
+  <link rel="preload" as="image" href="image_1.jpg" />
 
-        .content {
-            text-align: center;
-            width: min(90vw, 750px);
-            z-index: 2;
-            margin-top: auto;
-            margin-bottom: auto;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
+  </noscript>
 
-        .catch-copy { margin-bottom: 10vmin; }
+  <style>
+    :root {
+      --bg: #000;
+      --gold: rgba(184,146,92,0.62);
+      --gold-soft: rgba(184,146,92,0.22);
+      --text: rgba(235,235,235,0.7);
+      --jp: rgba(235,235,235,0.78);
+      --muted: rgba(235,235,235,0.42);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
-        .catch-group {
-            margin-bottom: 5vmin;
-            opacity: 0;
-            animation: fadeInUp 1.8s ease-out forwards;
-            will-change: transform, opacity;
-        }
-        .group-1 { animation-delay: 0.7s; }
-        .group-2 { animation-delay: 1.2s; }
+    * { box-sizing: border-box; }
 
-        .en, .jp { -webkit-font-smoothing: antialiased; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      font-size: 16px;
+      color: var(--text);
+    }
 
-        .en {
-            font-family: 'Playfair Display', 'Times New Roman', serif;
-            color: rgba(235, 230, 225, 0.85); 
-            font-size: clamp(24px, 6.2vmin, 64px);
-            font-style: italic;
-            letter-spacing: 0.05em; 
-            line-height: 1.4; 
-            margin-bottom: 2vmin;
-            text-wrap: balance;
-        }
+    a {
+      -webkit-tap-highlight-color: transparent;
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .jp {
-            font-family: 'Shippori Mincho', 'Hiragino Mincho ProN', 'MS PMincho', serif;
-            color: rgba(255, 255, 255, 0.95); 
-            font-size: clamp(14px, 2.8vmin, 20px);
-            letter-spacing: 0.25em;
-        }
+    .site-header {
+      position: absolute;
+      top: env(safe-area-inset-top);
+      left: 0;
+      width: 100%;
+      padding: 6vw;
+      opacity: 0.18;
+    }
 
-        .booking-button {
-            display: inline-block;
-            width: min(80vw, 360px);
-            padding: 3.5vmin 0;
-            background-color: transparent; 
-            border: 1px solid #c9a063;
-            color: #c9a063 !important;
-            text-decoration: none;
-            font-family: 'Playfair Display', serif; 
-            font-size: clamp(16px, 3.8vmin, 22px);
-            letter-spacing: 0.25em; 
-            opacity: 0;
-            animation: fadeInUp 1.5s ease-out forwards; 
-            animation-delay: 2.0s;
-            transition: all 0.3s ease;
-            will-change: transform;
-        }
+    .header-logo {
+      font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      font-weight: 300;
+    }
 
-        .booking-button:focus-visible {
-            outline: 2px solid #c9a063;
-            outline-offset: 4px;
-        }
+    .main {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: calc(env(safe-area-inset-top) + 12vh) 6vw env(safe-area-inset-bottom);
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.62), rgba(0,0,0,0.94)),
+        url('image_1.jpg') center / cover no-repeat;
+    }
 
-        @media (hover: hover) {
-            .booking-button:hover {
-                background-color: rgba(201, 160, 99, 0.15);
-                transform: translateY(-2px);
-            }
-        }
-        .booking-button:active { transform: scale(0.97); }
+    .content {
+      width: min(92vw, 680px);
+      text-align: center;
+    }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, .catch-group, .booking-button {
-                animation: none !important;
-                transition: none !important;
-                opacity: 1 !important;
-                transform: none !important;
-            }
-        }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .note { 
-            display: block; 
-            font-family: 'Shippori Mincho', serif; 
-            font-size: clamp(12px, 2.2vmin, 14px);
-            margin-top: 1.2vmin; 
-            letter-spacing: 0.15em;
-            color: #c9a063;
-        }
-    </style>
+    .block {
+      margin-bottom: 8vmin;
+      opacity: 0;
+      animation: fadeUp 1.4s var(--ease) forwards;
+    }
+
+    .block:nth-child(1) { animation-delay: 0.25s; }
+    .block:nth-child(2) { animation-delay: 0.55s; }
+
+    .en {
+      font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.05rem, 4vw, 2.2rem);
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      color: var(--muted);
+      margin: 0 0 0.7rem;
+    }
+
+    .jp {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      letter-spacing: 0.18em;
+      line-height: 2;
+      color: var(--jp);
+      margin: 0;
+    }
+
+    .cta-wrap {
+      margin-top: 3.2rem;
+      opacity: 0;
+      animation: fadeUp 1.3s var(--ease) forwards;
+      animation-delay: 0.9s;
+    }
+
+    .btn {
+      display: inline-block;
+      width: min(88vw, 340px);
+      padding: 1.05rem 0;
+      border: 1px solid var(--gold-soft);
+      color: var(--gold);
+      font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.32em;
+      font-size: 0.95rem;
+      position: relative;
+      transition: 0.35s var(--ease);
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(184,146,92,0.18);
+      opacity: 0;
+      transition: 0.35s;
+    }
+
+    .btn:hover::before {
+      inset: -6px;
+      opacity: 1;
+    }
+
+    .btn:hover {
+      background: rgba(184,146,92,0.03);
+    }
+
+    .btn:active { transform: scale(0.985); }
+
+    .btn-sub {
+      display: block;
+      margin-top: 0.6rem;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      color: rgba(235,235,235,0.45);
+    }
+
+    .footer {
+      margin-top: 11vh;
+      opacity: 0.18;
+    }
+
+    .footer a {
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: rgba(235,235,235,0.7);
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .copyright {
+      font-size: 0.55rem;
+      letter-spacing: 0.04em;
+      color: rgba(235,235,235,0.45);
+    }
+  </style>
 </head>
+
 <body>
-    <main class="main-container">
-        <article class="content">
-            <div class="catch-copy">
-                <section class="catch-group group-1" aria-labelledby="catch1-en">
-                    <h1 class="en" id="catch1-en" lang="en">Pause the noise.<br>Feel the rhythm of your breath.</h1>
-                    <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
-                </section>
-                <section class="catch-group group-2" aria-labelledby="catch2-en">
-                    <p class="en" id="catch2-en" lang="en">Reclaiming the space<br>for your mind and body.</p>
-                    <p class="jp">心と体に、余白を取り戻す。</p>
-                </section>
-            </div>
-            <a 
-                href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services" 
-                class="booking-button"
-                aria-label="スタッフを選んで予約する"
-            >
-                CHOOSE STAFF
-                <span class="note" aria-hidden="true">スタッフを選んで予約する</span>
-            </a>
-        </article>
-    </main>
+
+  <header class="site-header">
+    <a href="https://page.line.me/cvj7583f">
+      <span class="header-logo">MOMIZO</span>
+    </a>
+  </header>
+
+  <main class="main">
+    <div class="content">
+
+      <section class="block">
+        <p class="en">Pause the noise.<br>Return to your breath.</p>
+        <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
+      </section>
+
+      <section class="block">
+        <p class="en">Reclaim the space for your body.</p>
+        <p class="jp">心と体に、余白を取り戻す。</p>
+      </section>
+
+      <div class="cta-wrap">
+        <a class="btn" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">
+          RESERVE YOUR MOMENT
+        </a>
+        <span class="btn-sub">予約・静かにお入りください</span>
+      </div>
+
+      <footer class="footer">
+        <a href="https://page.line.me/cvj7583f">OFFICIAL LINE</a>
+        <p class="copyright">&copy; 2026 MOMIZO</p>
+      </footer>
+
+    </div>
+  </main>
+
 </body>
 </html>
