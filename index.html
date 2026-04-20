@@ -12,7 +12,7 @@
     <style>
         :root {
             --gold: #b39b7d;
-            --gold-glow: rgba(179, 155, 125, 0.2);
+            --gold-glow: rgba(179, 155, 125, 0.3);
             --text-en: rgba(255, 255, 255, 0.5);
             --text-jp: rgba(255, 255, 255, 0.8);
             --text-info: rgba(255, 255, 255, 0.65);
@@ -21,7 +21,7 @@
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { background-color: var(--bg-base); scroll-behavior: smooth; }
 
         body {
@@ -80,35 +80,33 @@
 
         .cta-area { opacity: 0; animation: fadeIn 2.5s var(--ease-out) forwards 1.5s; margin-bottom: 6dvh; }
 
-        /* RESERVEボタン：ホバーとタップ両方に対応 */
+        /* RESERVEボタン：スマホのontouchstart対応 */
         .btn-reserve {
             position: relative; display: inline-block;
             padding: 1.3rem 4rem; 
             border: 0.5px solid rgba(179, 155, 125, 0.35);
             color: var(--gold); text-decoration: none; font-size: 0.75rem;
-            letter-spacing: 0.45em; background-color: transparent;
+            letter-spacing: 0.45em; background-color: rgba(179, 155, 125, 0);
             backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            -webkit-tap-highlight-color: transparent;
             transition: all 0.6s var(--ease-out);
+            cursor: pointer;
         }
 
-        /* PCでのホバー反応 */
         @media (hover: hover) {
             .btn-reserve:hover {
                 background-color: rgba(179, 155, 125, 0.1);
                 border-color: rgba(179, 155, 125, 0.7);
                 box-shadow: 0 0 15px rgba(179, 155, 125, 0.15);
-                transition: all 0.3s var(--ease-out);
             }
         }
 
-        /* クリック・タップした瞬間の強い反応 */
+        /* スマホ・PC共通：押した瞬間の挙動（最優先） */
         .btn-reserve:active { 
-            transform: scale(0.97); 
-            background-color: var(--gold-glow) !important; 
+            transform: scale(0.97) !important; 
+            background-color: rgba(179, 155, 125, 0.25) !important; 
             border-color: rgba(179, 155, 125, 1) !important;
-            box-shadow: 0 0 25px rgba(179, 155, 125, 0.35) !important;
-            transition: all 0.05s ease-out !important;
+            box-shadow: 0 0 25px rgba(179, 155, 125, 0.4) !important;
+            transition: all 0.01s linear !important; /* ほぼ同時 */
         }
 
         .sub-label {
@@ -122,12 +120,10 @@
             justify-content: center; align-items: center; gap: 1.2rem;
         }
 
-        /* LINE：ホバーとタップに対応 */
         .line-link {
             font-family: 'Playfair Display', serif; font-size: 11px;
             letter-spacing: 0.4em; color: var(--text-muted);
             text-decoration: none; text-transform: uppercase;
-            -webkit-tap-highlight-color: transparent;
             transition: all 0.6s var(--ease-out);
         }
 
@@ -135,15 +131,14 @@
             .line-link:hover {
                 color: var(--gold);
                 text-shadow: 0 0 8px rgba(179, 155, 125, 0.5);
-                transition: all 0.3s var(--ease-out);
             }
         }
         
         .line-link:active { 
             color: var(--gold) !important; 
             text-shadow: 0 0 15px rgba(179, 155, 125, 0.8) !important;
-            transform: scale(0.98);
-            transition: all 0.05s ease-out !important;
+            transform: scale(0.98) !important;
+            transition: all 0.01s linear !important;
         }
 
         .copyright {
@@ -165,7 +160,7 @@
         }
     </style>
 </head>
-<body>
+<body ontouchstart="">
 
     <div class="main-container">
         <header class="site-header">
