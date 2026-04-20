@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>momizo relaxation salon</title>
+    
+    <link rel="preload" as="image" href="image_1.jpg" fetchpriority="high">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Shippori+Mincho:wght@400;500&display=swap" 
+          rel="stylesheet" 
+          media="print" 
+          onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+    </noscript>
+
+    <style>
+        a, button {
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-color: #000;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .main-container {
+            position: relative;
+            width: 100%;
+            /* SafariのUIバー格納を誘発する動的スクロール余白設計 */
+            min-height: calc(100dvh + max(60px, 8vh));
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            padding: calc(env(safe-area-inset-top) + 10vh) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.8) 100%), 
+                        url('image_1.jpg') center center / cover no-repeat;
+            box-sizing: border-box;
+        }
+
+        .content {
+            text-align: center;
+            width: min(90vw, 750px);
+            z-index: 2;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .catch-copy { margin-bottom: 10vmin; }
+
+        .catch-group {
+            margin-bottom: 5vmin;
+            opacity: 0;
+            animation: fadeInUp 1.8s ease-out forwards;
+            will-change: transform, opacity;
+        }
+        .group-1 { animation-delay: 0.7s; }
+        .group-2 { animation-delay: 1.2s; }
+
+        .en, .jp { -webkit-font-smoothing: antialiased; }
+
+        .en {
+            font-family: 'Playfair Display', 'Times New Roman', serif;
+            color: rgba(235, 230, 225, 0.85); 
+            font-size: clamp(24px, 6.2vmin, 64px);
+            font-style: italic;
+            letter-spacing: 0.05em; 
+            line-height: 1.4; 
+            margin-bottom: 2vmin;
+            text-wrap: balance;
+        }
+
+        .jp {
+            font-family: 'Shippori Mincho', 'Hiragino Mincho ProN', 'MS PMincho', serif;
+            color: rgba(255, 255, 255, 0.95); 
+            font-size: clamp(14px, 2.8vmin, 20px);
+            letter-spacing: 0.25em;
+        }
+
+        .booking-button {
+            display: inline-block;
+            width: min(80vw, 360px);
+            padding: 3.5vmin 0;
+            background-color: transparent; 
+            border: 1px solid #c9a063;
+            color: #c9a063 !important;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(16px, 3.8vmin, 22px);
+            letter-spacing: 0.25em; 
+            opacity: 0;
+            animation: fadeInUp 1.5s ease-out forwards; 
+            animation-delay: 2.0s;
+            transition: all 0.3s ease;
+            will-change: transform;
+        }
+
+        .booking-button:focus-visible {
+            outline: 2px solid #c9a063;
+            outline-offset: 4px;
+        }
+
+        @media (hover: hover) {
+            .booking-button:hover {
+                background-color: rgba(201, 160, 99, 0.15);
+                transform: translateY(-2px);
+            }
+        }
+        .booking-button:active { transform: scale(0.97); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, .catch-group, .booking-button {
+                animation: none !important;
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        .note { 
+            display: block; 
+            font-family: 'Shippori Mincho', serif; 
+            font-size: clamp(12px, 2.2vmin, 14px);
+            margin-top: 1.2vmin; 
+            letter-spacing: 0.15em;
+            color: #c9a063;
+        }
+    </style>
+</head>
+<body>
+    <main class="main-container">
+        <article class="content">
+            <div class="catch-copy">
+                <section class="catch-group group-1" aria-labelledby="catch1-en">
+                    <h1 class="en" id="catch1-en" lang="en">Pause the noise.<br>Feel the rhythm of your breath.</h1>
+                    <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
+                </section>
+                <section class="catch-group group-2" aria-labelledby="catch2-en">
+                    <p class="en" id="catch2-en" lang="en">Reclaiming the space<br>for your mind and body.</p>
+                    <p class="jp">心と体に、余白を取り戻す。</p>
+                </section>
+            </div>
+            <a 
+                href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services" 
+                class="booking-button"
+                aria-label="スタッフを選んで予約する"
+            >
+                CHOOSE STAFF
+                <span class="note" aria-hidden="true">スタッフを選んで予約する</span>
+            </a>
+        </article>
+    </main>
+</body>
+</html>
