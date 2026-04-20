@@ -3,46 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>MOMIZO</title>
 
-  <title>MOMIZO Relaxation Salon</title>
-
-  <link rel="preload" as="image" href="image_1.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg: #000;
-      --gold: rgba(184, 146, 92, 0.65); 
-      --text: rgba(235, 235, 235, 0.82);
-      --jp: rgba(235, 235, 235, 0.85);
-      --ease: cubic-bezier(0.16, 1, 0.3, 1); 
-    }
-
-    * { box-sizing: border-box; }
-
+    /* --- 1. 土台：100%で画面を満たす --- */
     html, body {
       margin: 0; padding: 0;
-      background: var(--bg);
-      -webkit-font-smoothing: antialiased;
-      font-size: 16px;
-      color: var(--text);
-      min-height: 100dvh;
+      background: #000;
+      height: 100%; width: 100%;
     }
 
-    /* 🧠 ノイズ：空気感として薄く重ねるだけ */
-    body::before {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-      opacity: 0.18; z-index: 5; mix-blend-mode: soft-light;
-    }
-
-    /* 🧠 レイアウト：縦も横も「1本の中心軸」だけ */
     .main {
       min-height: 100dvh;
       display: flex;
@@ -50,89 +24,72 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 8vh 6vw;
-      /* 背景：はみ出す方向へいっぱいに伸ばす（Cover） */
+      /* 背景：常に面を100%カバー。比率が変われば自動で追従。 */
       background:
         radial-gradient(circle at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.98)),
+        linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,1)),
         url('image_1.jpg') center / cover no-repeat;
+      padding: 5%; /* 余白を画面サイズに対する比率に */
     }
 
+    /* --- 2. 構造：幅を％で定義し、最大値（max-width）だけで抑制 --- */
     .content {
-      width: 100%;
-      max-width: 640px;
+      width: 85%;
+      max-width: 500px; /* 広がりすぎを防ぐ唯一の蓋 */
       z-index: 10;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .block {
-      margin-bottom: clamp(2.5rem, 8vh, 4rem);
-      opacity: 0;
-      animation: fadeUp 1.8s var(--ease) forwards;
+      margin-bottom: 10%; /* 縦方向の呼吸も比率で */
     }
-    .block:nth-child(1) { animation-delay: 0.3s; }
-    .block:nth-child(2) { animation-delay: 0.8s; }
 
-    /* 🧠 フォント：はみ出さないよう clamp で可変。それ以外は何もいじらない */
+    /* --- 3. タイポグラフィ：ここもpxを捨てて相対値に --- */
     .en {
       font-family: system-ui, -apple-system, sans-serif;
       font-weight: 300;
-      font-size: clamp(1.1rem, 5vw, 1.8rem);
+      font-size: 1.4rem; /* 基本サイズを基準に */
       line-height: 1.6;
-      letter-spacing: 0.02em;
-      margin: 0 0 0.8rem;
+      letter-spacing: 0.05em;
+      color: rgba(235, 235, 235, 0.85);
+      margin-bottom: 3%;
     }
 
     .jp {
       font-family: 'Shippori Mincho', serif;
-      font-size: clamp(0.85rem, 3vw, 1rem);
+      font-size: 0.9rem;
       letter-spacing: 0.2em;
-      line-height: 2.2;
-      color: var(--jp);
+      line-height: 2;
+      color: rgba(235, 235, 235, 0.7);
     }
 
     .cta-wrap {
-      margin-top: clamp(3rem, 10vh, 5rem);
-      opacity: 0;
-      animation: fadeUp 1.6s var(--ease) forwards;
-      animation-delay: 1.4s;
+      margin-top: 12%;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: min(85vw, 320px);
+      width: 100%; /* 親（content）の幅に従う */
+      max-width: 280px; /* ボタンとして適切なサイズで止める */
       padding: 1.1rem 0;
-      border: 1px solid rgba(184, 146, 92, 0.3);
-      color: var(--gold);
-      font-family: system-ui, -apple-system, sans-serif;
-      letter-spacing: 0.3em;
-      font-size: 0.88rem;
+      border: 1px solid rgba(184, 146, 92, 0.4);
+      color: rgba(184, 146, 92, 0.8);
+      font-family: system-ui, sans-serif;
       text-decoration: none;
-      transition: all 0.4s;
+      letter-spacing: 0.3em;
+      font-size: 0.85rem;
     }
 
     .btn-sub {
       display: block;
-      margin-top: 1rem;
+      margin-top: 4%;
       font-size: 0.65rem;
       color: rgba(235,235,235,0.3);
     }
 
-    /* 🧠 横画面：構造は変えず、ただ「収まり」を整えるだけ */
-    @media (orientation: landscape) and (max-height: 500px) {
-      .main { padding: 4vh 4vw; }
-      .block { margin-bottom: 4vh; }
-      .cta-wrap { margin-top: 5vh; }
-    }
-
     .footer {
-      position: absolute; bottom: 3vh; width: 100%;
+      position: absolute; bottom: 3%; width: 100%;
       text-align: center; opacity: 0.15; font-size: 0.55rem;
     }
   </style>
