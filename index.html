@@ -14,28 +14,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg: #000;
-      --gold: rgba(184, 146, 92, 0.65);
-      --gold-soft: rgba(184, 146, 92, 0.2);
-      --text: rgba(235, 235, 235, 0.72);
-      --jp: rgba(235, 235, 235, 0.85);
-      --ease: cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
     * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
       padding: 0;
-      background: var(--bg);
+      background: #000;
       -webkit-font-smoothing: antialiased;
       min-height: 100%;
-      color: var(--text);
       overscroll-behavior: none;
+      color: rgba(235,235,235,0.72);
     }
 
-    /* background */
     body::before {
       content: "";
       position: fixed;
@@ -47,19 +37,17 @@
       z-index: 0;
     }
 
-    /* noise */
     body::after {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-      opacity: 0.15;
+      opacity: 0.12;
       mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
       z-index: 1;
     }
 
-    /* logo */
     .site-header {
       position: fixed;
       top: calc(env(safe-area-inset-top) + 18px);
@@ -75,15 +63,12 @@
       color: rgba(184,146,92,0.45);
     }
 
-    /* main */
     .main {
       position: relative;
       z-index: 2;
       min-height: 100dvh;
-
       display: grid;
       place-items: center;
-
       padding:
         calc(env(safe-area-inset-top) + 10vh)
         6vw
@@ -102,7 +87,7 @@
 
     .block {
       opacity: 0;
-      animation: fadeUp 1.6s var(--ease) forwards;
+      animation: fadeUp 1.6s ease forwards;
       margin-bottom: clamp(3rem, 7vh, 4.5rem);
     }
 
@@ -124,14 +109,13 @@
       letter-spacing: 0.22em;
       line-height: 2.2;
       margin: 0;
-      color: var(--jp);
+      color: rgba(235,235,235,0.85);
     }
 
-    /* CTA */
     .cta {
       margin-top: clamp(4rem, 12vh, 6rem);
       opacity: 0;
-      animation: fadeUp 1.4s var(--ease) forwards;
+      animation: fadeUp 1.4s ease forwards;
       animation-delay: 1.4s;
     }
 
@@ -139,18 +123,15 @@
       display: inline-block;
       width: min(85vw, 320px);
       padding: 1.1rem 0;
-
       text-align: center;
       text-decoration: none;
-
       font-family: system-ui, -apple-system, sans-serif;
       font-weight: 300;
       letter-spacing: 0.3em;
       font-size: 0.9rem;
-
       color: rgba(184,146,92,0.85);
-      border-top: 1px solid var(--gold-soft);
-      border-bottom: 1px solid var(--gold-soft);
+      border-top: 1px solid rgba(184,146,92,0.2);
+      border-bottom: 1px solid rgba(184,146,92,0.2);
     }
 
     .btn-sub {
@@ -162,23 +143,21 @@
       color: rgba(235,235,235,0.4);
     }
 
-    .btn:active {
-      transform: scale(0.985);
-      background: rgba(184,146,92,0.06);
-    }
-
-    /* footer（安定フロー） */
     .footer {
       position: relative;
       margin-top: 12vh;
       text-align: center;
-      z-index: 2;
     }
 
     .copyright {
       font-size: 0.6rem;
       letter-spacing: 0.15em;
       color: rgba(255,255,255,0.25);
+    }
+
+    /* ★これが本体：確実にスクロール発生させる1px */
+    .scroll-trigger {
+      height: 1px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -220,6 +199,9 @@
     <footer class="footer">
       <div class="copyright">© 2026 MOMIZO</div>
     </footer>
+
+    <!-- ★ここが重要 -->
+    <div class="scroll-trigger"></div>
 
   </div>
 </main>
