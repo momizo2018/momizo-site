@@ -12,203 +12,155 @@
     <style>
         :root {
             --gold: #b39b7d;
-            --gold-bright: #d4c4ad;
-            --text-en: rgba(255, 255, 255, 0.45);
-            --text-jp: rgba(255, 255, 255, 0.75);
-            --text-muted: rgba(255, 255, 255, 0.2);
+            --gold-glow: rgba(179, 155, 125, 0.2);
+            --text-en: rgba(255, 255, 255, 0.5);
+            --text-jp: rgba(255, 255, 255, 0.8);
+            --text-info: rgba(255, 255, 255, 0.65);
+            --text-muted: rgba(255, 255, 255, 0.45);
             --bg-base: #050505;
-            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { box-sizing: border-box; }
-
-        html {
-            background-color: var(--bg-base);
-            scroll-behavior: smooth;
-        }
+        html { background-color: var(--bg-base); scroll-behavior: smooth; }
 
         body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 112dvh; /* わずかに多めに遊びを確保 */
+            margin: 0; padding: 0; width: 100%; min-height: 112dvh;
             font-family: 'Shippori Mincho', serif;
             -webkit-font-smoothing: antialiased;
-            color: var(--text-jp);
-            overflow-x: hidden;
+            color: var(--text-jp); overflow-x: hidden;
         }
 
         body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: 5;
-            pointer-events: none;
+            content: ""; position: fixed; inset: 0; z-index: 5; pointer-events: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='.02'/%3E%3C/svg%3E");
             mix-blend-mode: overlay;
         }
 
         .main-container {
-            position: relative;
-            width: 100%;
-            min-height: 112dvh;
+            position: relative; width: 100%; min-height: 112dvh;
             background: 
-                radial-gradient(circle at 50% 45%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%),
-                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.9)),
+                radial-gradient(circle at 50% 45%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%),
+                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.92)),
                 url('image_1.jpg') center / cover no-repeat;
             background-attachment: fixed;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             padding: env(safe-area-inset-top) 8vw env(safe-area-inset-bottom);
         }
 
-        .site-header {
-            height: 15dvh;
-            display: flex;
-            align-items: flex-start;
-            padding-top: 5dvh;
-        }
+        .site-header { height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh; }
 
         .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 13px;
-            font-weight: 400;
-            letter-spacing: 0.85em;
-            color: var(--gold);
-            text-transform: uppercase;
-            margin: 0;
-            opacity: 0.6;
-            line-height: 1;
+            font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.85em;
+            color: var(--gold); text-transform: uppercase; margin: 0; opacity: 0.65; line-height: 1;
         }
 
         .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 10;
-            padding: 4vh 0;
+            flex: 1; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            z-index: 10; padding: 4vh 0;
         }
 
         .text-block {
-            margin-bottom: 12dvh;
-            opacity: 0;
-            animation: revealUp 3.5s var(--ease) forwards;
+            margin-bottom: 12dvh; opacity: 0;
+            animation: revealUp 2.2s var(--ease-out) forwards;
         }
-        .text-block:nth-child(2) { animation-delay: 1.2s; }
+        .text-block:nth-child(2) { animation-delay: 0.6s; }
 
         .en {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: clamp(1.15rem, 4.5vw, 1.4rem);
-            letter-spacing: 0.04em;
-            line-height: 1.8;
-            color: var(--text-en);
-            margin-bottom: 1.4rem;
-            display: block;
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: clamp(1.15rem, 4.5vw, 1.4rem); letter-spacing: 0.04em;
+            line-height: 1.8; color: var(--text-en); margin-bottom: 1.4rem; display: block;
         }
 
         .jp {
-            font-size: clamp(0.76rem, 3vw, 0.85rem);
-            letter-spacing: 0.4em;
-            line-height: 2.2;
-            color: var(--text-jp);
+            font-size: clamp(0.76rem, 3vw, 0.85rem); letter-spacing: 0.4em;
+            line-height: 2.2; color: var(--text-jp);
         }
 
-        /* 誘惑する予約エリア */
-        .cta-area {
-            opacity: 0;
-            animation: fadeIn 4s var(--ease) forwards 2.6s;
-            margin-bottom: 6dvh;
-        }
+        .cta-area { opacity: 0; animation: fadeIn 2.5s var(--ease-out) forwards 1.5s; margin-bottom: 6dvh; }
 
+        /* RESERVEボタン：ホバーとタップ両方に対応 */
         .btn-reserve {
-            position: relative;
-            display: inline-block;
-            padding: 1.3rem 4rem;
-            border: 0.5px solid rgba(179, 155, 125, 0.3);
-            color: var(--gold);
-            text-decoration: none;
-            font-size: 0.75rem;
-            letter-spacing: 0.45em;
-            transition: all 1.2s var(--ease);
-            background: rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            position: relative; display: inline-block;
+            padding: 1.3rem 4rem; 
+            border: 0.5px solid rgba(179, 155, 125, 0.35);
+            color: var(--gold); text-decoration: none; font-size: 0.75rem;
+            letter-spacing: 0.45em; background-color: transparent;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             -webkit-tap-highlight-color: transparent;
-            /* 呼吸のような光の脈動 */
-            animation: pulseGlow 4s infinite alternate ease-in-out;
+            transition: all 0.6s var(--ease-out);
         }
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 0px rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.2); }
-            100% { box-shadow: 0 0 15px rgba(179, 155, 125, 0.1); border-color: rgba(179, 155, 125, 0.4); }
+        /* PCでのホバー反応 */
+        @media (hover: hover) {
+            .btn-reserve:hover {
+                background-color: rgba(179, 155, 125, 0.1);
+                border-color: rgba(179, 155, 125, 0.7);
+                box-shadow: 0 0 15px rgba(179, 155, 125, 0.15);
+                transition: all 0.3s var(--ease-out);
+            }
         }
 
-        .btn-reserve:active {
-            transform: scale(0.97);
-            background: rgba(179, 155, 125, 0.15);
-            transition: all 0.2s;
+        /* クリック・タップした瞬間の強い反応 */
+        .btn-reserve:active { 
+            transform: scale(0.97); 
+            background-color: var(--gold-glow) !important; 
+            border-color: rgba(179, 155, 125, 1) !important;
+            box-shadow: 0 0 25px rgba(179, 155, 125, 0.35) !important;
+            transition: all 0.05s ease-out !important;
         }
 
         .sub-label {
-            display: block;
-            margin-top: 1.4rem;
-            font-size: 0.58rem;
-            letter-spacing: 0.2em;
-            color: var(--text-muted);
-            font-weight: 400;
+            display: block; margin-top: 1.5rem; 
+            font-size: 0.72rem; letter-spacing: 0.15em; 
+            color: var(--text-info); font-weight: 400;
         }
 
-        /* ひっそりとしたLINEリンクとフッター */
         .site-footer {
-            height: 14dvh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
+            height: 14dvh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; gap: 1.2rem;
         }
 
+        /* LINE：ホバーとタップに対応 */
         .line-link {
-            font-family: 'Playfair Display', serif;
-            font-size: 9px;
-            letter-spacing: 0.5em;
-            color: var(--text-muted);
-            text-decoration: none;
-            text-transform: uppercase;
-            transition: color 0.8s;
-            opacity: 0.6;
+            font-family: 'Playfair Display', serif; font-size: 11px;
+            letter-spacing: 0.4em; color: var(--text-muted);
+            text-decoration: none; text-transform: uppercase;
+            -webkit-tap-highlight-color: transparent;
+            transition: all 0.6s var(--ease-out);
+        }
+
+        @media (hover: hover) {
+            .line-link:hover {
+                color: var(--gold);
+                text-shadow: 0 0 8px rgba(179, 155, 125, 0.5);
+                transition: all 0.3s var(--ease-out);
+            }
         }
         
-        .line-link:active {
-            color: var(--gold);
+        .line-link:active { 
+            color: var(--gold) !important; 
+            text-shadow: 0 0 15px rgba(179, 155, 125, 0.8) !important;
+            transform: scale(0.98);
+            transition: all 0.05s ease-out !important;
         }
 
         .copyright {
-            font-size: 0.5rem;
-            letter-spacing: 0.25em;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            opacity: 0.5;
+            font-size: 0.55rem; letter-spacing: 0.2em;
+            color: var(--text-muted); text-transform: uppercase; opacity: 0.5;
         }
 
         @keyframes revealUp {
-            from { opacity: 0; transform: translateY(25px); filter: blur(6px); }
+            from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { to { opacity: 1; } }
 
         @media (orientation: landscape) and (max-height: 500px) {
-            body { min-height: 125dvh; }
-            .main-container { min-height: 125dvh; }
-            .site-header { height: 18dvh; }
-            .text-block { margin-bottom: 7dvh; }
+            body, .main-container { min-height: 125dvh; }
+            .site-header { height: 18dvh; } .text-block { margin-bottom: 7dvh; }
             .site-footer { height: 20dvh; gap: 1rem; }
         }
     </style>
