@@ -10,92 +10,70 @@
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* --- 1. 土台：100%で画面を満たす --- */
     html, body {
       margin: 0; padding: 0;
       background: #000;
-      height: 100%; width: 100%;
-      overflow: hidden; /* 1枚絵としての静寂を守る */
+      height: 100%;
     }
 
-    .main {
-      position: relative;
+    /* 🧠 1. 全体を「一本の芯」で通す。absoluteを使わない */
+    .viewport {
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 5%; /* 画面全体の余白（安全圏） */
+      /* 背景：面として広がる */
       background:
         radial-gradient(circle at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%),
         linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,1)),
         url('image_1.jpg') center / cover no-repeat;
     }
 
-    /* --- 2. 構造：文字は独立した中央のオブジェクト --- */
+    /* 🧠 2. コンテンツ：中央に浮かせるのではなく、上の余白を自動調整(margin-top: auto)にする */
     .content {
-      width: 90%;
+      width: 85%;
       max-width: 500px;
-      z-index: 10;
+      text-align: center;
+      margin-top: auto; /* 上下のオートマージンで中央を維持 */
+      margin-bottom: auto;
+      padding: 10% 0; /* 最低限の隙間を確保 */
     }
 
-    .block {
-      margin-bottom: 8%; /* 縦方向の呼吸 */
-    }
+    .block { margin-bottom: 12%; }
 
     .en {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-weight: 300;
-      font-size: 1.4rem;
-      line-height: 1.6;
-      letter-spacing: 0.05em;
+      font-family: system-ui, sans-serif;
+      font-weight: 300; font-size: 1.4rem;
+      line-height: 1.6; letter-spacing: 0.05em;
       color: rgba(235, 235, 235, 0.85);
-      margin-bottom: 2%;
+      margin: 0 0 5%;
     }
 
     .jp {
       font-family: 'Shippori Mincho', serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.2em;
-      line-height: 2;
-      color: rgba(235, 235, 235, 0.7);
+      font-size: 0.9rem; letter-spacing: 0.2em;
+      line-height: 2; color: rgba(235, 235, 235, 0.7);
     }
 
-    .cta-wrap {
-      margin-top: 10%;
-    }
+    .cta-wrap { margin-top: 15%; }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 280px;
-      padding: 1.1rem 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 100%; max-width: 280px; padding: 1.1rem 0;
       border: 1px solid rgba(184, 146, 92, 0.4);
       color: rgba(184, 146, 92, 0.8);
       font-family: system-ui, sans-serif;
-      text-decoration: none;
-      letter-spacing: 0.3em;
-      font-size: 0.85rem;
+      text-decoration: none; letter-spacing: 0.3em; font-size: 0.85rem;
     }
 
-    .btn-sub {
-      display: block;
-      margin-top: 3%;
-      font-size: 0.65rem;
-      color: rgba(235,235,235,0.3);
-    }
+    .btn-sub { display: block; margin-top: 5%; font-size: 0.65rem; color: rgba(235,235,235,0.3); }
 
-    /* --- 3. コピーライト：地面（最下部）からの距離を比率で保つ --- */
+    /* 🧠 3. コピーライト：芯の「一番下」に置く。これで絶対に重ならない */
     .footer {
-      position: absolute;
-      bottom: 4%; /* 下端からの比率。横画面でも適切な位置に止まる */
       width: 100%;
+      padding-bottom: 5%; /* 下からの距離 */
       text-align: center;
       opacity: 0.2;
-      z-index: 10;
     }
 
     .copyright {
@@ -105,11 +83,9 @@
       margin: 0;
     }
 
-    /* 背景のノイズ粒子 */
+    /* 空気感（ノイズ） */
     body::before {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none;
+      content: ""; position: fixed; inset: 0; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
       opacity: 0.12; z-index: 5; mix-blend-mode: soft-light;
     }
@@ -117,8 +93,8 @@
 </head>
 <body>
 
-  <main class="main">
-    <div class="content">
+  <div class="viewport">
+    <main class="content">
       <section class="block">
         <p class="en">Pause the noise.<br>Return to your breath.</p>
         <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
@@ -133,12 +109,12 @@
         <a class="btn" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">RESERVE</a>
         <span class="btn-sub">予約・静かにお入りください</span>
       </nav>
-    </div>
+    </main>
 
     <footer class="footer">
       <p class="copyright">&copy; 2026 MOMIZO</p>
     </footer>
-  </main>
+  </div>
 
 </body>
 </html>
