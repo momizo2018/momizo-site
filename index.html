@@ -15,43 +15,43 @@
       margin: 0; padding: 0;
       background: #000;
       height: 100%; width: 100%;
+      overflow: hidden; /* 1枚絵としての静寂を守る */
     }
 
     .main {
+      position: relative;
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      /* 背景：常に面を100%カバー。比率が変われば自動で追従。 */
+      padding: 5%; /* 画面全体の余白（安全圏） */
       background:
         radial-gradient(circle at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%),
         linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,1)),
         url('image_1.jpg') center / cover no-repeat;
-      padding: 5%; /* 余白を画面サイズに対する比率に */
     }
 
-    /* --- 2. 構造：幅を％で定義し、最大値（max-width）だけで抑制 --- */
+    /* --- 2. 構造：文字は独立した中央のオブジェクト --- */
     .content {
-      width: 85%;
-      max-width: 500px; /* 広がりすぎを防ぐ唯一の蓋 */
+      width: 90%;
+      max-width: 500px;
       z-index: 10;
     }
 
     .block {
-      margin-bottom: 10%; /* 縦方向の呼吸も比率で */
+      margin-bottom: 8%; /* 縦方向の呼吸 */
     }
 
-    /* --- 3. タイポグラフィ：ここもpxを捨てて相対値に --- */
     .en {
       font-family: system-ui, -apple-system, sans-serif;
       font-weight: 300;
-      font-size: 1.4rem; /* 基本サイズを基準に */
+      font-size: 1.4rem;
       line-height: 1.6;
       letter-spacing: 0.05em;
       color: rgba(235, 235, 235, 0.85);
-      margin-bottom: 3%;
+      margin-bottom: 2%;
     }
 
     .jp {
@@ -63,15 +63,15 @@
     }
 
     .cta-wrap {
-      margin-top: 12%;
+      margin-top: 10%;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%; /* 親（content）の幅に従う */
-      max-width: 280px; /* ボタンとして適切なサイズで止める */
+      width: 100%;
+      max-width: 280px;
       padding: 1.1rem 0;
       border: 1px solid rgba(184, 146, 92, 0.4);
       color: rgba(184, 146, 92, 0.8);
@@ -83,14 +83,35 @@
 
     .btn-sub {
       display: block;
-      margin-top: 4%;
+      margin-top: 3%;
       font-size: 0.65rem;
       color: rgba(235,235,235,0.3);
     }
 
+    /* --- 3. コピーライト：地面（最下部）からの距離を比率で保つ --- */
     .footer {
-      position: absolute; bottom: 3%; width: 100%;
-      text-align: center; opacity: 0.15; font-size: 0.55rem;
+      position: absolute;
+      bottom: 4%; /* 下端からの比率。横画面でも適切な位置に止まる */
+      width: 100%;
+      text-align: center;
+      opacity: 0.2;
+      z-index: 10;
+    }
+
+    .copyright {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: rgba(235, 235, 235, 0.6);
+      margin: 0;
+    }
+
+    /* 背景のノイズ粒子 */
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      opacity: 0.12; z-index: 5; mix-blend-mode: soft-light;
     }
   </style>
 </head>
@@ -113,9 +134,11 @@
         <span class="btn-sub">予約・静かにお入りください</span>
       </nav>
     </div>
-  </main>
 
-  <footer class="footer">&copy; 2026 MOMIZO</footer>
+    <footer class="footer">
+      <p class="copyright">&copy; 2026 MOMIZO</p>
+    </footer>
+  </main>
 
 </body>
 </html>
