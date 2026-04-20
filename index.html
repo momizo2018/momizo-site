@@ -42,9 +42,9 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.12;
-      mix-blend-mode: soft-light;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      opacity: 0.15;
+      mix-blend-mode: soft-light;
       z-index: 1;
     }
 
@@ -78,6 +78,9 @@
     .content {
       width: min(90vw, 640px);
       text-align: center;
+
+      /* ★これが「スクロール発生の本体」 */
+      padding-bottom: 2px;
     }
 
     @keyframes fadeUp {
@@ -147,17 +150,13 @@
       position: relative;
       margin-top: 12vh;
       text-align: center;
+      z-index: 2;
     }
 
     .copyright {
       font-size: 0.6rem;
       letter-spacing: 0.15em;
       color: rgba(255,255,255,0.25);
-    }
-
-    /* ★これが本体：確実にスクロール発生させる1px */
-    .scroll-trigger {
-      height: 1px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -199,9 +198,6 @@
     <footer class="footer">
       <div class="copyright">© 2026 MOMIZO</div>
     </footer>
-
-    <!-- ★ここが重要 -->
-    <div class="scroll-trigger"></div>
 
   </div>
 </main>
