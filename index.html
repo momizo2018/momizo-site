@@ -2,224 +2,176 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
   <title>momizo relaxation salon</title>
 
-  <link rel="preload" as="image" href="image_1.jpg" />
+  <link rel="preload" as="image" href="image_1.jpg" fetchpriority="high" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-
-  <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
-  </noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg: #000;
-      --gold: rgba(184,146,92,0.62);
-      --gold-soft: rgba(184,146,92,0.28);
-
-      /* 可読性を少し上げる */
-      --text: rgba(240,240,240,0.82);
-      --jp: rgba(240,240,240,0.85);
-      --muted: rgba(240,240,240,0.62);
-
-      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    :root{
+      --bg:#000;
+      --text:rgba(245,245,245,0.82);
+      --jp:rgba(245,245,245,0.88);
+      --muted:rgba(245,245,245,0.62);
+      --accent:#c9a063;
+      --accent-soft:rgba(201,160,99,0.28);
+      --ease:cubic-bezier(0.22,1,0.36,1);
     }
 
-    * { box-sizing: border-box; }
+    *{box-sizing:border-box;}
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      -webkit-font-smoothing: antialiased;
-      font-size: 16px;
-      color: var(--text);
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -webkit-text-size-adjust:100%;
+      font-size:16px;
     }
 
-    a {
-      -webkit-tap-highlight-color: transparent;
-      text-decoration: none;
-      color: inherit;
+    a{
+      -webkit-tap-highlight-color:transparent;
+      text-decoration:none;
+      color:inherit;
     }
 
-    .site-header {
-      position: absolute;
-      top: env(safe-area-inset-top);
-      left: 0;
-      width: 100%;
-      padding: 6vw;
-      opacity: 0.25;
-    }
-
-    .header-logo {
-      font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.4em;
-      color: var(--gold);
-      font-weight: 300;
-    }
-
-    .main {
-      min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: calc(env(safe-area-inset-top) + 12vh) 6vw env(safe-area-inset-bottom);
+    .main-container{
+      position:relative;
+      width:100%;
+      min-height:calc(100dvh + 6vh);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:calc(env(safe-area-inset-top) + 10vh) 6vw env(safe-area-inset-bottom);
       background:
-        linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.88)),
-        url('image_1.jpg') center / cover no-repeat;
+        linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.82)),
+        url('image_1.jpg') center/cover no-repeat;
     }
 
-    .content {
-      width: min(92vw, 680px);
-      text-align: center;
+    .content{
+      text-align:center;
+      width:min(92vw,720px);
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInUp{
+      from{opacity:0;transform:translateY(14px);}
+      to{opacity:1;transform:translateY(0);}
     }
 
-    .block {
-      margin-bottom: 8vmin;
-      opacity: 0;
-      animation: fadeUp 1.4s var(--ease) forwards;
+    .catch-group{
+      margin-bottom:6vmin;
+      opacity:0;
+      animation:fadeInUp 1.6s var(--ease) forwards;
     }
 
-    .block:nth-child(1) { animation-delay: 0.25s; }
-    .block:nth-child(2) { animation-delay: 0.55s; }
+    .group-1{animation-delay:.5s;}
+    .group-2{animation-delay:.9s;}
 
-    .en {
-      font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-      font-weight: 400; /* 重要：少しだけ読みやすく */
-      font-size: clamp(1.05rem, 4vw, 2.2rem);
-      line-height: 1.6;
-      letter-spacing: 0.01em;
-      color: var(--muted);
-      margin: 0 0 0.7rem;
+    .en{
+      font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+      font-weight:300;
+      color:var(--muted);
+      font-size:clamp(20px,5.2vmin,52px);
+      line-height:1.5;
+      letter-spacing:0.02em;
+      margin:0 0 1.2vmin;
     }
 
-    .jp {
-      font-family: 'Shippori Mincho', serif;
-      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-      letter-spacing: 0.18em;
-      line-height: 2;
-      color: var(--jp);
-      margin: 0;
+    .jp{
+      font-family:'Shippori Mincho',serif;
+      font-weight:500;
+      color:var(--jp);
+      font-size:clamp(14px,2.6vmin,18px);
+      letter-spacing:0.22em;
+      line-height:1.9;
+      margin:0;
     }
 
-    .cta-wrap {
-      margin-top: 3.2rem;
-      opacity: 0;
-      animation: fadeUp 1.3s var(--ease) forwards;
-      animation-delay: 0.9s;
+    .booking-button{
+      display:inline-block;
+      width:min(84vw,360px);
+      margin-top:4vmin;
+      padding:3.2vmin 0;
+      border:1px solid var(--accent);
+      color:var(--accent);
+      font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+      font-weight:300;
+      font-size:clamp(15px,3.6vmin,20px);
+      letter-spacing:0.18em;
+      position:relative;
+      transition:.3s var(--ease);
     }
 
-    .btn {
-      display: inline-block;
-      width: min(88vw, 340px);
-      padding: 1.05rem 0;
-      border: 1px solid var(--gold-soft);
-      color: var(--gold);
-      font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-      font-weight: 300;
-      letter-spacing: 0.32em;
-      font-size: 0.95rem;
-      position: relative;
-      transition: 0.35s var(--ease);
+    .booking-button:hover{
+      background:rgba(201,160,99,0.08);
+      transform:translateY(-1px);
     }
 
-    .btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 1px solid rgba(184,146,92,0.18);
-      opacity: 0;
-      transition: 0.35s;
+    .booking-button:active{
+      transform:scale(0.98);
     }
 
-    .btn:hover::before {
-      inset: -8px;
-      opacity: 1;
+    .note{
+      display:block;
+      margin-top:1vmin;
+      font-family:'Shippori Mincho',serif;
+      font-size:clamp(12px,2.2vmin,14px);
+      color:rgba(245,245,245,0.6);
+      letter-spacing:0.15em;
     }
 
-    .btn:hover {
-      background: rgba(184,146,92,0.04);
+    @media (orientation:landscape){
+      .en{
+        font-size:clamp(18px,4vh,44px);
+      }
+      .jp{
+        font-size:clamp(13px,2.2vh,16px);
+      }
+      .content{
+        width:min(78vw,620px);
+      }
     }
 
-    .btn:active { transform: scale(0.985); }
-
-    .btn-sub {
-      display: block;
-      margin-top: 0.6rem;
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.14em;
-      color: rgba(240,240,240,0.6);
-    }
-
-    .footer {
-      margin-top: 11vh;
-      opacity: 0.22;
-    }
-
-    .footer a {
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      color: rgba(240,240,240,0.75);
-      display: block;
-      margin-bottom: 0.35rem;
-    }
-
-    .copyright {
-      font-size: 0.55rem;
-      letter-spacing: 0.04em;
-      color: rgba(240,240,240,0.6);
+    @media (prefers-reduced-motion:reduce){
+      *{
+        animation:none!important;
+        transition:none!important;
+      }
+      .catch-group{opacity:1;transform:none;}
     }
   </style>
 </head>
 
 <body>
 
-  <header class="site-header">
-    <a href="https://page.line.me/cvj7583f">
-      <span class="header-logo">MOMIZO</span>
-    </a>
-  </header>
+  <main class="main-container">
 
-  <main class="main">
-    <div class="content">
+    <article class="content">
 
-      <section class="block">
+      <section class="catch-group group-1">
         <p class="en">Pause the noise.<br>Return to your breath.</p>
         <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
       </section>
 
-      <section class="block">
+      <section class="catch-group group-2">
         <p class="en">Reclaim the space for your body.</p>
         <p class="jp">心と体に、余白を取り戻す。</p>
       </section>
 
-      <div class="cta-wrap">
-        <a class="btn" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">
-          RESERVE YOUR MOMENT
-        </a>
-        <span class="btn-sub">予約・静かにお入りください</span>
-      </div>
+      <a class="booking-button" href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services">
+        CHOOSE STAFF
+        <span class="note">スタッフを選んで予約する</span>
+      </a>
 
-      <footer class="footer">
-        <a href="https://page.line.me/cvj7583f">OFFICIAL LINE</a>
-        <p class="copyright">&copy; 2026 MOMIZO</p>
-      </footer>
+    </article>
 
-    </div>
   </main>
 
 </body>
