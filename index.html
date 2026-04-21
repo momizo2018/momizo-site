@@ -50,9 +50,17 @@
 
         .site-header { height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh; }
 
+        /* ロゴ：ホバーで反応 */
         .logo {
             font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.85em;
             color: var(--gold); text-transform: uppercase; margin: 0; opacity: 0.65; line-height: 1;
+            cursor: pointer; transition: all 1.2s var(--ease-out);
+            user-select: none; z-index: 2000;
+        }
+        .logo:hover {
+            opacity: 1;
+            text-shadow: 0 0 20px var(--gold);
+            letter-spacing: 0.95em;
         }
 
         .content {
@@ -78,9 +86,12 @@
             line-height: 2.2; color: var(--text-jp);
         }
 
-        .cta-area { opacity: 0; animation: fadeIn 2.5s var(--ease-out) forwards 1.5s; margin-bottom: 6dvh; }
+        .cta-area { 
+            opacity: 0; 
+            animation: fadeIn 2.5s var(--ease-out) forwards 1.5s; 
+            margin-bottom: 10dvh; 
+        }
 
-        /* RESERVEボタン：スマホのontouchstart対応 */
         .btn-reserve {
             position: relative; display: inline-block;
             padding: 1.3rem 4rem; 
@@ -90,7 +101,20 @@
             backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             transition: all 0.6s var(--ease-out);
             cursor: pointer;
+            overflow: visible;
         }
+
+        .sub-label {
+            position: absolute;
+            top: 100%; left: 50%; transform: translateX(-50%);
+            display: block; margin-top: 1.5rem; 
+            font-size: 0.72rem; letter-spacing: 0.15em; 
+            color: var(--text-info); font-weight: 400;
+            transition: all 0.6s var(--ease-out);
+            white-space: nowrap;
+        }
+
+        .dash { opacity: 0.4; transition: all 0.6s var(--ease-out); }
 
         @media (hover: hover) {
             .btn-reserve:hover {
@@ -98,59 +122,69 @@
                 border-color: rgba(179, 155, 125, 0.7);
                 box-shadow: 0 0 15px rgba(179, 155, 125, 0.15);
             }
+            .btn-reserve:hover .sub-label {
+                color: var(--gold);
+                text-shadow: 0 0 8px rgba(179, 155, 125, 0.5);
+            }
+            .btn-reserve:hover .dash { opacity: 0.7; }
         }
 
-        /* スマホ・PC共通：押した瞬間の挙動（最優先） */
         .btn-reserve:active { 
             transform: scale(0.97) !important; 
             background-color: rgba(179, 155, 125, 0.25) !important; 
             border-color: rgba(179, 155, 125, 1) !important;
             box-shadow: 0 0 25px rgba(179, 155, 125, 0.4) !important;
-            transition: all 0.01s linear !important; /* ほぼ同時 */
         }
+        .btn-reserve:active .sub-label { transform: translateX(-50%) !important; color: var(--gold) !important; }
 
-        .sub-label {
-            display: block; margin-top: 1.5rem; 
-            font-size: 0.72rem; letter-spacing: 0.15em; 
-            color: var(--text-info); font-weight: 400;
+        /* 季節パーティクル */
+        .particle {
+            position: fixed; top: -5vh; pointer-events: none; z-index: 1000;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
         .site-footer {
             height: 14dvh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; gap: 1.2rem;
+            z-index: 10;
         }
 
+        /* LINEリンク：アニメーション修正 */
         .line-link {
             font-family: 'Playfair Display', serif; font-size: 11px;
             letter-spacing: 0.4em; color: var(--text-muted);
             text-decoration: none; text-transform: uppercase;
-            transition: all 0.6s var(--ease-out);
+            transition: all 0.8s var(--ease-out);
+            position: relative;
         }
 
         @media (hover: hover) {
             .line-link:hover {
                 color: var(--gold);
-                text-shadow: 0 0 8px rgba(179, 155, 125, 0.5);
+                text-shadow: 0 0 10px rgba(179, 155, 125, 0.6);
             }
         }
         
         .line-link:active { 
             color: var(--gold) !important; 
-            text-shadow: 0 0 15px rgba(179, 155, 125, 0.8) !important;
-            transform: scale(0.98) !important;
-            transition: all 0.01s linear !important;
+            transform: scale(0.98);
+            transition: all 0.1s;
         }
 
         .copyright {
             font-size: 0.55rem; letter-spacing: 0.2em;
-            color: var(--text-muted); text-transform: uppercase; opacity: 0.5;
+            color: var(--text-muted); text-transform: uppercase; opacity: 0.4;
         }
 
         @keyframes revealUp {
             from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-
         @keyframes fadeIn { to { opacity: 1; } }
 
         @media (orientation: landscape) and (max-height: 500px) {
@@ -164,7 +198,7 @@
 
     <div class="main-container">
         <header class="site-header">
-            <h1 class="logo">MOMIZO</h1>
+            <h1 class="logo" id="seasonal-logo">MOMIZO</h1>
         </header>
 
         <main class="content">
@@ -181,8 +215,10 @@
             <nav class="cta-area">
                 <a href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services" class="btn-reserve">
                     RESERVE
+                    <span class="sub-label">
+                        <span class="dash">—</span>&nbsp;ご予約のお申し込みはこちらから&nbsp;<span class="dash">—</span>
+                    </span>
                 </a>
-                <span class="sub-label">予約・静かにお入りください</span>
             </nav>
         </main>
 
@@ -192,5 +228,53 @@
         </footer>
     </div>
 
+    <script>
+        const logo = document.getElementById('seasonal-logo');
+        let isRunning = false;
+
+        // マウスが乗った時、またはタッチされた時に発火
+        const handleInteraction = () => {
+            if (isRunning) return;
+            isRunning = true;
+            
+            const month = new Date().getMonth() + 1;
+            let config = { char: '❅', color: 'rgba(255,255,255,0.4)' }; // 冬
+
+            if (month >= 3 && month <= 5) config = { char: '🌸', color: 'rgba(255,209,220,0.4)' }; // 春
+            else if (month >= 6 && month <= 8) config = { char: '🌿', color: 'rgba(129,163,132,0.3)' }; // 夏
+            else if (month >= 9 && month <= 11) config = { char: '🍂', color: 'rgba(179,93,61,0.4)' }; // 秋
+
+            // 3秒間、パラパラと降り続ける
+            const interval = setInterval(() => {
+                createParticle(config);
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                isRunning = false;
+            }, 3000);
+        };
+
+        logo.addEventListener('mouseenter', handleInteraction);
+        logo.addEventListener('touchstart', (e) => {
+            handleInteraction();
+        });
+
+        function createParticle(config) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.textContent = config.char;
+            p.style.color = config.color;
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.fontSize = (Math.random() * 12 + 10) + 'px';
+            
+            const duration = Math.random() * 3 + 5; 
+            p.style.animationDuration = duration + 's';
+            p.style.filter = `blur(${Math.random() * 1.5}px)`;
+
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), duration * 1000);
+        }
+    </script>
 </body>
 </html>
