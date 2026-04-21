@@ -29,6 +29,11 @@
             font-family: 'Shippori Mincho', serif;
             -webkit-font-smoothing: antialiased;
             color: var(--text-jp); overflow-x: hidden;
+            /* 追加: テキスト選択を無効化 */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         body::before {
