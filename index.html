@@ -29,7 +29,7 @@
             font-family: 'Shippori Mincho', serif;
             -webkit-font-smoothing: antialiased;
             color: var(--text-jp); overflow-x: hidden;
-            /* 追加: テキスト選択を無効化 */
+            /* テキスト選択を無効化 */
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -55,7 +55,6 @@
 
         .site-header { height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh; }
 
-        /* ロゴ：ホバーで反応 */
         .logo {
             font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.85em;
             color: var(--gold); text-transform: uppercase; margin: 0; opacity: 0.65; line-height: 1;
@@ -93,7 +92,10 @@
 
         .cta-area { 
             opacity: 0; 
-            animation: fadeIn 2.5s var(--ease-out) forwards 1.5s; 
+            /* フェードインと同時に初期発光を実行 */
+            animation: 
+                fadeIn 2.5s var(--ease-out) forwards 1.5s,
+                initialGlow 2.5s var(--ease-out) forwards 1.5s;
             margin-bottom: 10dvh; 
         }
 
@@ -107,6 +109,8 @@
             transition: all 0.6s var(--ease-out);
             cursor: pointer;
             overflow: visible;
+            /* iOSのリンクプレビュー防止 */
+            -webkit-touch-callout: none;
         }
 
         .sub-label {
@@ -142,7 +146,6 @@
         }
         .btn-reserve:active .sub-label { transform: translateX(-50%) !important; color: var(--gold) !important; }
 
-        /* 季節パーティクル */
         .particle {
             position: fixed; top: -5vh; pointer-events: none; z-index: 1000;
             animation: fall linear forwards;
@@ -159,13 +162,14 @@
             z-index: 10;
         }
 
-        /* LINEリンク：アニメーション修正 */
         .line-link {
             font-family: 'Playfair Display', serif; font-size: 11px;
             letter-spacing: 0.4em; color: var(--text-muted);
             text-decoration: none; text-transform: uppercase;
             transition: all 0.8s var(--ease-out);
             position: relative;
+            /* iOSのリンクプレビュー防止 */
+            -webkit-touch-callout: none;
         }
 
         @media (hover: hover) {
@@ -186,11 +190,19 @@
             color: var(--text-muted); text-transform: uppercase; opacity: 0.4;
         }
 
+        /* アニメーション定義 */
         @keyframes revealUp {
             from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
         @keyframes fadeIn { to { opacity: 1; } }
+
+        /* 登場時に一度だけふわっと光る */
+        @keyframes initialGlow {
+            0% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
+            50% { background-color: rgba(179, 155, 125, 0.2); border-color: rgba(179, 155, 125, 0.8); box-shadow: 0 0 20px rgba(179, 155, 125, 0.3); }
+            100% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
+        }
 
         @media (orientation: landscape) and (max-height: 500px) {
             body, .main-container { min-height: 125dvh; }
@@ -237,19 +249,17 @@
         const logo = document.getElementById('seasonal-logo');
         let isRunning = false;
 
-        // マウスが乗った時、またはタッチされた時に発火
         const handleInteraction = () => {
             if (isRunning) return;
             isRunning = true;
             
             const month = new Date().getMonth() + 1;
-            let config = { char: '❅', color: 'rgba(255,255,255,0.4)' }; // 冬
+            let config = { char: '❅', color: 'rgba(255,255,255,0.4)' };
 
-            if (month >= 3 && month <= 5) config = { char: '🌸', color: 'rgba(255,209,220,0.4)' }; // 春
-            else if (month >= 6 && month <= 8) config = { char: '🌿', color: 'rgba(129,163,132,0.3)' }; // 夏
-            else if (month >= 9 && month <= 11) config = { char: '🍂', color: 'rgba(179,93,61,0.4)' }; // 秋
+            if (month >= 3 && month <= 5) config = { char: '🌸', color: 'rgba(255,209,220,0.4)' };
+            else if (month >= 6 && month <= 8) config = { char: '🌿', color: 'rgba(129,163,132,0.3)' };
+            else if (month >= 9 && month <= 11) config = { char: '🍂', color: 'rgba(179,93,61,0.4)' };
 
-            // 3秒間、パラパラと降り続ける
             const interval = setInterval(() => {
                 createParticle(config);
             }, 100);
