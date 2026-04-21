@@ -29,7 +29,6 @@
             font-family: 'Shippori Mincho', serif;
             -webkit-font-smoothing: antialiased;
             color: var(--text-jp); overflow-x: hidden;
-            /* テキスト選択を無効化 */
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -92,7 +91,6 @@
 
         .cta-area { 
             opacity: 0; 
-            /* フェードインと同時に初期発光を実行 */
             animation: 
                 fadeIn 2.5s var(--ease-out) forwards 1.5s,
                 initialGlow 2.5s var(--ease-out) forwards 1.5s;
@@ -109,7 +107,6 @@
             transition: all 0.6s var(--ease-out);
             cursor: pointer;
             overflow: visible;
-            /* iOSのリンクプレビュー防止 */
             -webkit-touch-callout: none;
         }
 
@@ -121,19 +118,23 @@
             color: var(--text-info); font-weight: 400;
             transition: all 0.6s var(--ease-out);
             white-space: nowrap;
+            /* 初期発光アニメーション：終了後に状態を保持（forwards） */
+            animation: initialTextGlow 2.5s var(--ease-out) forwards 1.5s;
         }
 
         .dash { opacity: 0.4; transition: all 0.6s var(--ease-out); }
 
+        /* ホバー時の設定 */
         @media (hover: hover) {
             .btn-reserve:hover {
                 background-color: rgba(179, 155, 125, 0.1);
                 border-color: rgba(179, 155, 125, 0.7);
                 box-shadow: 0 0 15px rgba(179, 155, 125, 0.15);
             }
+            /* !importantを付けてホバー時の発光を強制 */
             .btn-reserve:hover .sub-label {
-                color: var(--gold);
-                text-shadow: 0 0 8px rgba(179, 155, 125, 0.5);
+                color: var(--gold) !important;
+                text-shadow: 0 0 8px rgba(179, 155, 125, 0.5) !important;
             }
             .btn-reserve:hover .dash { opacity: 0.7; }
         }
@@ -168,7 +169,6 @@
             text-decoration: none; text-transform: uppercase;
             transition: all 0.8s var(--ease-out);
             position: relative;
-            /* iOSのリンクプレビュー防止 */
             -webkit-touch-callout: none;
         }
 
@@ -190,18 +190,22 @@
             color: var(--text-muted); text-transform: uppercase; opacity: 0.4;
         }
 
-        /* アニメーション定義 */
         @keyframes revealUp {
             from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* 登場時に一度だけふわっと光る */
         @keyframes initialGlow {
             0% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
             50% { background-color: rgba(179, 155, 125, 0.2); border-color: rgba(179, 155, 125, 0.8); box-shadow: 0 0 20px rgba(179, 155, 125, 0.3); }
             100% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
+        }
+
+        @keyframes initialTextGlow {
+            0% { color: var(--text-info); text-shadow: none; }
+            50% { color: var(--gold); text-shadow: 0 0 10px rgba(179, 155, 125, 0.6); }
+            100% { color: var(--text-info); text-shadow: none; }
         }
 
         @media (orientation: landscape) and (max-height: 500px) {
@@ -252,28 +256,18 @@
         const handleInteraction = () => {
             if (isRunning) return;
             isRunning = true;
-            
             const month = new Date().getMonth() + 1;
             let config = { char: '❅', color: 'rgba(255,255,255,0.4)' };
-
             if (month >= 3 && month <= 5) config = { char: '🌸', color: 'rgba(255,209,220,0.4)' };
             else if (month >= 6 && month <= 8) config = { char: '🌿', color: 'rgba(129,163,132,0.3)' };
             else if (month >= 9 && month <= 11) config = { char: '🍂', color: 'rgba(179,93,61,0.4)' };
 
-            const interval = setInterval(() => {
-                createParticle(config);
-            }, 100);
-
-            setTimeout(() => {
-                clearInterval(interval);
-                isRunning = false;
-            }, 3000);
+            const interval = setInterval(() => { createParticle(config); }, 100);
+            setTimeout(() => { clearInterval(interval); isRunning = false; }, 3000);
         };
 
         logo.addEventListener('mouseenter', handleInteraction);
-        logo.addEventListener('touchstart', (e) => {
-            handleInteraction();
-        });
+        logo.addEventListener('touchstart', (e) => { handleInteraction(); });
 
         function createParticle(config) {
             const p = document.createElement('div');
@@ -282,11 +276,9 @@
             p.style.color = config.color;
             p.style.left = Math.random() * 100 + 'vw';
             p.style.fontSize = (Math.random() * 12 + 10) + 'px';
-            
             const duration = Math.random() * 3 + 5; 
             p.style.animationDuration = duration + 's';
             p.style.filter = `blur(${Math.random() * 1.5}px)`;
-
             document.body.appendChild(p);
             setTimeout(() => p.remove(), duration * 1000);
         }
