@@ -51,13 +51,13 @@
             display: flex; flex-direction: column;
             padding: env(safe-area-inset-top) 8vw env(safe-area-inset-bottom);
             opacity: 0;
-            animation: fadeInBg 2.5s var(--ease-out) forwards;
+            animation: fadeInBg 2.0s var(--ease-out) forwards;
         }
 
         .site-header { 
             height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh;
             opacity: 0;
-            animation: revealUp 2.2s var(--ease-out) forwards 1.0s;
+            animation: revealUp 1.8s var(--ease-out) forwards 0.6s;
         }
 
         .logo {
@@ -80,10 +80,11 @@
 
         .text-block {
             margin-bottom: 12dvh; opacity: 0;
-            animation: revealUp 2.2s var(--ease-out) forwards;
+            animation: revealUp 2.0s var(--ease-out) forwards;
         }
-        .text-block:nth-child(1) { animation-delay: 1.8s; }
-        .text-block:nth-child(2) { animation-delay: 2.8s; }
+        /* 表示間隔を少し短縮 */
+        .text-block:nth-child(1) { animation-delay: 1.2s; }
+        .text-block:nth-child(2) { animation-delay: 2.0s; }
 
         .en {
             font-family: 'Playfair Display', serif; font-style: italic;
@@ -99,8 +100,8 @@
         .cta-area { 
             opacity: 0; 
             animation: 
-                fadeIn 2.5s var(--ease-out) forwards 4.0s,
-                initialGlow 4.5s var(--ease-out) forwards 5.5s; /* 開始を遅く、時間を長く */
+                fadeIn 2.0s var(--ease-out) forwards 3.0s,
+                initialGlow 3.5s var(--ease-out) forwards 4.5s;
             margin-bottom: 10dvh; 
         }
 
@@ -125,8 +126,7 @@
             color: var(--text-info); font-weight: 400;
             transition: all 0.6s var(--ease-out);
             white-space: nowrap;
-            /* テキストの発光も同様に調整 */
-            animation: initialTextGlow 4.5s var(--ease-out) forwards 5.5s;
+            animation: initialTextGlow 3.5s var(--ease-out) forwards 4.5s;
         }
 
         .dash { opacity: 0.4; transition: all 0.6s var(--ease-out); }
@@ -167,7 +167,7 @@
             justify-content: center; align-items: center; gap: 1.2rem;
             z-index: 10;
             opacity: 0;
-            animation: fadeIn 2.5s var(--ease-out) forwards 5.0s;
+            animation: fadeIn 2.0s var(--ease-out) forwards 4.0s;
         }
 
         .line-link {
@@ -203,7 +203,7 @@
         }
 
         @keyframes revealUp {
-            from { opacity: 0; transform: translateY(25px); filter: blur(8px); }
+            from { opacity: 0; transform: translateY(20px); filter: blur(6px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
