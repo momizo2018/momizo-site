@@ -50,9 +50,15 @@
             background-attachment: fixed;
             display: flex; flex-direction: column;
             padding: env(safe-area-inset-top) 8vw env(safe-area-inset-bottom);
+            opacity: 0;
+            animation: fadeInBg 2.5s var(--ease-out) forwards;
         }
 
-        .site-header { height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh; }
+        .site-header { 
+            height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh;
+            opacity: 0;
+            animation: revealUp 2.2s var(--ease-out) forwards 1.0s;
+        }
 
         .logo {
             font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.85em;
@@ -76,7 +82,8 @@
             margin-bottom: 12dvh; opacity: 0;
             animation: revealUp 2.2s var(--ease-out) forwards;
         }
-        .text-block:nth-child(2) { animation-delay: 0.6s; }
+        .text-block:nth-child(1) { animation-delay: 1.8s; }
+        .text-block:nth-child(2) { animation-delay: 2.8s; }
 
         .en {
             font-family: 'Playfair Display', serif; font-style: italic;
@@ -92,8 +99,8 @@
         .cta-area { 
             opacity: 0; 
             animation: 
-                fadeIn 2.5s var(--ease-out) forwards 1.5s,
-                initialGlow 2.5s var(--ease-out) forwards 1.5s;
+                fadeIn 2.5s var(--ease-out) forwards 4.0s,
+                initialGlow 4.5s var(--ease-out) forwards 5.5s; /* 開始を遅く、時間を長く */
             margin-bottom: 10dvh; 
         }
 
@@ -118,20 +125,18 @@
             color: var(--text-info); font-weight: 400;
             transition: all 0.6s var(--ease-out);
             white-space: nowrap;
-            /* 初期発光アニメーション：終了後に状態を保持（forwards） */
-            animation: initialTextGlow 2.5s var(--ease-out) forwards 1.5s;
+            /* テキストの発光も同様に調整 */
+            animation: initialTextGlow 4.5s var(--ease-out) forwards 5.5s;
         }
 
         .dash { opacity: 0.4; transition: all 0.6s var(--ease-out); }
 
-        /* ホバー時の設定 */
         @media (hover: hover) {
             .btn-reserve:hover {
                 background-color: rgba(179, 155, 125, 0.1);
                 border-color: rgba(179, 155, 125, 0.7);
                 box-shadow: 0 0 15px rgba(179, 155, 125, 0.15);
             }
-            /* !importantを付けてホバー時の発光を強制 */
             .btn-reserve:hover .sub-label {
                 color: var(--gold) !important;
                 text-shadow: 0 0 8px rgba(179, 155, 125, 0.5) !important;
@@ -161,6 +166,8 @@
             height: 14dvh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; gap: 1.2rem;
             z-index: 10;
+            opacity: 0;
+            animation: fadeIn 2.5s var(--ease-out) forwards 5.0s;
         }
 
         .line-link {
@@ -190,21 +197,30 @@
             color: var(--text-muted); text-transform: uppercase; opacity: 0.4;
         }
 
+        @keyframes fadeInBg {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         @keyframes revealUp {
-            from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+            from { opacity: 0; transform: translateY(25px); filter: blur(8px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-        @keyframes fadeIn { to { opacity: 1; } }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
         @keyframes initialGlow {
             0% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
-            50% { background-color: rgba(179, 155, 125, 0.2); border-color: rgba(179, 155, 125, 0.8); box-shadow: 0 0 20px rgba(179, 155, 125, 0.3); }
+            45% { background-color: rgba(179, 155, 125, 0.2); border-color: rgba(179, 155, 125, 0.8); box-shadow: 0 0 30px rgba(179, 155, 125, 0.35); }
             100% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
         }
 
         @keyframes initialTextGlow {
             0% { color: var(--text-info); text-shadow: none; }
-            50% { color: var(--gold); text-shadow: 0 0 10px rgba(179, 155, 125, 0.6); }
+            45% { color: var(--gold); text-shadow: 0 0 15px rgba(179, 155, 125, 0.7); }
             100% { color: var(--text-info); text-shadow: none; }
         }
 
