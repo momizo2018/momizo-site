@@ -2,260 +2,236 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MOMIZO Relaxation Salon</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Shippori+Mincho:wght@400&display=swap" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MOMIZO | ENTER</title>
     <style>
         :root {
-            --gold: #b39b7d;
-            --gold-alpha: rgba(179, 155, 125, 0.4);
-            --gold-bright: rgba(179, 155, 125, 0.7);
-            --text-en: rgba(255, 255, 255, 0.5);
-            --text-jp: rgba(255, 255, 255, 0.8);
-            --bg-base: #050505;
-            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-color: #030303;
+            --text-main: rgba(255, 255, 255, 0.94);
+            --text-sub: rgba(255, 255, 255, 0.45);
+            --text-ghost: rgba(255, 255, 255, 0.18);
+            --line-color: rgba(255, 255, 255, 0.12);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html { background-color: var(--bg-base); scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            /* スクロール時の「バウンス」による白い背景露出を防ぐ */
+            background-color: var(--bg-color);
+        }
 
         body {
-            margin: 0; padding: 0; width: 100%; min-height: 112dvh;
-            font-family: 'Shippori Mincho', serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: "YuMincho", "Hiragino Mincho ProN", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 101vhにすることで、ステータスバーを隠すための「遊び」を作る */
+            min-height: 101vh; 
+            /* 横スクロールは禁止し、縦のわずかな動きだけを許可 */
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            color: var(--text-jp); overflow-x: hidden;
-            user-select: none; -webkit-user-select: none;
-            background-color: var(--bg-base);
         }
 
+        /* 背景：究極の静寂 */
         body::before {
-            content: ""; position: fixed; inset: 0; z-index: 5; pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='.02'/%3E%3C/svg%3E");
-            mix-blend-mode: overlay;
+            content: "";
+            position: fixed;
+            top: -5%; left: -5%; width: 110%; height: 110%;
+            background: url("image_1.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.65;
+            pointer-events: none;
+            z-index: 1;
+            animation: spaceBreath 90s infinite alternate ease-in-out;
+            filter: contrast(1.1) brightness(0.85);
         }
 
-        .main-container {
-            position: relative; width: 100%; min-height: 112dvh;
-            background: 
-                radial-gradient(circle at 50% 45%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%),
-                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.92)),
-                url('image_1.jpg') center / cover no-repeat;
-            background-attachment: fixed;
-            display: flex; flex-direction: column;
-            padding: env(safe-area-inset-top) 8vw env(safe-area-inset-bottom);
-            
-            /* 背景の出現を少し溜めてから開始 */
-            opacity: 0;
-            animation: fadeInBg 3.0s var(--ease-out) 0.5s forwards;
+        /* 粒子感 */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 2;
         }
 
-        /* --- ふわっと浮き上がる出現演出 --- */
-        .site-header, .text-block, .cta-area, .site-footer {
-            opacity: 0;
-            animation: organicReveal 2.2s var(--ease-out) forwards;
+        .frame {
+            position: relative;
+            width: 85%;
+            max-width: 500px;
+            height: 60vh;
+            border-left: 0.5px solid var(--line-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-left: 45px;
+            z-index: 10;
+            animation: lineFade 2.5s ease-out forwards;
         }
 
-        /* 出現の重なり（オーバーラップ）を調整して「流れ」を作る */
-        .site-header { animation-delay: 1.2s; height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh; }
-        .text-block:nth-child(1) { animation-delay: 1.6s; }
-        .text-block:nth-child(2) { animation-delay: 1.9s; }
-        .cta-area { animation-delay: 2.3s; margin-bottom: 10dvh; }
-        .site-footer { animation-delay: 2.6s; height: 14dvh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.2rem; }
-
-        .logo {
-            font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.85em;
-            color: var(--gold); text-transform: uppercase; margin: 0; opacity: 0.65;
-            cursor: pointer; transition: all 1.2s var(--ease-out); z-index: 2000;
-        }
-        .logo:hover { opacity: 1; text-shadow: 0 0 20px var(--gold); }
-
-        .content {
-            flex: 1; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            z-index: 10; padding: 4vh 0;
+        @keyframes lineFade {
+            from { opacity: 0; height: 0; }
+            to { opacity: 1; height: 60vh; }
         }
 
-        .text-block { margin-bottom: 12dvh; }
-
-        .en {
-            font-family: 'Playfair Display', serif; font-style: italic;
-            font-size: clamp(1.15rem, 4.5vw, 1.4rem); letter-spacing: 0.04em;
-            line-height: 1.8; color: var(--text-en); margin-bottom: 1.4rem; display: block;
+        .title {
+            font-size: 2.1rem;
+            font-weight: 100;
+            margin: 0;
+            line-height: 1;
+            animation: titleBreath 26.3s ease-in-out infinite;
         }
-        .jp { font-size: clamp(0.76rem, 3vw, 0.85rem); letter-spacing: 0.4em; line-height: 2.2; }
 
-        .btn-reserve {
-            position: relative; display: inline-block;
-            padding: 1.3rem 4rem; text-decoration: none; font-size: 0.75rem;
-            letter-spacing: 0.5em; color: var(--gold);
-            border: 0.5px solid rgba(179, 155, 125, 0.4);
-            background-color: rgba(179, 155, 125, 0.1);
+        @keyframes titleBreath {
+            0%, 33%, 66%, 100% { letter-spacing: 0.55em; opacity: 0.85; filter: blur(0.3px); }
+            16% { letter-spacing: 0.6em; opacity: 1; filter: blur(0px); }
+            49% { letter-spacing: 0.62em; opacity: 1; filter: blur(0px); }
+            82% { letter-spacing: 0.58em; opacity: 1; filter: blur(0px); }
+        }
+
+        .title-sub {
+            font-size: 0.72rem;
+            letter-spacing: 0.38em;
+            color: var(--text-ghost);
+            margin-top: 16px;
+            display: block;
+        }
+
+        .message {
+            font-size: 0.88rem;
+            line-height: 3.2;
+            letter-spacing: 0.22em;
+            color: var(--text-sub);
+            margin-top: 55px;
+        }
+
+        .btn-wrap {
+            margin-top: auto;
+            margin-bottom: 10px;
+        }
+
+        .reserve-link {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.78rem;
+            letter-spacing: 0.5em;
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            padding: 22px 80px;
+            background: transparent;
+            transition: all 1s cubic-bezier(0.15, 1, 0.3, 1);
             cursor: pointer;
-            transition: 
-                background-color 0.5s var(--ease-out),
-                border-color 0.5s var(--ease-out),
-                box-shadow 0.5s var(--ease-out),
-                text-shadow 0.5s var(--ease-out);
-            box-shadow: 0 0 10px rgba(179, 155, 125, 0.05);
+            position: relative;
+            z-index: 20;
+            animation: heartBeat 12s infinite ease-in-out;
         }
 
-        .sub-label {
-            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            display: block; margin-top: 1.6rem; 
-            font-size: 0.7rem; letter-spacing: 0.2em; 
-            color: var(--gold); white-space: nowrap;
-            opacity: 0.6;
-            transition: opacity 0.5s var(--ease-out), text-shadow 0.5s var(--ease-out);
-            text-shadow: 0 0 8px rgba(179, 155, 125, 0.2);
+        @keyframes heartBeat {
+            0%, 70%, 100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0); }
+            75% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.05); }
+            80% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.01); }
+            85% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.08); }
         }
 
-        /* スマホ用: active(タップ中)時にも発光させる */
-        @media (hover: hover) {
-            .btn-reserve:hover {
-                background-color: rgba(179, 155, 125, 0.25);
-                border-color: var(--gold-bright);
-                text-shadow: 0 0 12px var(--gold);
-                box-shadow: 
-                    0 0 25px var(--gold-alpha),
-                    inset 0 0 12px var(--gold-alpha);
-            }
-            .btn-reserve:hover .sub-label {
-                opacity: 1;
-                text-shadow: 0 0 12px var(--gold);
-            }
-        }
-        /* 追加部分: タップした瞬間の演出 */
-        .btn-reserve:active {
-            background-color: rgba(179, 155, 125, 0.25);
-            border-color: var(--gold-bright);
-            text-shadow: 0 0 12px var(--gold);
-            box-shadow: 
-                0 0 25px var(--gold-alpha),
-                inset 0 0 12px var(--gold-alpha);
-        }
-        .btn-reserve:active .sub-label {
-            opacity: 1;
-            text-shadow: 0 0 12px var(--gold);
+        .reserve-link:hover {
+            background: rgba(255, 255, 255, 0.96);
+            color: #000;
+            letter-spacing: 0.8em;
+            padding: 22px 90px;
         }
 
         .line-link {
-            font-family: 'Playfair Display', serif; font-size: 11px;
-            letter-spacing: 0.4em; color: var(--gold);
-            text-decoration: none; text-transform: uppercase;
-            transition: opacity 0.6s var(--ease-out), text-shadow 0.6s var(--ease-out);
-            opacity: 0.65;
-            text-shadow: 0 0 8px rgba(179, 155, 125, 0.3);
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            letter-spacing: 0.2em;
+            z-index: 20;
+            transition: color 0.6s;
         }
 
-        @media (hover: hover) {
-            .line-link:hover {
-                opacity: 1;
-                text-shadow: 0 0 15px var(--gold);
-            }
-        }
-        /* 追加部分: Lineリンクもタップ時に光らせる */
-        .line-link:active {
-            opacity: 1;
-            text-shadow: 0 0 15px var(--gold);
+        .line-link:hover { color: #fff; }
+
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
-        .copyright {
-            font-size: 0.55rem; letter-spacing: 0.2em;
-            color: rgba(255,255,255,0.3); text-transform: uppercase;
+        @keyframes zenFlash {
+            0% { background: #000; opacity: 1; }
+            12% { background: rgba(255, 248, 240, 0.02); opacity: 1; }
+            30% { background: #000; opacity: 1; }
+            100% { background: #000; opacity: 1; }
         }
 
-        @keyframes organicReveal {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes spaceBreath {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.03) translate(5px, 2px); }
         }
 
-        @keyframes fadeInBg { 
-            from { opacity: 0; } 
-            to { opacity: 1; } 
-        }
-
-        .particle {
-            position: fixed; top: -5vh; pointer-events: none; z-index: 1000;
-            animation: fall linear forwards;
-        }
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        /* モバイル対応 */
+        @media screen and (max-width: 480px) {
+            .frame { padding-left: 25px; }
+            .title { font-size: 1.8rem; }
+            .reserve-link { padding: 18px 0; width: 100%; text-align: center; }
+            .reserve-link:hover { letter-spacing: 0.6em; }
         }
     </style>
 </head>
-<body ontouchstart="">
+<body>
 
-    <div class="main-container">
-        <header class="site-header">
-            <h1 class="logo" id="seasonal-logo">MOMIZO</h1>
-        </header>
+    <div id="overlay"></div>
 
-        <main class="content">
-            <section class="text-block">
-                <span class="en">Pause the noise.<br>Return to your breath.</span>
-                <p class="jp">喧騒を止め、呼吸のリズムを感じる。</p>
-            </section>
+    <div class="frame">
+        <div class="content-inner">
+            <h1 class="title">MOMIZO</h1>
+            <span class="title-sub">静寂の、その先へ。</span>
+            <div class="message">
+                呼吸を整える。<br>
+                それだけで、世界は変わる。
+            </div>
+        </div>
 
-            <section class="text-block">
-                <span class="en">Reclaim the space for your body.</span>
-                <p class="jp">心と体に、余白を取り戻す。</p>
-            </section>
-
-            <nav class="cta-area">
-                <a href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services" class="btn-reserve">
-                    RESERVE
-                    <span class="sub-label">
-                        — ご予約のお申し込みはこちらから —
-                    </span>
-                </a>
-            </nav>
-        </main>
-
-        <footer class="site-footer">
-            <a href="https://page.line.me/cvj7583f" class="line-link">Contact via Line</a>
-            <p class="copyright">&copy; 2026 MOMIZO</p>
-        </footer>
+        <div class="btn-wrap">
+            <a href="#" class="reserve-link" id="enter-btn">ENTER</a>
+        </div>
     </div>
 
+    <a href="https://page.line.me/cvj7583f" class="line-link" target="_blank">Contact via Line</a>
+
     <script>
-        const logo = document.getElementById('seasonal-logo');
-        let isRunning = false;
+        // ロード時に自動で少しだけスクロールさせ、バーを隠すきっかけを作る
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                window.scrollTo(0, 1);
+            }, 100);
+        });
 
-        const handleInteraction = () => {
-            if (isRunning) return;
-            isRunning = true;
-            const month = new Date().getMonth() + 1;
-            let config = { char: '❅', color: 'rgba(255,255,255,0.4)' };
-            if (month >= 3 && month <= 5) config = { char: '🌸', color: 'rgba(255,209,220,0.4)' };
-            else if (month >= 6 && month <= 8) config = { char: '🌿', color: 'rgba(129,163,132,0.3)' };
-            else if (month >= 9 && month <= 11) config = { char: '🍂', color: 'rgba(179,93,61,0.4)' };
+        document.getElementById('enter-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetUrl = "https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services";
+            const overlay = document.getElementById('overlay');
 
-            const interval = setInterval(() => { createParticle(config); }, 100);
-            setTimeout(() => { clearInterval(interval); isRunning = false; }, 3000);
-        };
+            overlay.style.visibility = 'visible';
+            overlay.style.animation = 'zenFlash 1.2s forwards';
 
-        logo.addEventListener('mouseenter', handleInteraction);
-        logo.addEventListener('touchstart', (e) => { handleInteraction(); });
-
-        function createParticle(config) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.textContent = config.char;
-            p.style.color = config.color;
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.fontSize = (Math.random() * 12 + 10) + 'px';
-            const duration = Math.random() * 3 + 5; 
-            p.style.animationDuration = duration + 's';
-            p.style.filter = `blur(${Math.random() * 1.5}px)`;
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), duration * 1000);
-        }
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 1100);
+        });
     </script>
 </body>
 </html>
