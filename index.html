@@ -124,9 +124,9 @@
             font-size: 0.78rem;
             letter-spacing: 0.5em;
             border: 0.5px solid rgba(255, 255, 255, 0.2);
-            padding: 22px 80px;
+            padding: 20px 60px; /* 初期サイズを少し引き締め */
             background: transparent;
-            transition: all 0.6s cubic-bezier(0.15, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
             position: relative;
             z-index: 20;
@@ -141,12 +141,22 @@
             85% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.08); }
         }
 
-        .reserve-link:hover,
+        /* PCでのホバーと、スマホでのタップ中のみ反応 */
+        @media (hover: hover) {
+            .reserve-link:hover {
+                background: rgba(255, 255, 255, 0.96);
+                color: #000;
+                letter-spacing: 0.8em;
+                padding: 20px 80px;
+            }
+        }
+
         .reserve-link:active {
             background: rgba(255, 255, 255, 0.96);
-            color: #000;
+            color: #000 !important;
             letter-spacing: 0.8em;
-            padding: 22px 90px;
+            padding: 20px 80px;
+            transition: all 0.1s ease; /* タップ時は即座に反応 */
         }
 
         .line-link {
@@ -183,10 +193,10 @@
 
         @media screen and (max-width: 480px) {
             .frame { padding-left: 25px; }
-            /* スマホでMOMIZOの文字間をさらに広げて窮屈さを解消 */
-            .title { font-size: 1.8rem; letter-spacing: 0.8em !important; } 
-            .reserve-link { padding: 18px 0; width: 100%; text-align: center; }
-            .reserve-link:hover, .reserve-link:active { padding: 18px 0; letter-spacing: 0.6em; }
+            /* スマホでMOMIZOの文字間を美しく広げる */
+            .title { font-size: 1.8rem; letter-spacing: 0.7em !important; } 
+            .reserve-link { width: 100%; text-align: center; }
+            .reserve-link:active { letter-spacing: 0.6em; }
         }
     </style>
 </head>
@@ -218,12 +228,12 @@
 
         const enterBtn = document.getElementById('enter-btn');
 
-        // スマホで指を放した瞬間にホバー状態をリセットする
-        enterBtn.addEventListener('touchend', function() {
-            setTimeout(() => {
-                this.blur();
-            }, 100);
-        });
+        // 指を放した、またはキャンセルされた瞬間にスタイルをリセット
+        const resetAction = function() {
+            setTimeout(() => { enterBtn.blur(); }, 50);
+        };
+        enterBtn.addEventListener('touchend', resetAction);
+        enterBtn.addEventListener('touchcancel', resetAction);
 
         enterBtn.addEventListener('click', function(e) {
             e.preventDefault();
