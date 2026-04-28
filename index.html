@@ -86,14 +86,13 @@
             font-weight: 100;
             margin: 0;
             line-height: 1;
+            letter-spacing: 0.55em;
             animation: titleBreath 26.3s ease-in-out infinite;
         }
 
         @keyframes titleBreath {
-            0%, 33%, 66%, 100% { letter-spacing: 0.55em; opacity: 0.85; filter: blur(0.3px); }
-            16% { letter-spacing: 0.6em; opacity: 1; filter: blur(0px); }
-            49% { letter-spacing: 0.62em; opacity: 1; filter: blur(0px); }
-            82% { letter-spacing: 0.58em; opacity: 1; filter: blur(0px); }
+            0%, 33%, 66%, 100% { opacity: 0.85; filter: blur(0.3px); }
+            16%, 49%, 82% { opacity: 1; filter: blur(0px); }
         }
 
         .title-sub {
@@ -117,6 +116,7 @@
             margin-bottom: 10px;
         }
 
+        /* リンク設定：初期状態を引き締め */
         .reserve-link {
             display: inline-block;
             text-decoration: none;
@@ -124,9 +124,9 @@
             font-size: 0.78rem;
             letter-spacing: 0.5em;
             border: 0.5px solid rgba(255, 255, 255, 0.2);
-            padding: 20px 60px; /* 初期サイズを少し引き締め */
+            padding: 20px 60px; 
             background: transparent;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
             position: relative;
             z-index: 20;
@@ -137,26 +137,25 @@
         @keyframes heartBeat {
             0%, 70%, 100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0); }
             75% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.05); }
-            80% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.01); }
             85% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.08); }
         }
 
-        /* PCでのホバーと、スマホでのタップ中のみ反応 */
+        /* PCホバー時 */
         @media (hover: hover) {
             .reserve-link:hover {
                 background: rgba(255, 255, 255, 0.96);
                 color: #000;
-                letter-spacing: 0.8em;
+                letter-spacing: 0.7em;
                 padding: 20px 80px;
             }
         }
 
+        /* スマホタップ時：即座に反応し、指を離すとtransitionで戻る */
         .reserve-link:active {
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.96) !important;
             color: #000 !important;
-            letter-spacing: 0.8em;
-            padding: 20px 80px;
-            transition: all 0.1s ease; /* タップ時は即座に反応 */
+            letter-spacing: 0.6em;
+            transition: all 0.05s ease;
         }
 
         .line-link {
@@ -172,8 +171,6 @@
             -webkit-touch-callout: none;
         }
 
-        .line-link:hover { color: #fff; }
-
         #overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -187,16 +184,32 @@
         @keyframes zenFlash {
             0% { background: #000; opacity: 1; }
             12% { background: rgba(255, 248, 240, 0.02); opacity: 1; }
-            30% { background: #000; opacity: 1; }
-            100% { background: #000; opacity: 1; }
+            30%, 100% { background: #000; opacity: 1; }
         }
 
-        @media screen and (max-width: 480px) {
+        /* --- スマホ専用調整 --- */
+        @media screen and (max-width: 900px) {
+            /* 縦でも横でもMOMIZOの文字間を広げる */
+            .title { 
+                font-size: 1.8rem; 
+                letter-spacing: 0.8em !important; 
+                text-indent: 0.8em; /* 中央揃えを維持するための補正 */
+            }
             .frame { padding-left: 25px; }
-            /* スマホでMOMIZOの文字間を美しく広げる */
-            .title { font-size: 1.8rem; letter-spacing: 0.7em !important; } 
-            .reserve-link { width: 100%; text-align: center; }
-            .reserve-link:active { letter-spacing: 0.6em; }
+            
+            /* ボタンはスマホ時のみ横幅を活かすが、デカすぎないように制限 */
+            .reserve-link {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+                padding: 18px 0;
+            }
+        }
+
+        /* 横向き時のさらなる微調整 */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .frame { height: 75vh; }
+            .message { margin-top: 20px; line-height: 2.2; }
         }
     </style>
 </head>
@@ -226,25 +239,20 @@
             setTimeout(() => { window.scrollTo(0, 1); }, 100);
         });
 
-        const enterBtn = document.getElementById('enter-btn');
+        const btn = document.getElementById('enter-btn');
 
-        // 指を放した、またはキャンセルされた瞬間にスタイルをリセット
-        const resetAction = function() {
-            setTimeout(() => { enterBtn.blur(); }, 50);
-        };
-        enterBtn.addEventListener('touchend', resetAction);
-        enterBtn.addEventListener('touchcancel', resetAction);
+        // タップ終了時にフォーカスを強制解除
+        const endTouch = () => { setTimeout(() => btn.blur(), 150); };
+        btn.addEventListener('touchend', endTouch);
+        btn.addEventListener('touchcancel', endTouch);
 
-        enterBtn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function(e) {
             e.preventDefault();
-            const targetUrl = "https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services";
             const overlay = document.getElementById('overlay');
-
             overlay.style.visibility = 'visible';
             overlay.style.animation = 'zenFlash 1.2s forwards';
-
             setTimeout(() => {
-                window.location.href = targetUrl;
+                window.location.href = "https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services";
             }, 1100);
         });
     </script>
