@@ -14,16 +14,11 @@
         }
 
         * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            /* タップ時の青いハイライトを消去 */
+            margin: 0; padding: 0; box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
         }
 
-        html {
-            background-color: var(--bg-color);
-        }
+        html { background-color: var(--bg-color); }
 
         body {
             background-color: var(--bg-color);
@@ -37,7 +32,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 背景：究極の静寂 */
         body::before {
             content: "";
             position: fixed;
@@ -58,7 +52,6 @@
             100% { transform: scale(1.03) translate(5px, 2px); }
         }
 
-        /* 粒子感のレイヤー */
         body::after {
             content: "";
             position: fixed;
@@ -133,12 +126,11 @@
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             padding: 22px 80px;
             background: transparent;
-            transition: all 1s cubic-bezier(0.15, 1, 0.3, 1);
+            transition: all 0.6s cubic-bezier(0.15, 1, 0.3, 1);
             cursor: pointer;
             position: relative;
             z-index: 20;
             animation: heartBeat 12s infinite ease-in-out;
-            /* 長押しプレビューの禁止 */
             -webkit-touch-callout: none;
         }
 
@@ -149,7 +141,6 @@
             85% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.08); }
         }
 
-        /* HoverとActive（タップ中）の両方にスタイルを適用 */
         .reserve-link:hover,
         .reserve-link:active {
             background: rgba(255, 255, 255, 0.96);
@@ -189,9 +180,19 @@
             30% { background: #000; opacity: 1; }
             100% { background: #000; opacity: 1; }
         }
+
+        @media screen and (max-width: 480px) {
+            .frame { padding-left: 25px; }
+            /* スマホでMOMIZOの文字間をさらに広げて窮屈さを解消 */
+            .title { font-size: 1.8rem; letter-spacing: 0.8em !important; } 
+            .reserve-link { padding: 18px 0; width: 100%; text-align: center; }
+            .reserve-link:hover, .reserve-link:active { padding: 18px 0; letter-spacing: 0.6em; }
+        }
     </style>
 </head>
-<body ontouchstart=""> <div id="overlay"></div>
+<body ontouchstart="">
+
+    <div id="overlay"></div>
 
     <div class="frame">
         <div class="content-inner">
@@ -215,7 +216,16 @@
             setTimeout(() => { window.scrollTo(0, 1); }, 100);
         });
 
-        document.getElementById('enter-btn').addEventListener('click', function(e) {
+        const enterBtn = document.getElementById('enter-btn');
+
+        // スマホで指を放した瞬間にホバー状態をリセットする
+        enterBtn.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.blur();
+            }, 100);
+        });
+
+        enterBtn.addEventListener('click', function(e) {
             e.preventDefault();
             const targetUrl = "https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services";
             const overlay = document.getElementById('overlay');
