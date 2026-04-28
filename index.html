@@ -12,11 +12,10 @@
     <style>
         :root {
             --gold: #b39b7d;
-            --gold-glow: rgba(179, 155, 125, 0.3);
+            --gold-alpha: rgba(179, 155, 125, 0.4);
+            --gold-bright: rgba(179, 155, 125, 0.7);
             --text-en: rgba(255, 255, 255, 0.5);
             --text-jp: rgba(255, 255, 255, 0.8);
-            --text-info: rgba(255, 255, 255, 0.65);
-            --text-muted: rgba(255, 255, 255, 0.45);
             --bg-base: #050505;
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -29,10 +28,8 @@
             font-family: 'Shippori Mincho', serif;
             -webkit-font-smoothing: antialiased;
             color: var(--text-jp); overflow-x: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            user-select: none; -webkit-user-select: none;
+            background-color: var(--bg-base);
         }
 
         body::before {
@@ -50,27 +47,31 @@
             background-attachment: fixed;
             display: flex; flex-direction: column;
             padding: env(safe-area-inset-top) 8vw env(safe-area-inset-bottom);
+            
+            /* 背景の出現を少し溜めてから開始 */
             opacity: 0;
-            animation: fadeInBg 2.0s var(--ease-out) forwards;
+            animation: fadeInBg 3.0s var(--ease-out) 0.5s forwards;
         }
 
-        .site-header { 
-            height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh;
+        /* --- ふわっと浮き上がる出現演出 --- */
+        .site-header, .text-block, .cta-area, .site-footer {
             opacity: 0;
-            animation: revealUp 1.8s var(--ease-out) forwards 0.6s;
+            animation: organicReveal 2.2s var(--ease-out) forwards;
         }
+
+        /* 出現の重なり（オーバーラップ）を調整して「流れ」を作る */
+        .site-header { animation-delay: 1.2s; height: 15dvh; display: flex; align-items: flex-start; padding-top: 5dvh; }
+        .text-block:nth-child(1) { animation-delay: 1.6s; }
+        .text-block:nth-child(2) { animation-delay: 1.9s; }
+        .cta-area { animation-delay: 2.3s; margin-bottom: 10dvh; }
+        .site-footer { animation-delay: 2.6s; height: 14dvh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.2rem; }
 
         .logo {
             font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.85em;
-            color: var(--gold); text-transform: uppercase; margin: 0; opacity: 0.65; line-height: 1;
-            cursor: pointer; transition: all 1.2s var(--ease-out);
-            user-select: none; z-index: 2000;
+            color: var(--gold); text-transform: uppercase; margin: 0; opacity: 0.65;
+            cursor: pointer; transition: all 1.2s var(--ease-out); z-index: 2000;
         }
-        .logo:hover {
-            opacity: 1;
-            text-shadow: 0 0 20px var(--gold);
-            letter-spacing: 0.95em;
-        }
+        .logo:hover { opacity: 1; text-shadow: 0 0 20px var(--gold); }
 
         .content {
             flex: 1; display: flex; flex-direction: column;
@@ -78,79 +79,85 @@
             z-index: 10; padding: 4vh 0;
         }
 
-        .text-block {
-            margin-bottom: 12dvh; opacity: 0;
-            animation: revealUp 2.0s var(--ease-out) forwards;
-        }
-        /* 表示間隔を少し短縮 */
-        .text-block:nth-child(1) { animation-delay: 1.2s; }
-        .text-block:nth-child(2) { animation-delay: 2.0s; }
+        .text-block { margin-bottom: 12dvh; }
 
         .en {
             font-family: 'Playfair Display', serif; font-style: italic;
             font-size: clamp(1.15rem, 4.5vw, 1.4rem); letter-spacing: 0.04em;
             line-height: 1.8; color: var(--text-en); margin-bottom: 1.4rem; display: block;
         }
-
-        .jp {
-            font-size: clamp(0.76rem, 3vw, 0.85rem); letter-spacing: 0.4em;
-            line-height: 2.2; color: var(--text-jp);
-        }
-
-        .cta-area { 
-            opacity: 0; 
-            animation: 
-                fadeIn 2.0s var(--ease-out) forwards 3.0s,
-                initialGlow 3.5s var(--ease-out) forwards 4.5s;
-            margin-bottom: 10dvh; 
-        }
+        .jp { font-size: clamp(0.76rem, 3vw, 0.85rem); letter-spacing: 0.4em; line-height: 2.2; }
 
         .btn-reserve {
             position: relative; display: inline-block;
-            padding: 1.3rem 4rem; 
-            border: 0.5px solid rgba(179, 155, 125, 0.35);
-            color: var(--gold); text-decoration: none; font-size: 0.75rem;
-            letter-spacing: 0.45em; background-color: rgba(179, 155, 125, 0);
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            transition: all 0.6s var(--ease-out);
+            padding: 1.3rem 4rem; text-decoration: none; font-size: 0.75rem;
+            letter-spacing: 0.5em; color: var(--gold);
+            border: 0.5px solid rgba(179, 155, 125, 0.4);
+            background-color: rgba(179, 155, 125, 0.1);
             cursor: pointer;
-            overflow: visible;
-            -webkit-touch-callout: none;
+            transition: 
+                background-color 0.5s var(--ease-out),
+                border-color 0.5s var(--ease-out),
+                box-shadow 0.5s var(--ease-out),
+                text-shadow 0.5s var(--ease-out);
+            box-shadow: 0 0 10px rgba(179, 155, 125, 0.05);
         }
 
         .sub-label {
-            position: absolute;
-            top: 100%; left: 50%; transform: translateX(-50%);
-            display: block; margin-top: 1.5rem; 
-            font-size: 0.72rem; letter-spacing: 0.15em; 
-            color: var(--text-info); font-weight: 400;
-            transition: all 0.6s var(--ease-out);
-            white-space: nowrap;
-            animation: initialTextGlow 3.5s var(--ease-out) forwards 4.5s;
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            display: block; margin-top: 1.6rem; 
+            font-size: 0.7rem; letter-spacing: 0.2em; 
+            color: var(--gold); white-space: nowrap;
+            opacity: 0.6;
+            transition: opacity 0.5s var(--ease-out), text-shadow 0.5s var(--ease-out);
+            text-shadow: 0 0 8px rgba(179, 155, 125, 0.2);
         }
-
-        .dash { opacity: 0.4; transition: all 0.6s var(--ease-out); }
 
         @media (hover: hover) {
             .btn-reserve:hover {
-                background-color: rgba(179, 155, 125, 0.1);
-                border-color: rgba(179, 155, 125, 0.7);
-                box-shadow: 0 0 15px rgba(179, 155, 125, 0.15);
+                background-color: rgba(179, 155, 125, 0.25);
+                border-color: var(--gold-bright);
+                text-shadow: 0 0 12px var(--gold);
+                box-shadow: 
+                    0 0 25px var(--gold-alpha),
+                    inset 0 0 12px var(--gold-alpha);
             }
             .btn-reserve:hover .sub-label {
-                color: var(--gold) !important;
-                text-shadow: 0 0 8px rgba(179, 155, 125, 0.5) !important;
+                opacity: 1;
+                text-shadow: 0 0 12px var(--gold);
             }
-            .btn-reserve:hover .dash { opacity: 0.7; }
         }
 
-        .btn-reserve:active { 
-            transform: scale(0.97) !important; 
-            background-color: rgba(179, 155, 125, 0.25) !important; 
-            border-color: rgba(179, 155, 125, 1) !important;
-            box-shadow: 0 0 25px rgba(179, 155, 125, 0.4) !important;
+        .line-link {
+            font-family: 'Playfair Display', serif; font-size: 11px;
+            letter-spacing: 0.4em; color: var(--gold);
+            text-decoration: none; text-transform: uppercase;
+            transition: opacity 0.6s var(--ease-out), text-shadow 0.6s var(--ease-out);
+            opacity: 0.65;
+            text-shadow: 0 0 8px rgba(179, 155, 125, 0.3);
         }
-        .btn-reserve:active .sub-label { transform: translateX(-50%) !important; color: var(--gold) !important; }
+
+        @media (hover: hover) {
+            .line-link:hover {
+                opacity: 1;
+                text-shadow: 0 0 15px var(--gold);
+            }
+        }
+
+        .copyright {
+            font-size: 0.55rem; letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.3); text-transform: uppercase;
+        }
+
+        @keyframes organicReveal {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInBg { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
 
         .particle {
             position: fixed; top: -5vh; pointer-events: none; z-index: 1000;
@@ -160,74 +167,6 @@
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
-
-        .site-footer {
-            height: 14dvh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; gap: 1.2rem;
-            z-index: 10;
-            opacity: 0;
-            animation: fadeIn 2.0s var(--ease-out) forwards 4.0s;
-        }
-
-        .line-link {
-            font-family: 'Playfair Display', serif; font-size: 11px;
-            letter-spacing: 0.4em; color: var(--text-muted);
-            text-decoration: none; text-transform: uppercase;
-            transition: all 0.8s var(--ease-out);
-            position: relative;
-            -webkit-touch-callout: none;
-        }
-
-        @media (hover: hover) {
-            .line-link:hover {
-                color: var(--gold);
-                text-shadow: 0 0 10px rgba(179, 155, 125, 0.6);
-            }
-        }
-        
-        .line-link:active { 
-            color: var(--gold) !important; 
-            transform: scale(0.98);
-            transition: all 0.1s;
-        }
-
-        .copyright {
-            font-size: 0.55rem; letter-spacing: 0.2em;
-            color: var(--text-muted); text-transform: uppercase; opacity: 0.4;
-        }
-
-        @keyframes fadeInBg {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes revealUp {
-            from { opacity: 0; transform: translateY(20px); filter: blur(6px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes initialGlow {
-            0% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
-            45% { background-color: rgba(179, 155, 125, 0.2); border-color: rgba(179, 155, 125, 0.8); box-shadow: 0 0 30px rgba(179, 155, 125, 0.35); }
-            100% { background-color: rgba(179, 155, 125, 0); border-color: rgba(179, 155, 125, 0.35); }
-        }
-
-        @keyframes initialTextGlow {
-            0% { color: var(--text-info); text-shadow: none; }
-            45% { color: var(--gold); text-shadow: 0 0 15px rgba(179, 155, 125, 0.7); }
-            100% { color: var(--text-info); text-shadow: none; }
-        }
-
-        @media (orientation: landscape) and (max-height: 500px) {
-            body, .main-container { min-height: 125dvh; }
-            .site-header { height: 18dvh; } .text-block { margin-bottom: 7dvh; }
-            .site-footer { height: 20dvh; gap: 1rem; }
         }
     </style>
 </head>
@@ -253,7 +192,7 @@
                 <a href="https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services" class="btn-reserve">
                     RESERVE
                     <span class="sub-label">
-                        <span class="dash">—</span>&nbsp;ご予約のお申し込みはこちらから&nbsp;<span class="dash">—</span>
+                        — ご予約のお申し込みはこちらから —
                     </span>
                 </a>
             </nav>
