@@ -113,6 +113,7 @@
             text-shadow: 0 0 8px rgba(179, 155, 125, 0.2);
         }
 
+        /* スマホ用: active(タップ中)時にも発光させる */
         @media (hover: hover) {
             .btn-reserve:hover {
                 background-color: rgba(179, 155, 125, 0.25);
@@ -126,6 +127,19 @@
                 opacity: 1;
                 text-shadow: 0 0 12px var(--gold);
             }
+        }
+        /* 追加部分: タップした瞬間の演出 */
+        .btn-reserve:active {
+            background-color: rgba(179, 155, 125, 0.25);
+            border-color: var(--gold-bright);
+            text-shadow: 0 0 12px var(--gold);
+            box-shadow: 
+                0 0 25px var(--gold-alpha),
+                inset 0 0 12px var(--gold-alpha);
+        }
+        .btn-reserve:active .sub-label {
+            opacity: 1;
+            text-shadow: 0 0 12px var(--gold);
         }
 
         .line-link {
@@ -142,6 +156,11 @@
                 opacity: 1;
                 text-shadow: 0 0 15px var(--gold);
             }
+        }
+        /* 追加部分: Lineリンクもタップ時に光らせる */
+        .line-link:active {
+            opacity: 1;
+            text-shadow: 0 0 15px var(--gold);
         }
 
         .copyright {
