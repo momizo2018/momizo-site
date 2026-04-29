@@ -7,12 +7,13 @@
     <style>
         :root {
             --bg-color: #030303;
-            --text-main: rgba(255, 255, 255, 0.94);
-            --text-sub: rgba(255, 255, 255, 0.45);
-            --text-ghost: rgba(255, 255, 255, 0.18);
-            --line-color: rgba(255, 255, 255, 0.12);
+            --text-main: rgba(255, 255, 255, 0.98);
+            --text-sub: rgba(255, 255, 255, 0.75); /* 視認性向上のため不透明度UP */
+            --text-ghost: rgba(255, 255, 255, 0.4);  /* 視認性向上のため不透明度UP */
+            --line-color: rgba(255, 255, 255, 0.15);
             --bg-loaded: none;
             --bg-opacity: 0;
+            --accent-bloom: rgba(255, 255, 255, 0.15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -22,7 +23,6 @@
             color: var(--text-main);
             font-family: "YuMincho", "Hiragino Mincho ProN", serif;
             font-weight: 300;
-            /* ステータスバーを隠すためのスクロール領域 */
             min-height: 125vh; 
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -34,9 +34,8 @@
             content: "";
             position: fixed;
             top: -5%; left: -5%; width: 110%; height: 110%;
-            /* 縦方向のグラデーション：上が空気、下が深淵 */
             background-image: 
-                linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.35)),
+                linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.45)),
                 var(--bg-loaded);
             background-repeat: no-repeat;
             background-size: cover;
@@ -44,15 +43,14 @@
             opacity: var(--bg-opacity);
             pointer-events: none;
             z-index: 1;
-            transition: opacity 1.2s ease;
+            transition: opacity 1.5s ease;
             animation: spaceBreath 90s infinite alternate ease-in-out;
-            /* 画像の質感を再現するコントラスト調整 */
-            filter: contrast(1.12) brightness(0.80);
+            filter: contrast(1.1) brightness(0.75);
         }
 
         @keyframes spaceBreath {
             0% { transform: scale(1) translate(0, 0); }
-            100% { transform: scale(1.03) translate(5px, 2px); }
+            100% { transform: scale(1.05) translate(8px, 4px); }
         }
 
         /* 粒子感のレイヤー */
@@ -60,110 +58,116 @@
             content: "";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
             pointer-events: none;
             z-index: 2;
         }
 
         .frame {
             position: fixed;
-            top: 50svh; /* ブラウザUIに左右されない動的センタリング */
+            top: 50svh;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 85%;
+            width: 88%;
             max-width: 500px;
-            border-left: 0.35px solid var(--line-color); 
+            border-left: 0.5px solid var(--line-color); 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            /* 端末幅に応じた最適な余白の追求 */
-            padding-left: clamp(28px, 6vw, 45px);
+            padding-left: clamp(24px, 7vw, 45px);
             z-index: 10;
-            animation: lineFade 2.5s ease-out forwards;
+            animation: lineFade 2.8s cubic-bezier(0.15, 1, 0.3, 1) forwards;
+            /* テキストエリアの背後をわずかに暗くして浮かび上がらせる（環境制御） */
+            background: radial-gradient(circle at 0% 50%, rgba(0,0,0,0.4) 0%, transparent 80%);
         }
 
         @keyframes lineFade {
             from { opacity: 0; min-height: 0; }
-            to { opacity: 1; min-height: 60vh; }
+            to { opacity: 1; min-height: 62vh; }
         }
 
         .title {
-            font-size: 2.1rem;
-            font-weight: 100;
+            font-size: 2.2rem;
+            font-weight: 200;
             margin: 0;
             line-height: 1;
+            text-shadow: 0 0 15px var(--accent-bloom); /* Soft Bloom */
             animation: titleBreath 21s ease-in-out infinite;
         }
 
         @keyframes titleBreath {
-            0%, 33%, 66%, 100% { letter-spacing: 0.52em; opacity: 0.85; filter: blur(0.3px); }
-            16%, 49%, 82% { letter-spacing: 0.63em; opacity: 1; filter: blur(0px); }
+            0%, 33%, 66%, 100% { letter-spacing: 0.52em; opacity: 0.9; filter: blur(0.3px); }
+            16%, 49%, 82% { letter-spacing: 0.6em; opacity: 1; filter: blur(0px); }
         }
 
         .title-sub {
-            font-size: 0.72rem;
-            letter-spacing: 0.38em;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
             color: var(--text-ghost);
-            margin-top: 10px;
+            margin-top: 12px;
             display: block;
+            text-shadow: 0 0 8px rgba(0,0,0,0.8); /* 視認性確保のシャドウ */
         }
 
         .message {
-            font-size: 0.88rem;
-            line-height: clamp(2.4, 2.2vh, 2.8);
-            letter-spacing: 0.22em;
+            font-size: 0.92rem;
+            line-height: 2.6;
+            letter-spacing: 0.25em;
             color: var(--text-sub);
-            margin-top: 45px;
+            margin-top: 40px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
         }
 
         .btn-wrap {
             margin-top: auto;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .reserve-link {
             display: inline-block;
             text-decoration: none;
             color: var(--text-main);
-            font-size: 0.78rem;
-            letter-spacing: 0.5em;
-            border: 0.5px solid rgba(255, 255, 255, 0.2);
-            padding: 22px 80px;
+            font-size: 0.8rem;
+            letter-spacing: 0.55em;
+            border: 0.6px solid rgba(255, 255, 255, 0.25);
+            padding: 22px 75px;
             background: transparent;
-            transition: all 0.8s cubic-bezier(0.15, 1, 0.3, 1);
+            transition: all 0.7s cubic-bezier(0.15, 1, 0.3, 1);
             cursor: pointer;
             position: relative;
             z-index: 20;
+            overflow: hidden;
+        }
+
+        /* スマホ用のアクティブ状態フィードバック */
+        .reserve-link:active, .reserve-link.touched {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.08);
+            letter-spacing: 0.65em;
+            transition: transform 0.15s ease-out;
         }
 
         @media (hover: hover) {
             .reserve-link:hover {
-                background: rgba(255, 255, 255, 0.96);
+                background: rgba(255, 255, 255, 0.98);
                 color: #000;
-                letter-spacing: 0.8em;
-                padding: 22px 90px;
+                letter-spacing: 0.85em;
+                padding: 22px 85px;
             }
         }
 
-        .reserve-link.touched {
-            transform: scale(0.97);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
-            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* 視認性と静寂を両立させた位置調整 */
         .line-link {
             position: fixed;
-            bottom: 32px;
+            bottom: 35px;
             right: 32px;
             font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.35);
             text-decoration: none;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.22em;
             z-index: 20;
-            transition: color 0.6s;
+            transition: color 0.6s, opacity 0.6s;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         @media (hover: hover) {
@@ -185,35 +189,29 @@
             100% { opacity: 1; }
         }
 
-        /* =========================================
-            スマートフォン最適化
-        ========================================= */
-
+        /* スマートフォン最適化 */
         @media (max-width: 768px) {
             .frame {
-                /* padding-left は clamp により自動最適化 */
-                animation: lineFadeMobile 2.5s ease-out forwards;
+                animation: lineFadeMobile 2.8s ease-out forwards;
             }
             @keyframes lineFadeMobile {
                 from { opacity: 0; min-height: 0; }
-                to { opacity: 1; min-height: 65vh; }
+                to { opacity: 1; min-height: 64vh; }
             }
             .title {
-                font-size: 1.8rem;
-                margin-top: -10px;
+                font-size: 1.9rem;
+                margin-top: -5px;
             }
             .reserve-link {
-                padding: 18px 55px;
-                font-size: 0.7rem;
+                padding: 18px 50px;
+                font-size: 0.72rem;
             }
-            /* 小さなスマホでも 32px を基準に安定 */
             .line-link {
-                bottom: 32px;
+                bottom: 35px;
                 right: 32px;
             }
         }
 
-        /* 横向き：静寂の最適化 */
         @media (max-height: 500px) and (orientation: landscape) {
             body { min-height: 150vh; }
             .frame {
@@ -222,20 +220,11 @@
             }
             @keyframes lineFadeLandscape {
                 from { opacity: 0; min-height: 0; }
-                to { opacity: 1; min-height: 75vh; }
+                to { opacity: 1; min-height: 72vh; }
             }
-            .title {
-                font-size: 1.5rem;
-                letter-spacing: 0.35em;
-                filter: blur(0.4px);
-            }
-            .message {
-                margin-top: 15px;
-                line-height: 2;
-            }
-            .reserve-link {
-                padding: 12px 40px;
-            }
+            .title { font-size: 1.5rem; }
+            .message { margin-top: 10px; line-height: 2; }
+            .reserve-link { padding: 10px 40px; }
         }
     </style>
 </head>
@@ -261,40 +250,56 @@
     <a href="https://page.line.me/cvj7583f" class="line-link">Contact via Line</a>
 
     <script>
-        // 背景の確実な立ち上がり（Safari 2フレーム遅延対策）
+        const overlay = document.getElementById('overlay');
+        const enterBtn = document.getElementById('enter-btn');
+        const targetUrl = "https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services";
+
+        // 背景の確実な立ち上がり
         window.addEventListener("load", () => {
             const bg = document.body.dataset.bg;
-            document.body.style.setProperty("--bg-loaded", `url(${bg})`);
-            requestAnimationFrame(() => {
+            if (bg) {
+                document.body.style.setProperty("--bg-loaded", `url(${bg})`);
                 requestAnimationFrame(() => {
-                    document.body.style.setProperty("--bg-opacity", "0.65");
+                    requestAnimationFrame(() => {
+                        document.body.style.setProperty("--bg-opacity", "0.68");
+                    });
                 });
-            });
+            }
         });
 
-        const enterBtn = document.getElementById('enter-btn');
-        const overlay = document.getElementById('overlay');
-        const targetUrl = "https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services";
+        // 【最重要】戻った時に真っ黒なのを防ぐ（bfcache対策）
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                // ブラウザの「戻る」で来た場合、オーバーレイをリセット
+                overlay.style.animation = 'none';
+                overlay.style.visibility = 'hidden';
+                overlay.style.opacity = '0';
+                enterBtn.classList.remove("touched");
+            }
+        });
 
         function startTransition() {
             overlay.style.visibility = 'visible';
-            overlay.style.animation = 'zenFlash 0.9s forwards';
+            overlay.style.animation = 'zenFlash 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards';
         }
 
-        // アニメーション完了と遷移の完全同期
-        overlay.addEventListener("animationend", () => {
-            window.location.href = targetUrl;
+        // アニメーション完了と遷移
+        overlay.addEventListener("animationend", (e) => {
+            if (e.animationName === 'zenFlash') {
+                window.location.href = targetUrl;
+            }
         });
 
-        // タッチ操作の極致（二重反応防止 ＋ 即時レスポンス）
+        // タッチ操作（二重反応防止 ＋ 即時レスポンス）
         enterBtn.addEventListener("touchstart", (e) => {
-            e.preventDefault(); 
+            // passive: false でスクロール干渉を防ぎつつ即時実行
             enterBtn.classList.add("touched");
             startTransition();
-        }, {passive: false});
+        }, {passive: true});
 
-        // PC環境用のクリックイベント
+        // クリックイベント（PC用）
         enterBtn.addEventListener('click', (e) => {
+            // pointerTypeがtouchの場合はtouchstart側に任せる
             if (e.pointerType === 'touch') return;
             startTransition();
         });
