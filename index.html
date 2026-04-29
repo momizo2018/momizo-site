@@ -29,12 +29,15 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 背景：深淵とディテールの究極バランス */
+        /* 背景：画像と完全に同期する深淵の空気感 */
         body::before {
             content: "";
             position: fixed;
             top: -5%; left: -5%; width: 110%; height: 110%;
-            background-image: var(--bg-loaded);
+            /* 縦方向のグラデーション：上が空気、下が深淵 */
+            background-image: 
+                linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.35)),
+                var(--bg-loaded);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -43,7 +46,8 @@
             z-index: 1;
             transition: opacity 1.2s ease;
             animation: spaceBreath 90s infinite alternate ease-in-out;
-            filter: contrast(1.08) brightness(0.82);
+            /* 画像の質感を再現するコントラスト調整 */
+            filter: contrast(1.12) brightness(0.80);
         }
 
         @keyframes spaceBreath {
@@ -182,7 +186,7 @@
         }
 
         /* =========================================
-           スマートフォン最適化
+            スマートフォン最適化
         ========================================= */
 
         @media (max-width: 768px) {
