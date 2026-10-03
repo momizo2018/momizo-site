@@ -1,308 +1,415 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MOMIZO | ENTER</title>
-    <style>
-        :root {
-            --bg-color: #030303;
-            --text-main: rgba(255, 255, 255, 0.98);
-            --text-sub: rgba(255, 255, 255, 0.75); /* 視認性向上のため不透明度UP */
-            --text-ghost: rgba(255, 255, 255, 0.4);  /* 視認性向上のため不透明度UP */
-            --line-color: rgba(255, 255, 255, 0.15);
-            --bg-loaded: none;
-            --bg-opacity: 0;
-            --accent-bloom: rgba(255, 255, 255, 0.15);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f4f2ed">
+<meta name="format-detection" content="telephone=no">
+<title>揉蔵 | ご予約</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: "YuMincho", "Hiragino Mincho ProN", serif;
-            font-weight: 300;
-            min-height: 125vh; 
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -webkit-tap-highlight-color: transparent;
-        }
+<style>
+:root {
+  --ink: #171716;
+  --muted: #77736c;
+  --soft: #a19c94;
+  --line: rgba(23,23,22,.10);
+  --paper: #f4f2ed;
+  --card: rgba(255,254,251,.88);
+  --accent: #a28d73;
+  --accent-light: rgba(162,141,115,.13);
+}
 
-        /* 背景：画像と完全に同期する深淵の空気感 */
-        body::before {
-            content: "";
-            position: fixed;
-            top: -5%; left: -5%; width: 110%; height: 110%;
-            background-image: 
-                linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.45)),
-                var(--bg-loaded);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            opacity: var(--bg-opacity);
-            pointer-events: none;
-            z-index: 1;
-            transition: opacity 1.5s ease;
-            animation: spaceBreath 90s infinite alternate ease-in-out;
-            filter: contrast(1.1) brightness(0.75);
-        }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-        @keyframes spaceBreath {
-            0% { transform: scale(1) translate(0, 0); }
-            100% { transform: scale(1.05) translate(8px, 4px); }
-        }
+html {
+  min-height: 100%;
+  background: var(--paper);
+}
 
-        /* 粒子感のレイヤー */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.04;
-            pointer-events: none;
-            z-index: 2;
-        }
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  color: var(--ink);
+  font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
+    "Hiragino Sans", "Yu Gothic", sans-serif;
+  background:
+    radial-gradient(circle at 8% 8%, rgba(255,255,255,.95), transparent 34%),
+    radial-gradient(circle at 94% 92%, rgba(206,195,180,.30), transparent 32%),
+    linear-gradient(145deg, #faf9f6 0%, #eeece7 100%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
 
-        .frame {
-            position: fixed;
-            top: 50svh;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 88%;
-            max-width: 500px;
-            border-left: 0.5px solid var(--line-color); 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding-left: clamp(24px, 7vw, 45px);
-            z-index: 10;
-            animation: lineFade 2.8s cubic-bezier(0.15, 1, 0.3, 1) forwards;
-            /* テキストエリアの背後をわずかに暗くして浮かび上がらせる（環境制御） */
-            background: radial-gradient(circle at 0% 50%, rgba(0,0,0,0.4) 0%, transparent 80%);
-        }
+body::before {
+  content: "";
+  position: fixed;
+  width: 460px;
+  height: 460px;
+  top: -290px;
+  left: -260px;
+  border: 1px solid rgba(162,141,115,.16);
+  border-radius: 50%;
+  pointer-events: none;
+}
 
-        @keyframes lineFade {
-            from { opacity: 0; min-height: 0; }
-            to { opacity: 1; min-height: 62vh; }
-        }
+.card {
+  position: relative;
+  width: min(100%, 430px);
+  padding: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 25px;
+  background: var(--card);
+  box-shadow:
+    0 24px 60px rgba(40,34,27,.115),
+    0 2px 8px rgba(40,34,27,.035);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation: enter .65s cubic-bezier(.16,1,.3,1) both;
+}
 
-        .title {
-            font-size: 2.2rem;
-            font-weight: 200;
-            margin: 0;
-            line-height: 1;
-            text-shadow: 0 0 15px var(--accent-bloom); /* Soft Bloom */
-            animation: titleBreath 21s ease-in-out infinite;
-        }
+.card::after {
+  content: "";
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  right: -125px;
+  top: -115px;
+  border-radius: 50%;
+  background: rgba(162,141,115,.08);
+  pointer-events: none;
+}
 
-        @keyframes titleBreath {
-            0%, 33%, 66%, 100% { letter-spacing: 0.52em; opacity: 0.9; filter: blur(0.3px); }
-            16%, 49%, 82% { letter-spacing: 0.6em; opacity: 1; filter: blur(0px); }
-        }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 23px;
+  border-bottom: 1px solid var(--line);
+}
 
-        .title-sub {
-            font-size: 0.75rem;
-            letter-spacing: 0.4em;
-            color: var(--text-ghost);
-            margin-top: 12px;
-            display: block;
-            text-shadow: 0 0 8px rgba(0,0,0,0.8); /* 視認性確保のシャドウ */
-        }
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
 
-        .message {
-            font-size: 0.92rem;
-            line-height: 2.6;
-            letter-spacing: 0.25em;
-            color: var(--text-sub);
-            margin-top: 40px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-        }
+.brand-name {
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -.065em;
+}
 
-        .btn-wrap {
-            margin-top: auto;
-            margin-bottom: 20px;
-        }
+.brand-sub {
+  color: var(--soft);
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: .23em;
+  text-transform: uppercase;
+}
 
-        .reserve-link {
-            display: inline-block;
-            text-decoration: none;
-            color: var(--text-main);
-            font-size: 0.8rem;
-            letter-spacing: 0.55em;
-            border: 0.6px solid rgba(255, 255, 255, 0.25);
-            padding: 22px 75px;
-            background: transparent;
-            transition: all 0.7s cubic-bezier(0.15, 1, 0.3, 1);
-            cursor: pointer;
-            position: relative;
-            z-index: 20;
-            overflow: hidden;
-        }
+.mark {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(162,141,115,.24);
+  border-radius: 50%;
+  color: var(--accent);
+  background: var(--accent-light);
+  font-size: 10px;
+  font-weight: 600;
+}
 
-        /* スマホ用のアクティブ状態フィードバック */
-        .reserve-link:active, .reserve-link.touched {
-            transform: scale(0.96);
-            background: rgba(255, 255, 255, 0.08);
-            letter-spacing: 0.65em;
-            transition: transform 0.15s ease-out;
-        }
+.main {
+  padding: 45px 0 39px;
+  text-align: left;
+}
 
-        @media (hover: hover) {
-            .reserve-link:hover {
-                background: rgba(255, 255, 255, 0.98);
-                color: #000;
-                letter-spacing: 0.85em;
-                padding: 22px 85px;
-            }
-        }
+.kicker {
+  margin-bottom: 13px;
+  color: var(--accent);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: .25em;
+}
 
-        .line-link {
-            position: fixed;
-            bottom: 35px;
-            right: 32px;
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.35);
-            text-decoration: none;
-            letter-spacing: 0.22em;
-            z-index: 20;
-            transition: color 0.6s, opacity 0.6s;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-        }
+.title {
+  max-width: 100%;
+  font-size: clamp(27px, 7.3vw, 37px);
+  line-height: 1.28;
+  font-weight: 600;
+  letter-spacing: -.045em;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
 
-        @media (hover: hover) {
-            .line-link:hover { color: #fff; }
-        }
+.title-accent {
+  color: var(--accent);
+}
 
-        #overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+.description {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.95;
+  letter-spacing: .025em;
+}
 
-        @keyframes zenFlash {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+.actions {
+  display: grid;
+  gap: 10px;
+}
 
-        /* スマートフォン最適化 */
-        @media (max-width: 768px) {
-            .frame {
-                animation: lineFadeMobile 2.8s ease-out forwards;
-            }
-            @keyframes lineFadeMobile {
-                from { opacity: 0; min-height: 0; }
-                to { opacity: 1; min-height: 64vh; }
-            }
-            .title {
-                font-size: 1.9rem;
-                margin-top: -5px;
-            }
-            .reserve-link {
-                padding: 18px 50px;
-                font-size: 0.72rem;
-            }
-            .line-link {
-                bottom: 35px;
-                right: 32px;
-            }
-        }
+.reserve,
+.line {
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 14px;
+  transition: none;
+}
 
-        @media (max-height: 500px) and (orientation: landscape) {
-            body { min-height: 150vh; }
-            .frame {
-                top: 50svh;
-                animation: lineFadeLandscape 2.5s ease-out forwards;
-            }
-            @keyframes lineFadeLandscape {
-                from { opacity: 0; min-height: 0; }
-                to { opacity: 1; min-height: 72vh; }
-            }
-            .title { font-size: 1.5rem; }
-            .message { margin-top: 10px; line-height: 2; }
-            .reserve-link { padding: 10px 40px; }
-        }
-    </style>
+.reserve {
+  justify-content: space-between;
+  padding: 0 17px 0 21px;
+  color: #fff;
+  background:
+    linear-gradient(180deg, #1b1b1a 0%, #151514 100%);
+  box-shadow:
+    0 12px 25px rgba(23,23,22,.15),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+.reserve-arrow,
+.line-arrow {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 29px;
+  border-radius: 50%;
+  font-size: 13px;
+  transition: transform .22s ease;
+}
+
+.reserve-arrow {
+  border: 1px solid rgba(255,255,255,.20);
+}
+
+.reserve:hover {
+  background: #242423;
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 30px rgba(23,23,22,.18),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.reserve:hover .reserve-arrow {
+  transform: translateX(3px);
+}
+
+.line {
+  justify-content: space-between;
+  padding: 0 17px 0 21px;
+  color: #45423d;
+  background: rgba(255,255,255,.20);
+  border: 1px solid rgba(23,23,22,.12);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .04em;
+}
+
+.line-arrow {
+  border: 1px solid rgba(23,23,22,.10);
+}
+
+.line:hover {
+  background: rgba(255,255,255,.75);
+  border-color: rgba(23,23,22,.20);
+  transform: translateY(-1px);
+}
+
+.line:hover .line-arrow {
+  transform: translate(2px,-2px);
+}
+
+.mark {
+  transition: transform .25s ease, background .25s ease;
+}
+
+.card:hover .mark {
+  transform: rotate(-4deg);
+  background: rgba(162,141,115,.17);
+}
+
+.footer {
+  margin-top: 25px;
+  text-align: center;
+  color: #aaa49b;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+#overlay {
+  display: none;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.988);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 25px 21px 22px;
+    border-radius: 22px;
+  }
+
+  .main {
+    padding: 38px 0 34px;
+  }
+
+  .title {
+    font-size: clamp(25px, 7.5vw, 32px);
+    line-height: 1.3;
+    letter-spacing: -.035em;
+  }
+
+  .description {
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .card {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .title {
+    font-size: 24px;
+    letter-spacing: -.02em;
+  }
+
+  .brand-name {
+    font-size: 23px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
 </head>
-<body data-bg="image_1.jpg">
 
-    <div id="overlay"></div>
+<body>
+  <div id="overlay" aria-hidden="true"></div>
 
-    <div class="frame">
-        <div class="content-inner">
-            <h1 class="title">MOMIZO</h1>
-            <span class="title-sub">静寂の、その先へ。</span>
-            <div class="message">
-                呼吸を整える。<br>
-                それだけで、世界は変わる。
-            </div>
-        </div>
+  <main class="card">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-name">momizo</div>
+        <div class="brand-sub">Relaxation &amp; Care</div>
+      </div>
+      <div class="mark" aria-hidden="true">m</div>
+    </header>
 
-        <div class="btn-wrap">
-            <a href="#" class="reserve-link" id="enter-btn">ENTER</a>
-        </div>
-    </div>
+    <section class="main">
+      <div class="kicker">RESERVATION</div>
+      <h1 class="title">
+        心地よい時間を、<br>
+        <span class="title-accent">あなたのために。</span>
+      </h1>
+      <p class="description">
+        ご予約はWEBから承っております。<br>
+        担当者・メニュー・ご希望の時間を選択して、<br>ご予約へお進みください。
+      </p>
+    </section>
 
-    <a href="https://page.line.me/cvj7583f" class="line-link">Contact via Line</a>
+    <nav class="actions" aria-label="ご案内">
+      <a href="#" class="reserve" id="reserve-btn">
+        <span>WEB予約</span>
+        <span class="reserve-arrow" aria-hidden="true">→</span>
+      </a>
 
-    <script>
-        const overlay = document.getElementById('overlay');
-        const enterBtn = document.getElementById('enter-btn');
-        const targetUrl = "https://book.squareup.com/appointments/tli4clkb20flxc/location/LZPVZXQ5CZ1A5/services";
+      <a href="https://page.line.me/cvj7583f" class="line">
+        <span>公式LINE</span>
+        <span class="line-arrow" aria-hidden="true">↗</span>
+      </a>
+    </nav>
 
-        // 背景の確実な立ち上がり
-        window.addEventListener("load", () => {
-            const bg = document.body.dataset.bg;
-            if (bg) {
-                document.body.style.setProperty("--bg-loaded", `url(${bg})`);
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        document.body.style.setProperty("--bg-opacity", "0.68");
-                    });
-                });
-            }
-        });
+    <footer class="footer">Take a moment for yourself</footer>
+  </main>
 
-        // 【最重要】戻った時に真っ黒なのを防ぐ（bfcache対策）
-        window.addEventListener('pageshow', (event) => {
-            if (event.persisted) {
-                // ブラウザの「戻る」で来た場合、オーバーレイをリセット
-                overlay.style.animation = 'none';
-                overlay.style.visibility = 'hidden';
-                overlay.style.opacity = '0';
-                enterBtn.classList.remove("touched");
-            }
-        });
+<script>
+(() => {
+  const reserveBtn = document.getElementById("reserve-btn");
 
-        function startTransition() {
-            overlay.style.visibility = 'visible';
-            overlay.style.animation = 'zenFlash 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards';
-        }
+  const targetUrl =
+    "https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start";
 
-        // アニメーション完了と遷移
-        overlay.addEventListener("animationend", (e) => {
-            if (e.animationName === 'zenFlash') {
-                window.location.href = targetUrl;
-            }
-        });
+  let transitioning = false;
 
-        // タッチ操作（二重反応防止 ＋ 即時レスポンス）
-        enterBtn.addEventListener("touchstart", (e) => {
-            // passive: false でスクロール干渉を防ぎつつ即時実行
-            enterBtn.classList.add("touched");
-            startTransition();
-        }, {passive: true});
+  function goToReservation(event) {
+    if (event) event.preventDefault();
+    if (transitioning) return;
 
-        // クリックイベント（PC用）
-        enterBtn.addEventListener('click', (e) => {
-            // pointerTypeがtouchの場合はtouchstart側に任せる
-            if (e.pointerType === 'touch') return;
-            startTransition();
-        });
-    </script>
+    transitioning = true;
+    reserveBtn.style.pointerEvents = "none";
+    window.location.replace(targetUrl);
+  }
+
+  reserveBtn.addEventListener("click", goToReservation);
+
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      transitioning = false;
+    }
+  });
+})();
+</script>
 </body>
 </html>
