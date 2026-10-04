@@ -14,12 +14,13 @@
 <style>
 :root {
   --ink: #171716;
-  --muted: #77736c;
-  --soft: #a19c94;
-  --line: rgba(23,23,22,.10);
+  --muted: #6b6761;
+  --soft: #9c978f;
+  --line: rgba(23,23,22,.08);
   --paper: #f4f2ed;
-  --card: rgba(255,254,251,.88);
+  --card: rgba(255,254,251,.92);
   --accent: #a28d73;
+  --accent-hover: #8f7b63;
   --accent-light: rgba(162,141,115,.13);
 }
 
@@ -38,7 +39,7 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 18px;
+  padding: 16px;
   color: var(--ink);
   font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
     "Hiragino Sans", "Yu Gothic", sans-serif;
@@ -49,6 +50,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  animation: pageFadeIn 0.6s ease-out both;
 }
 
 body::before {
@@ -65,18 +67,23 @@ body::before {
 
 .card {
   position: relative;
-  width: min(100%, 430px);
-  padding: 30px;
+  width: min(100%, 420px);
+  padding: 32px 28px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.85);
-  border-radius: 25px;
+  border-radius: 26px;
   background: var(--card);
   box-shadow:
-    0 24px 60px rgba(40,34,27,.115),
-    0 2px 8px rgba(40,34,27,.035);
+    0 24px 60px rgba(40,34,27,.08),
+    0 2px 10px rgba(40,34,27,.03);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  animation: enter .65s cubic-bezier(.16,1,.3,1) both;
+  animation: enter .85s cubic-bezier(.16,1,.3,1) both;
+  animation-delay: 0.05s;
+}
+
+.card.is-leaving {
+  animation: slideOut .5s cubic-bezier(.4,0,.2,1) forwards;
 }
 
 .card::after {
@@ -95,166 +102,43 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 23px;
+  padding-bottom: 22px;
   border-bottom: 1px solid var(--line);
 }
 
 .brand {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .brand-name {
-  font-size: 25px;
+  font-size: 26px;
   line-height: 1;
   font-weight: 700;
-  letter-spacing: -.065em;
+  letter-spacing: -.05em;
 }
 
 .brand-sub {
   color: var(--soft);
-  font-size: 8px;
+  font-size: 9px;
   line-height: 1;
   font-weight: 600;
-  letter-spacing: .23em;
+  letter-spacing: .2em;
   text-transform: uppercase;
 }
 
 .mark {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(162,141,115,.24);
   border-radius: 50%;
   color: var(--accent);
   background: var(--accent-light);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-}
-
-.main {
-  padding: 45px 0 39px;
-  text-align: left;
-}
-
-.kicker {
-  margin-bottom: 13px;
-  color: var(--accent);
-  font-size: 9px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: .25em;
-}
-
-.title {
-  max-width: 100%;
-  font-size: clamp(27px, 7.3vw, 37px);
-  line-height: 1.28;
-  font-weight: 600;
-  letter-spacing: -.045em;
-  word-break: keep-all;
-  overflow-wrap: normal;
-  text-wrap: balance;
-}
-
-.title-accent {
-  color: var(--accent);
-}
-
-.description {
-  margin-top: 18px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.95;
-  letter-spacing: .025em;
-}
-
-.actions {
-  display: grid;
-  gap: 10px;
-}
-
-.reserve,
-.line {
-  width: 100%;
-  min-height: 58px;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  border-radius: 14px;
-  transition: none;
-}
-
-.reserve {
-  justify-content: space-between;
-  padding: 0 17px 0 21px;
-  color: #fff;
-  background:
-    linear-gradient(180deg, #1b1b1a 0%, #151514 100%);
-  box-shadow:
-    0 12px 25px rgba(23,23,22,.15),
-    inset 0 1px 0 rgba(255,255,255,.06);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .04em;
-}
-
-.reserve-arrow,
-.line-arrow {
-  width: 29px;
-  height: 29px;
-  display: grid;
-  place-items: center;
-  flex: 0 0 29px;
-  border-radius: 50%;
-  font-size: 13px;
-  transition: transform .22s ease;
-}
-
-.reserve-arrow {
-  border: 1px solid rgba(255,255,255,.20);
-}
-
-.reserve:hover {
-  background: #242423;
-  transform: translateY(-2px);
-  box-shadow:
-    0 16px 30px rgba(23,23,22,.18),
-    inset 0 1px 0 rgba(255,255,255,.07);
-}
-
-.reserve:hover .reserve-arrow {
-  transform: translateX(3px);
-}
-
-.line {
-  justify-content: space-between;
-  padding: 0 17px 0 21px;
-  color: #45423d;
-  background: rgba(255,255,255,.20);
-  border: 1px solid rgba(23,23,22,.12);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .04em;
-}
-
-.line-arrow {
-  border: 1px solid rgba(23,23,22,.10);
-}
-
-.line:hover {
-  background: rgba(255,255,255,.75);
-  border-color: rgba(23,23,22,.20);
-  transform: translateY(-1px);
-}
-
-.line:hover .line-arrow {
-  transform: translate(2px,-2px);
-}
-
-.mark {
   transition: transform .25s ease, background .25s ease;
 }
 
@@ -263,24 +147,210 @@ body::before {
   background: rgba(162,141,115,.17);
 }
 
+.main {
+  padding: 38px 0 32px;
+  text-align: left;
+}
+
+.kicker {
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: .2em;
+}
+
+.title {
+  max-width: 100%;
+  font-size: clamp(28px, 8.5vw, 38px);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -.05em;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
+
+.description {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  letter-spacing: .03em;
+}
+
+.actions {
+  display: grid;
+  gap: 12px;
+}
+
+.reserve,
+.line {
+  width: 100%;
+  min-height: 62px; /* スマホでのタップしやすさを考慮し高さを微増 */
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 16px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.3s ease,
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.reserve {
+  justify-content: space-between;
+  padding: 0 18px 0 22px;
+  color: #fff;
+  background-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(162, 141, 115, 0.25);
+}
+
+.reserve-arrow,
+.line-arrow {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  border-radius: 50%;
+  font-size: 13px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease;
+}
+
+.reserve-arrow {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+/* PCホバー時の挙動 */
+@media (hover: hover) {
+  .reserve:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(162, 141, 115, 0.35);
+  }
+  .reserve:hover .reserve-arrow {
+    transform: translateX(3px);
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  .line:hover {
+    background-color: rgba(255,255,255,1);
+    border-color: rgba(23,23,22,.18);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(40,34,27,.04);
+  }
+  .line:hover .line-arrow {
+    transform: translate(2px,-2px);
+    background-color: #fff;
+  }
+}
+
+/* スマホタップ時（アクティブ）の心地よい沈み込み */
+.reserve:active, .line:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+.line {
+  justify-content: space-between;
+  padding: 0 18px 0 22px;
+  color: #45423d;
+  background-color: rgba(255,255,255,.45);
+  border: 1px solid rgba(23,23,22,.10);
+}
+
+.line-arrow {
+  border: 1px solid rgba(23,23,22,.10);
+  background-color: rgba(255,255,255,.7);
+}
+
+.action-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  line-height: 1;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+.reserve .action-copy {
+  color: #fff;
+}
+
+.action-copy small {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: .15em;
+  font-family: "Inter", sans-serif;
+}
+
+.reserve .action-copy small {
+  color: rgba(255,255,255,.75);
+}
+
+.line .action-copy {
+  color: #3b3834;
+}
+
+.line .action-copy small {
+  color: var(--soft);
+}
+
+.line-action-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.line-note {
+  margin-top: 10px;
+  padding-left: 22px; /* ボタン内のテキストと完璧に左揃え */
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: .03em;
+  color: var(--soft);
+}
+
+.address {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: #77736c;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
 .footer {
-  margin-top: 25px;
+  margin-top: 28px;
   text-align: center;
-  color: #aaa49b;
-  font-size: 8px;
+  color: #c0bcb6;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: .17em;
-  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-family: "Inter", sans-serif;
 }
 
 #overlay {
   display: none;
 }
 
+/* アニメーション */
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes enter {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(.988);
+    transform: translateY(20px) scale(.99);
   }
   to {
     opacity: 1;
@@ -288,33 +358,28 @@ body::before {
   }
 }
 
-@keyframes fadeOut {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 
+/* モバイル向け微調整（基本はClampとFlexで対応済みのため最小限） */
 @media (max-width: 480px) {
   body {
     padding: 12px;
   }
-
   .card {
-    padding: 25px 21px 22px;
-    border-radius: 22px;
+    padding: 28px 22px 24px;
+    border-radius: 24px;
   }
-
   .main {
-    padding: 38px 0 34px;
-  }
-
-  .title {
-    font-size: clamp(25px, 7.5vw, 32px);
-    line-height: 1.3;
-    letter-spacing: -.035em;
-  }
-
-  .description {
-    font-size: 11.5px;
+    padding: 32px 0 28px;
   }
 }
 
@@ -323,14 +388,8 @@ body::before {
     padding-left: 18px;
     padding-right: 18px;
   }
-
-  .title {
-    font-size: 24px;
-    letter-spacing: -.02em;
-  }
-
   .brand-name {
-    font-size: 23px;
+    font-size: 24px;
   }
 }
 
@@ -358,35 +417,62 @@ body::before {
     </header>
 
     <section class="main">
-      <div class="kicker">RESERVATION</div>
-      <h1 class="title">
-        心地よい時間を、<br>
-        <span class="title-accent">あなたのために。</span>
-      </h1>
+      <div class="kicker">APPOINTMENT</div>
+      <h1 class="title">RESERVATION</h1>
       <p class="description">
-        ご予約はWEBから承っております。<br>
-        担当者・メニュー・ご希望の時間を選択して、<br>ご予約へお進みください。
+        WEBまたはお電話からご予約いただけます。
       </p>
     </section>
 
     <nav class="actions" aria-label="ご案内">
       <a href="#" class="reserve" id="reserve-btn">
-        <span>WEB予約</span>
+        <span class="action-copy">
+          <small>01 / ONLINE</small>
+          WEB予約
+        </span>
         <span class="reserve-arrow" aria-hidden="true">→</span>
       </a>
 
-      <a href="https://page.line.me/cvj7583f" class="line">
-        <span>公式LINE</span>
+      <a href="tel:0287339178" class="line">
+        <span class="action-copy">
+          <small>02 / PHONE</small>
+          0287-33-9178
+        </span>
         <span class="line-arrow" aria-hidden="true">↗</span>
       </a>
+
+      <a href="https://maps.app.goo.gl/w7eVEp75yPVMGSpN7" class="line" target="_blank" rel="noopener">
+        <span class="action-copy">
+          <small>03 / ACCESS</small>
+          アクセス・地図
+        </span>
+        <span class="line-arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <div class="line-action-wrapper">
+        <a href="https://page.line.me/cvj7583f" class="line">
+          <span class="action-copy">
+            <small>04 / CONTACT</small>
+            公式LINE
+          </span>
+          <span class="line-arrow" aria-hidden="true">↗</span>
+        </a>
+        <p class="line-note">※LINEは情報配信専用です。予約受付は行っておりません。</p>
+      </div>
     </nav>
 
-    <footer class="footer">Take a moment for yourself</footer>
+    <div class="address">
+      <span>〒324-0041 栃木県大田原市本町1丁目2701-11</span>
+      <span>サイトー・バルコニー107</span>
+    </div>
+
+    <footer class="footer">&copy; momizo</footer>
   </main>
 
 <script>
 (() => {
   const reserveBtn = document.getElementById("reserve-btn");
+  const card = document.querySelector(".card");
 
   const targetUrl =
     "https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start";
@@ -399,7 +485,14 @@ body::before {
 
     transitioning = true;
     reserveBtn.style.pointerEvents = "none";
-    window.location.replace(targetUrl);
+    
+    card.classList.add("is-leaving");
+    document.body.style.transition = "opacity 0.5s ease";
+    document.body.style.opacity = "0";
+
+    setTimeout(() => {
+      window.location.href = targetUrl;
+    }, 500);
   }
 
   reserveBtn.addEventListener("click", goToReservation);
@@ -407,6 +500,9 @@ body::before {
   window.addEventListener("pageshow", (event) => {
     if (event.persisted) {
       transitioning = false;
+      card.classList.remove("is-leaving");
+      document.body.style.opacity = "1";
+      reserveBtn.style.pointerEvents = "auto";
     }
   });
 })();
