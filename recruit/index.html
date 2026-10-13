@@ -430,7 +430,7 @@ html{scroll-behavior:smooth}
       headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},
       body:new URLSearchParams(data).toString()
     }).then(function(){
-      form.innerHTML='<div class="done" role="status"><b>ご応募ありがとうございました</b><p>内容を確認のうえ、ご入力いただいたメールアドレスまたはお電話でご連絡します。</p></div>';
+      form.innerHTML='<div class="done" role="status"><b>ご応募ありがとうございました</b><p>内容を確認のうえ、ご入力いただいたメールアドレスまたはお電話でご連絡します。<br>3日以上経っても連絡がない場合は、お手数ですがお電話（<a href="tel:0287339178">0287-33-9178</a>）にてご連絡ください。</p></div>';
       form.scrollIntoView({behavior:"smooth",block:"center"});
     }).catch(function(){
       btn.disabled=false;btn.textContent="送信";
