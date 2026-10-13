@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#f4f2ed">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>施術スタッフ募集 | momizo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#171716; --muted:#6b6761; --soft:#9c978f; --line:rgba(23,23,22,.08); --paper:#f4f2ed;
+  --card:rgba(255,254,251,.92); --accent:#a28d73; --accent-hover:#8f7b63; --accent-light:rgba(162,141,115,.13);
+  color-scheme:light; box-sizing:border-box; padding-top:env(safe-area-inset-top,0px);
+}
+html{background:var(--paper);scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:16px 16px 112px;color:var(--ink);font-family:Inter,"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-size:14px;line-height:1.85;letter-spacing:.02em;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background:radial-gradient(circle at 8% 8%,rgba(255,255,255,.95),transparent 34%),radial-gradient(circle at 94% 92%,rgba(206,195,180,.30),transparent 32%),linear-gradient(145deg,#faf9f6 0%,#eeece7 100%) fixed}
+body::before{content:"";position:fixed;width:460px;height:460px;top:-290px;left:-260px;border:1px solid rgba(162,141,115,.16);border-radius:50%;pointer-events:none}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+h1,h2,h3{margin:0}
+
+.card{position:relative;width:min(100%,420px);margin:0 auto;padding:32px 28px;overflow:hidden;border:1px solid rgba(255,255,255,.85);border-radius:26px;background:var(--card);box-shadow:0 24px 60px rgba(40,34,27,.08),0 2px 10px rgba(40,34,27,.03);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);animation:enter .85s cubic-bezier(.16,1,.3,1) both}
+.card::after{content:"";position:absolute;width:190px;height:190px;right:-125px;top:-115px;border-radius:50%;background:rgba(162,141,115,.08);pointer-events:none}
+@keyframes enter{from{opacity:0;transform:translateY(20px) scale(.99)}to{opacity:1;transform:none}}
+
+.head{display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.logo{margin:0;font-size:26px;line-height:1;font-weight:700;letter-spacing:-.05em}
+.logo+p{margin:4px 0 0;color:var(--soft);font-size:9px;line-height:1;font-weight:600;letter-spacing:.2em}
+.m{width:32px;height:32px;display:grid;place-items:center;border:1px solid rgba(162,141,115,.24);border-radius:50%;color:var(--accent);background:var(--accent-light);font-size:11px;font-weight:600}
+
+.eb{margin:0 0 10px;color:var(--accent);font-size:10px;line-height:1;font-weight:700;letter-spacing:.2em}
+.hero{padding:38px 0 8px}
+h1{font-size:clamp(28px,8.5vw,38px);line-height:1.15;font-weight:600;letter-spacing:-.05em;word-break:keep-all;text-wrap:balance}
+.hero p.mute{margin:14px 0 16px;color:var(--muted);font-size:12px;line-height:1.7;letter-spacing:.03em}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.tags li{padding:3px 13px;border-radius:999px;background:var(--accent-light);color:var(--muted);font-size:12px;font-weight:600}
+
+.big{margin:28px 0 0;padding:26px 24px 24px;border-radius:20px;background:var(--accent);color:#fff;box-shadow:0 8px 24px rgba(162,141,115,.25)}
+.big p{margin:0}
+.big .l{font-size:12px;font-weight:600;letter-spacing:.06em;opacity:.85}
+.big .n{font-size:clamp(112px,36vw,150px);line-height:.95;font-weight:600;letter-spacing:-.07em}
+.big .n small{font-size:.34em;letter-spacing:0;margin-left:2px}
+.big .s{margin-top:12px;font-size:15px;font-weight:600;letter-spacing:.04em}
+.big .t{margin-top:2px;font-size:11px;opacity:.85}
+
+.sec{margin-top:38px;padding-top:32px;border-top:1px solid var(--line)}
+h2{margin-bottom:14px;font-size:22px;line-height:1.3;font-weight:600;letter-spacing:-.04em}
+.note{color:var(--soft);font-size:11px;line-height:1.7;letter-spacing:.03em}
+.course{margin-top:10px;padding:14px 12px 12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.45)}
+.course h3{margin:0 0 8px 4px;font-size:14px;font-weight:600;letter-spacing:.04em}
+.course h3 small{margin-left:8px;color:var(--soft);font-size:10px;font-weight:600;letter-spacing:.1em}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.g div{padding:8px 2px;border-radius:10px;background:var(--accent-light);text-align:center;line-height:1.3}
+.g span{display:block;color:var(--soft);font-size:10px;font-weight:600}
+.g b{display:block;font-size:16px;font-weight:600;letter-spacing:-.02em}
+.g small{color:var(--soft);font-size:9px}
+.points{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.points li{padding:14px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.45)}
+.points b{display:block;font-weight:600;letter-spacing:.03em}
+.points span{color:var(--muted);font-size:12px}
+dl.spec{margin:0;border-top:1px solid var(--line)}
+dl.spec>div{padding:14px 0;border-bottom:1px solid var(--line)}
+dt{color:var(--soft);font-size:11px;font-weight:600;letter-spacing:.12em}
+dd{margin:3px 0 0}
+dd ul{margin:6px 0;padding-left:1.1em}
+.hours{border-collapse:collapse}
+.hours th,.hours td{padding:0 18px 0 0;text-align:left;font-weight:400;white-space:nowrap}
+
+.links{display:grid;gap:12px;margin-top:4px}
+.lnk{min-height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 22px;border:1px solid rgba(23,23,22,.10);border-radius:16px;background:rgba(255,255,255,.45);color:#3b3834;text-decoration:none;transition:transform .3s cubic-bezier(.2,.8,.2,1),background-color .3s ease,box-shadow .3s ease}
+.lnk>span{display:flex;flex-direction:column;gap:5px;line-height:1}
+.lnk small{color:var(--soft);font-size:9px;font-weight:600;letter-spacing:.15em}
+.lnk b{font-size:14px;font-weight:600;letter-spacing:.04em}
+.lnk i{flex:0 0 30px;width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(23,23,22,.10);border-radius:50%;background:rgba(255,255,255,.7);font-style:normal;font-size:13px;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.lnk.main{border-color:transparent;background:var(--accent);color:#fff;box-shadow:0 8px 24px rgba(162,141,115,.25)}
+.lnk.main small{color:rgba(255,255,255,.75)}
+.lnk.main i{border-color:rgba(255,255,255,.35);background:transparent}
+@media (hover:hover){
+  .lnk.main:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 12px 28px rgba(162,141,115,.35)}
+  .lnk:not(.main):hover{background:#fff;transform:translateY(-1px);box-shadow:0 6px 16px rgba(40,34,27,.04)}
+  .lnk:hover i{transform:translate(2px,-2px)}
+}
+.lnk:active,.fixed:active{transform:scale(.97);transition:transform .1s ease}
+.fixed{position:fixed;left:50%;margin-left:calc(min(100% - 32px,388px) / -2);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;width:min(100% - 32px,388px);display:flex;justify-content:center;align-items:center;gap:10px;padding:16px 20px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.06em;box-shadow:0 8px 24px rgba(162,141,115,.35)}
+footer{margin-top:22px;text-align:center;color:#c0bcb6;font-size:10px;font-weight:500;letter-spacing:.1em}
+@media (max-width:480px){body{padding:12px 12px 112px}.card{padding:28px 22px 24px;border-radius:24px}.fixed{width:min(100% - 24px,388px);margin-left:calc(min(100% - 24px,388px) / -2)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+html{scroll-behavior:smooth}
+.form{display:grid;gap:18px;margin-top:4px}
+.f{display:grid;gap:6px;min-width:0;margin:0;padding:0;border:0}
+.f>label,.f>legend{display:flex;align-items:center;gap:8px;padding:0;font-size:13px;font-weight:600;letter-spacing:.04em}
+.req,.opt{padding:1px 8px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.06em;line-height:1.6}
+.req{background:var(--accent);color:#fff}
+.opt{background:var(--accent-light);color:var(--soft)}
+.hint{margin:0;color:var(--soft);font-size:11px;line-height:1.6}
+.form input[type=text],.form input[type=tel],.form input[type=email],.form input[type=number],.form select,.form textarea{width:100%;padding:12px 15px;border:1px solid rgba(23,23,22,.10);border-radius:14px;background:rgba(255,255,255,.7);color:var(--ink);font:inherit;font-size:14px;line-height:1.5;letter-spacing:.02em;-webkit-appearance:none;appearance:none;transition:border-color .25s ease,background-color .25s ease}
+.form select{background-image:linear-gradient(45deg,transparent 50%,var(--soft) 50%),linear-gradient(135deg,var(--soft) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
+.form textarea{min-height:96px;resize:vertical}
+.form input:focus,.form select:focus,.form textarea:focus{border-color:var(--accent);background:#fff;outline:none}
+.form input:focus-visible,.form select:focus-visible,.form textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chk{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border:1px solid rgba(23,23,22,.10);border-radius:14px;background:rgba(255,255,255,.45);font-size:14px;line-height:1.6;cursor:pointer}
+.chk input{flex:0 0 20px;width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent)}
+.send{width:100%;min-height:62px;border:0;border-radius:16px;background:var(--accent);color:#fff;font:inherit;font-size:15px;font-weight:600;letter-spacing:.08em;cursor:pointer;box-shadow:0 8px 24px rgba(162,141,115,.25);transition:transform .3s cubic-bezier(.2,.8,.2,1),background-color .3s ease,box-shadow .3s ease}
+@media (hover:hover){.send:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 12px 28px rgba(162,141,115,.35)}}
+.send:active{transform:scale(.97);transition:transform .1s ease}
+.fixed{transition:opacity .25s ease,transform .1s ease}
+.fixed.hide{opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.form ::placeholder{color:rgba(23,23,22,.28);opacity:1}
+.form textarea.s{min-height:84px}
+.form input[readonly]{background:rgba(23,23,22,.045);color:var(--ink);cursor:default}
+.form input[readonly]:focus{background:rgba(23,23,22,.045);border-color:rgba(23,23,22,.10)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sub{display:grid;gap:4px;min-width:0}
+.sub>span{padding-left:4px;color:var(--soft);font-size:11px;font-weight:600;letter-spacing:.08em}
+.age{margin:0;padding-left:4px;color:var(--muted);font-size:12px}
+.age b{color:var(--ink);font-size:14px;font-weight:600}
+.err{margin:0;color:#b3261e;font-size:11px;line-height:1.6}
+.skill{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:10px 14px;border:1px solid rgba(23,23,22,.10);border-radius:14px;background:rgba(255,255,255,.45)}
+.skill-name{font-size:13px;line-height:1.5}
+.seg{display:flex;gap:6px;margin-left:auto}
+.seg label{position:relative;display:block;cursor:pointer}
+.seg input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.seg span{display:block;min-width:64px;padding:6px 12px;border:1px solid rgba(23,23,22,.10);border-radius:999px;background:rgba(255,255,255,.7);color:var(--muted);font-size:12px;font-weight:600;text-align:center;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.seg input:checked+span{border-color:var(--accent);background:var(--accent);color:#fff}
+.seg input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.send:disabled{opacity:.6;cursor:default;transform:none;box-shadow:none}
+.done{padding:28px 20px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.45);text-align:center}
+.done b{display:block;margin-bottom:8px;font-size:16px;font-weight:600;letter-spacing:.04em}
+.done p{margin:0;color:var(--muted);font-size:13px;line-height:1.8}
+.hl{margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;background:var(--accent-light);color:var(--ink);font-size:13px;font-weight:600;line-height:1.7;letter-spacing:.03em}
+</style>
+</head>
+<body>
+
+<main class="card">
+  <div class="head">
+    <div><p class="logo">momizo</p><p>RELAXATION &amp; CARE</p></div>
+    <div class="m" aria-hidden="true">m</div>
+  </div>
+
+  <header class="hero">
+    <p class="eb">RECRUIT</p>
+    <h1>施術スタッフ募集</h1>
+    <p class="mute">他店でのご経験をそのまま活かせて、働く曜日も時間も自分で決められます。</p>
+    <ul class="tags"><li>業務委託</li><li>経験者</li><li>資格不要</li><li>履歴書不要</li><li>年齢・性別不問</li></ul>
+    <div class="big">
+      <p class="l">表示価格の</p>
+      <p class="n">70<small>%</small></p>
+      <p class="s">指名料は100%お支払いします</p>
+      <p class="t">割引・決済手数料などは店舗が負担し、割引前の料金で計算します。</p>
+    </div>
+  </header>
+
+  <section class="sec">
+    <p class="eb">REWARD</p>
+    <h2>報酬早見表</h2>
+    <p class="note" style="margin:0 0 6px">コースごとのあなたの報酬額です（税込・円）。小さい数字は表示価格（割引前の料金）です。</p>
+    <div class="course"><h3>ボディ<small>もみほぐし</small></h3><div class="g"><div><span>30分</span><b>1,400</b><small>料金2,000</small></div><div><span>60分</span><b>2,730</b><small>料金3,900</small></div><div><span>90分</span><b>4,060</b><small>料金5,800</small></div><div><span>120分</span><b>5,390</b><small>料金7,700</small></div></div></div>
+      <div class="course"><h3>ヘッド<small>ドライヘッドスパ</small></h3><div class="g"><div><span>30分</span><b>1,960</b><small>料金2,800</small></div><div><span>60分</span><b>3,010</b><small>料金4,300</small></div><div><span>90分</span><b>4,340</b><small>料金6,200</small></div><div><span>120分</span><b>5,670</b><small>料金8,100</small></div></div></div>
+      <div class="course"><h3>フット<small>足つぼ・フットマッサージ</small></h3><div class="g"><div><span>30分</span><b>2,100</b><small>料金3,000</small></div><div><span>60分</span><b>3,430</b><small>料金4,900</small></div><div><span>90分</span><b>4,760</b><small>料金6,800</small></div><div><span>120分</span><b>6,090</b><small>料金8,700</small></div></div></div>
+      <div class="course"><h3>フル<small>ボディ+ヘッド+フット</small></h3><div class="g"><div><span>90分</span><b>5,040</b><small>料金7,200</small></div><div><span>120分</span><b>6,370</b><small>料金9,100</small></div></div></div>
+      
+  </section>
+
+  <section class="sec">
+    <p class="eb">WORKSTYLE</p>
+    <h2>働き方</h2>
+    <ul class="points">
+      <li><b>働く曜日・時間は自分で決められます</b><span>働く曜日と時間帯を決めて、毎週そのサイクルで働きます。そのうえで、日ごとの調整も可能です。</span></li>
+      <li><b>他のお仕事との兼業も自由です</b><span>お客様が重なるおそれのある近隣の同業店舗での兼業のみ、ご遠慮いただきます。</span></li>
+      <li><b>集客は店舗が行います</b><span>WEBへの情報掲載やLINE配信など、集客は店舗が担当します。</span></li>
+      <li><b>設備・備品は店舗で用意します</b><span>施術に必要なものを揃えています。備品代や場所代などを報酬から差し引くことはありません。</span></li>
+      <li><b>インボイス登録は不要です</b><span>登録がなくてもお取引できます。</span></li>
+      <li><b>2018年から続く、少人数のお店です</b><span>長く続けているスタッフもいます。</span></li>
+    </ul>
+  </section>
+
+  <section class="sec">
+    <p class="eb">DETAILS</p>
+    <h2>募集要項</h2>
+    <dl class="spec">
+      <div><dt>職種</dt><dd>施術スタッフ</dd></div>
+      <div><dt>契約の種類</dt><dd>業務委託</dd></div>
+      <div><dt>仕事内容</dt><dd>次の施術と、お客様の接客など。<ul><li>ボディ：もみほぐし</li><li>フット：足つぼ・フットマッサージ（オイル使用）</li><li>ヘッド：ドライヘッドスパ</li></ul></dd></div>
+      <div><dt>応募資格</dt><dd>
+        次のいずれかのご経験が、1年以上ある方が目安です。
+        <ul><li>もみほぐし</li><li>足つぼ・フットマッサージ</li><li>ドライヘッドスパ（ヘッドマッサージ）</li><li>整体・接骨院・マッサージ店での施術</li></ul>
+        <span class="note">資格は不要です。入店後の研修はありません。性別・年齢は問いません。</span>
+        <p class="hl">経験が1年に満たなくても、施術に自信のある方、接客力や人柄を活かせる方のご応募もお待ちしています。</p>
+      </dd></div>
+      <div><dt>選考</dt><dd>フォームでご応募のあと、選考を経て面談となります。面談では身分証の確認と簡単な実技を行い、契約となる場合は、業務枠の打ち合わせと契約書などのご記入に進みます。</dd></div>
+      <div><dt>報酬</dt><dd>表示価格の70%、指名料は100%（いずれも税込）</dd></div>
+      <div><dt>支払い</dt><dd>月末締め、翌月10日払い。銀行振込または現金。</dd></div>
+      <div><dt>業務曜日・時間</dt><dd>ご希望の曜日・時間をうかがい、毎週の業務枠を決めます（例：月・木・金の14:00〜22:00、土・日の10:00〜18:00）。日ごとの調整も可能ですが、業務枠の変更をご希望の日に確定済みの予約がある場合は、予約を優先していただきます。</dd></div>
+    </dl>
+  </section>
+
+  <section class="sec">
+    <p class="eb">SALON</p>
+    <h2>店舗情報</h2>
+    <dl class="spec">
+      <div><dt>店名</dt><dd>relaxation salon momizo（屋号：揉蔵）</dd></div>
+      <div><dt>住所</dt><dd>〒324-0041 栃木県大田原市本町1丁目2701-11<br>サイトー・バルコニー107（ハローワーク大田原の近く）</dd></div>
+      <div><dt>営業時間</dt><dd>
+        <table class="hours">
+          <tr><th>月・木</th><td>14:00〜24:00</td></tr>
+          <tr><th>金</th><td>14:00〜22:00</td></tr>
+          <tr><th>土・日</th><td>10:00〜22:00</td></tr>
+          <tr><th>火・水</th><td>定休日（祝日も曜日どおり）</td></tr>
+        </table>
+        <p class="hl">営業日・営業時間は、スタッフの業務枠（曜日単位）に合わせて変更します。</p>
+      </dd></div>
+      <div><dt>アクセス</dt><dd>お車：東北自動車道 矢板IC・西那須野塩原ICから約20分<br>バス：「本町」停留所から徒歩約1分</dd></div>
+      <div><dt>設備</dt><dd>4席、禁煙、無料駐車場あり。<br>スタッフ用に、冷蔵庫、電子レンジ、トースター、電気ケトル、Wi-Fiなどを自由にお使いいただけます。</dd></div>
+    </dl>
+  </section>
+
+  <section class="sec" id="apply">
+    <p class="eb">APPLY</p>
+    <h2>ご応募</h2>
+    <p class="mute" style="margin:0 0 18px">履歴書は不要です。下のフォームに、簡単な経歴をご記入ください。</p>
+    <form class="form" id="form" novalidate>
+      <fieldset class="f"><legend>お名前<span class="req">必須</span></legend>
+        <div class="row2">
+          <label class="sub"><span>姓</span><input type="text" id="f-sei" name="sei" autocomplete="family-name" placeholder="例）山田" required></label>
+          <label class="sub"><span>名</span><input type="text" id="f-mei" name="mei" autocomplete="given-name" placeholder="例）太郎" required></label>
+        </div>
+      </fieldset>
+      <fieldset class="f"><legend>ふりがな<span class="req">必須</span></legend>
+        <div class="row2">
+          <label class="sub"><span>せい</span><input type="text" id="f-sei-k" name="sei_kana" autocomplete="off" placeholder="例）やまだ" required></label>
+          <label class="sub"><span>めい</span><input type="text" id="f-mei-k" name="mei_kana" autocomplete="off" placeholder="例）たろう" required></label>
+        </div>
+      </fieldset>
+      <div class="f"><label for="f-tel">電話番号<span class="req">必須</span></label><input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="numeric" placeholder="例）09012345678" required><p class="hint">数字のみ入力してください（ハイフンは自動で入ります）。</p></div>
+      <div class="f"><label for="f-mail">メールアドレス<span class="req">必須</span></label><input type="email" id="f-mail" name="mail" autocomplete="email" inputmode="email" placeholder="例）example@mail.com" required><p class="hint">ご返信に使います。</p></div>
+      <div class="f"><label for="f-birth">生年月日<span class="req">必須</span></label><input type="tel" id="f-birth" name="birth" autocomplete="off" inputmode="numeric" placeholder="例）19900415" required><p class="hint">数字8桁で入力してください（スラッシュは自動で入ります）。</p><p class="age" aria-live="polite">年齢：<b id="age-out">―</b></p></div>
+      <fieldset class="f"><legend>ご住所<span class="req">必須</span></legend>
+        <label class="sub"><span>郵便番号</span><input type="tel" id="f-zip" name="zip" autocomplete="postal-code" inputmode="numeric" placeholder="例）3240041" required></label>
+        <label class="sub"><span>住所（自動入力）</span><input type="text" id="f-addr" name="addr" readonly tabindex="-1" placeholder="郵便番号を入れると自動で表示されます"></label>
+        <p class="hint" id="zip-msg">数字のみ入力してください。都道府県・市区町村・町域が自動で入ります。</p>
+      </fieldset>
+      <div class="f"><label for="f-exp">施術に関わるお仕事のご経験<span class="req">必須</span></label><textarea id="f-exp" name="exp" maxlength="300" placeholder="例）○○整体院　2年（もみほぐし）&#10;△△リラクゼーション　1年（ヘッドスパ・足つぼ）" required></textarea><p class="hint">お店の名前・年数・施術内容をご記入ください（300字まで）。関係のない経歴は不要です。</p></div>
+      <fieldset class="f"><legend>対応できる施術<span class="req">必須</span></legend>
+        <p class="hint">それぞれの施術ができるかどうか、お選びください。</p>
+        <div class="skill"><span class="skill-name">もみほぐし</span><div class="seg"><label><input type="radio" name="skill_body" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_body" value="できない"><span>できない</span></label></div></div>
+        <div class="skill"><span class="skill-name">足つぼ・フットマッサージ</span><div class="seg"><label><input type="radio" name="skill_foot" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_foot" value="できない"><span>できない</span></label></div></div>
+        <div class="skill"><span class="skill-name">ドライヘッドスパ</span><div class="seg"><label><input type="radio" name="skill_head" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_head" value="できない"><span>できない</span></label></div></div>
+      </fieldset>
+      <div class="f"><label for="f-qual">保有資格<span class="opt">任意</span></label><textarea class="s" id="f-qual" name="qual" maxlength="300" placeholder="例）あん摩マッサージ指圧師&#10;リフレクソロジー認定資格"></textarea><p class="hint">お持ちの資格があればご記入ください。なければ空欄で構いません（300字まで）。</p></div>
+      <div class="f"><label for="f-time">連絡しやすい時間帯<span class="opt">任意</span></label><select id="f-time" name="time"><option value="">選択してください</option><option>いつでも</option><option>午前</option><option>午後</option><option>夜</option></select></div>
+      <div class="f"><label for="f-src">応募のきっかけ<span class="opt">任意</span></label><textarea class="s" id="f-src" name="src" maxlength="200" placeholder="例）求人サイトを見て／知人の紹介／店の前を通りかかって"></textarea><p class="hint">ひとことで大丈夫です（200字まで）。</p></div>
+      <div class="f"><label for="f-pr">自己PR<span class="opt">任意</span></label><textarea id="f-pr" name="pr" maxlength="300" placeholder="例）接客が好きで、お客様とお話ししながら丁寧に施術することを大切にしています。"></textarea><p class="hint">ひとことだけでも大丈夫です（300字まで）。</p></div>
+      <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <label class="chk"><input type="checkbox" id="f-agree" required><span>ご入力いただいた情報は、選考のためだけに使用します。内容に同意します。<span class="req" style="margin-left:6px">必須</span></span></label>
+      <div>
+        <button type="submit" class="send">送信</button>
+        <p class="note" id="form-msg" role="alert" style="margin:8px 0 0 4px;color:#b3261e"></p>
+      </div>
+    </form>
+    <p class="note" style="margin:16px 0 0 4px">※公式LINEは情報配信専用のため、応募は受け付けていません。</p>
+    <div class="links" style="margin-top:16px">
+      <a class="lnk" href="https://www.google.com/maps/search/?api=1&query=%E6%8F%89%E8%94%B5+%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%A4%A7%E7%94%B0%E5%8E%9F%E5%B8%82%E6%9C%AC%E7%94%BA1%E4%B8%81%E7%9B%AE2701-11" target="_blank" rel="noopener"><span><small>ACCESS</small><b>アクセス・地図</b></span><i>↗</i></a>
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 relaxation salon momizo</footer>
+<a class="fixed" id="fixed" href="#apply">応募する <span aria-hidden="true">↓</span></a>
+<script>
+(function(){
+  // 応募データの送信先（Google Apps Script のウェブアプリURL。手順書どおりに作成したURLを貼り付ける）
+  var ENDPOINT="https://script.google.com/macros/s/AKfycbyIKSUWntueRZnkyRkdig3cG2fPYjFUYgFSOGWHslXI50bExv2Kb5_sI88LEo356BE/exec";
+  var form=document.getElementById("form"),msg=document.getElementById("form-msg");
+  var $=function(id){return document.getElementById(id)};
+
+  /* 数字のみ（全角→半角に変換して、数字以外を除去） */
+  function digits(s,max){
+    s=s.replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).replace(/\D/g,"");
+    return max?s.slice(0,max):s;
+  }
+  /* 電話番号のハイフン整形 */
+  var AREA3=",011,017,018,019,022,023,024,025,026,027,028,029,042,043,044,045,046,047,048,049,052,053,054,055,058,059,072,075,076,077,078,079,082,083,084,086,087,088,089,092,093,095,096,097,098,099,";
+  // 3桁の市外局番のうち、4桁目が次の数字のときは別の市外局番（4桁）に当たる（例：028-xxx は宇都宮、0287-xx は大田原）
+  var AREA3X={"022":"0345689","024":"01234678","025":"0456789","027":"046789","028":"2345789","029":"1345679","019":"1234578","023":"34578"};
+  var AREA5=",01267,01372,01374,01457,01466,01547,01558,01564,01586,01587,01632,01634,01648,01654,01656,01658,04992,04994,04996,04998,05769,05979,07468,08387,08396,08477,08512,08514,09496,09802,09912,09913,";
+  function fmtTel(d){
+    var g=null;
+    if(d.length===11){
+      if(/^0800/.test(d))g=[4,3,4];            // 0800-123-4567
+      else g=[3,4,4];                          // 090/080/070/050
+    }else if(d.length===10){
+      if(/^0(120|570)/.test(d))g=[4,3,3];      // 0120-123-456
+      else if(/^0[36]/.test(d))g=[2,4,4];      // 03・06
+      else if(AREA5.indexOf(","+d.slice(0,5)+",")>-1)g=[5,1,4];
+      else if(AREA3.indexOf(","+d.slice(0,3)+",")>-1&&(AREA3X[d.slice(0,3)]||"").indexOf(d.charAt(3))<0)g=[3,3,4];
+      else g=[4,2,4];                          // 0287-23-1234 など
+    }
+    if(!g)return d;
+    return d.slice(0,g[0])+"-"+d.slice(g[0],g[0]+g[1])+"-"+d.slice(g[0]+g[1]);
+  }
+
+  /* 電話番号 */
+  var tel=$("f-tel");
+  function checkTel(){
+    var d=digits(tel.value);
+    tel.setCustomValidity(/^0\d{9,10}$/.test(d)?"":"電話番号を正しく入力してください");
+  }
+  tel.addEventListener("input",function(){tel.value=digits(tel.value,11);checkTel()});
+  tel.addEventListener("focus",function(){tel.value=digits(tel.value,11)});
+  tel.addEventListener("blur",function(){tel.value=fmtTel(digits(tel.value,11));checkTel()});
+
+  /* 生年月日 → 年齢 */
+  var birth=$("f-birth"),ageOut=$("age-out");
+  function parseBirth(d){
+    var m=/^(\d{4})(\d{2})(\d{2})$/.exec(d);if(!m)return null;
+    var y=+m[1],mo=+m[2],dd=+m[3],t=new Date(y,mo-1,dd);
+    if(t.getFullYear()!==y||t.getMonth()!==mo-1||t.getDate()!==dd||t>new Date())return null;
+    return {y:y,mo:mo,d:dd};
+  }
+  function calcAge(d){
+    var b=parseBirth(d);if(!b)return null;
+    var t=new Date(),age=t.getFullYear()-b.y;
+    if(t.getMonth()+1<b.mo||(t.getMonth()+1===b.mo&&t.getDate()<b.d))age--;
+    return age;
+  }
+  function updateAge(){
+    var d=digits(birth.value),a=calcAge(d);
+    if(a===null||a>99){
+      ageOut.textContent="―";
+      birth.setCustomValidity(d.length===0?"":"生年月日を正しく入力してください");return;
+    }
+    ageOut.textContent=a+"歳";
+    birth.setCustomValidity(a<16?"応募は16歳以上の方が対象です":"");
+  }
+  function fmtBirth(d){return d.length===8?d.slice(0,4)+"/"+d.slice(4,6)+"/"+d.slice(6):d}
+  birth.addEventListener("input",function(){birth.value=digits(birth.value,8);updateAge()});
+  birth.addEventListener("focus",function(){birth.value=digits(birth.value,8)});
+  birth.addEventListener("blur",function(){birth.value=fmtBirth(digits(birth.value,8));updateAge()});
+
+  /* 郵便番号 → 住所（編集不可） */
+  var zip=$("f-zip"),addr=$("f-addr"),zmsg=$("zip-msg"),zipHint=zmsg.textContent,found="",pending="";
+  function setZipMsg(t,isErr){zmsg.textContent=t;zmsg.className=isErr?"err":"hint"}
+  function checkZip(){zip.setCustomValidity(digits(zip.value).length===7?"":"郵便番号を7桁の数字で入力してください")}
+  function resetAddr(){addr.value="";found=""}
+  var API="https://zipcloud.ibsnet.co.jp/api/search?zipcode=";
+  function jsonp(z){
+    return new Promise(function(ok,ng){
+      var cb="zc"+Date.now(),sc=document.createElement("script"),done=false;
+      function end(){done=true;delete window[cb];if(sc.parentNode)sc.parentNode.removeChild(sc)}
+      window[cb]=function(j){if(!done){end();ok(j)}};
+      sc.onerror=function(){if(!done){end();ng(new Error("jsonp"))}};
+      setTimeout(function(){if(!done){end();ng(new Error("timeout"))}},8000);
+      sc.src=API+z+"&callback="+cb;document.head.appendChild(sc);
+    });
+  }
+  function getZip(z){
+    return fetch(API+z).then(function(r){return r.json()}).catch(function(){return jsonp(z)});
+  }
+  function lookup(z){
+    if(found===z||pending===z)return;
+    pending=z;setZipMsg("住所を検索しています…",false);
+    getZip(z)
+      .then(function(j){
+        if(digits(zip.value)!==z)return; // 入力が変わっていたら破棄
+        pending="";
+        if(j&&j.results&&j.results[0]){
+          var r=j.results[0];
+          addr.value=r.address1+r.address2+r.address3;
+          found=z;setZipMsg(zipHint,false);
+        }else{
+          resetAddr();setZipMsg("該当する住所が見つかりませんでした。郵便番号をご確認ください（そのまま送信もできます）。",true);
+        }
+      })
+      .catch(function(){
+        if(digits(zip.value)!==z)return;
+        pending="";resetAddr();
+        setZipMsg("住所を自動で取得できませんでしたが、郵便番号だけでそのまま送信できます。",false);
+      });
+  }
+  checkZip();
+  zip.addEventListener("input",function(){
+    var d=digits(zip.value,7);zip.value=d;checkZip();
+    if(d.length===7){lookup(d)}
+    else{pending="";resetAddr();setZipMsg(zipHint,false)}
+  });
+  zip.addEventListener("focus",function(){zip.value=digits(zip.value,7)});
+  zip.addEventListener("blur",function(){
+    var d=digits(zip.value,7);
+    zip.value=d.length===7?d.slice(0,3)+"-"+d.slice(3):d;
+    if(d.length===7)lookup(d);
+  });
+
+  /* 送信 */
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    msg.textContent="";
+    checkTel();updateAge();
+    if(!form.checkValidity()){
+      var bad=form.querySelector(":invalid");
+      msg.textContent="未入力または入力内容に誤りのある項目があります。ご確認ください。";
+      if(bad.validationMessage&&bad.willValidate&&(bad===tel||bad===birth||bad===zip))msg.textContent=bad.validationMessage;
+      bad.focus();return;
+    }
+    var v=function(id){return form.elements[id].value.trim()||"（未記入）"};
+    var name=form.elements["sei"].value.trim()+" "+form.elements["mei"].value.trim();
+    var kana=form.elements["sei_kana"].value.trim()+" "+form.elements["mei_kana"].value.trim();
+    var sk=function(n){return form.elements[n].value||"（未記入）"};
+    var data={
+      website:form.elements["website"].value,
+      name:name,kana:kana,tel:tel.value,mail:v("mail"),
+      birth:digits(birth.value).replace(/^(\d{4})(\d{2})(\d{2})$/,"$1年$2月$3日"),
+      age:calcAge(digits(birth.value))+"歳",
+      zip:zip.value,addr:addr.value||"（住所は自動取得できませんでした）",
+      exp:v("exp"),skill_body:sk("skill_body"),skill_foot:sk("skill_foot"),skill_head:sk("skill_head"),
+      qual:v("qual"),time:v("time"),src:v("src"),pr:v("pr")
+    };
+    if(!ENDPOINT){msg.textContent="送信先が未設定です。管理者にご連絡ください。";return}
+    var btn=form.querySelector(".send");
+    btn.disabled=true;btn.textContent="送信中…";
+    fetch(ENDPOINT,{
+      method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},
+      body:new URLSearchParams(data).toString()
+    }).then(function(){
+      form.innerHTML='<div class="done" role="status"><b>ご応募ありがとうございました</b><p>内容を確認のうえ、ご入力いただいたメールアドレスまたはお電話でご連絡します。</p></div>';
+      form.scrollIntoView({behavior:"smooth",block:"center"});
+    }).catch(function(){
+      btn.disabled=false;btn.textContent="送信";
+      msg.textContent="送信できませんでした。通信状況をご確認のうえ、もう一度お試しください。";
+    });
+  });
+  var fixed=document.getElementById("fixed"),box=document.getElementById("form");
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){fixed.classList.toggle("hide",en[0].isIntersecting)}).observe(box);
+  }
+})();
+</script>
+</body>
+</html>
