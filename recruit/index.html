@@ -12,11 +12,15 @@
 :root{
   --ink:#171716; --muted:#6b6761; --soft:#9c978f; --line:rgba(23,23,22,.08); --paper:#f4f2ed;
   --card:rgba(255,254,251,.92); --accent:#a28d73; --accent-hover:#8f7b63; --accent-light:rgba(162,141,115,.13);
+  /* 共通の文字・余白ルール（予約ページ／応募ページで同じ値） */
+  --fs-body:14px; --lh-body:1.85; --ls-body:.02em;
+  --lh-title:1.15;
+  --fs-note:11px; --lh-note:1.7; --note-gap:10px; --note-indent:22px;
   color-scheme:light; box-sizing:border-box; padding-top:env(safe-area-inset-top,0px);
 }
 html{background:var(--paper);scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;min-height:100vh;padding:16px;color:var(--ink);font-family:Inter,"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-size:14px;line-height:1.85;letter-spacing:.02em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;min-height:100vh;padding:16px;color:var(--ink);font-family:Inter,"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-size:var(--fs-body);line-height:var(--lh-body);letter-spacing:var(--ls-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:radial-gradient(circle at 8% 8%,rgba(255,255,255,.95),transparent 34%),radial-gradient(circle at 94% 92%,rgba(206,195,180,.30),transparent 32%),linear-gradient(145deg,#faf9f6 0%,#eeece7 100%)}
 a{color:inherit}
@@ -34,7 +38,7 @@ h1,h2,h3{margin:0}
 
 .eb{margin:0 0 10px;color:var(--accent);font-size:10px;line-height:1;font-weight:700;letter-spacing:.2em}
 .hero{padding:38px 0 8px}
-h1{font-size:clamp(28px,8.5vw,38px);line-height:1.15;font-weight:600;letter-spacing:-.05em;word-break:keep-all;text-wrap:balance}
+h1{font-size:clamp(28px,8.5vw,38px);line-height:var(--lh-title);font-weight:600;letter-spacing:-.05em;word-break:keep-all;text-wrap:balance}
 .hero p.mute{margin:14px 0 16px;color:var(--muted);font-size:12px;line-height:1.7;letter-spacing:.03em}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
 .tags li{padding:3px 13px;border-radius:999px;background:var(--accent-light);color:var(--muted);font-size:12px;font-weight:600}
@@ -49,7 +53,8 @@ h1{font-size:clamp(28px,8.5vw,38px);line-height:1.15;font-weight:600;letter-spac
 
 .sec{margin-top:38px;padding-top:32px;border-top:1px solid var(--line)}
 h2{margin-bottom:14px;font-size:22px;line-height:1.3;font-weight:600;letter-spacing:-.04em}
-.note{color:var(--soft);font-size:11px;line-height:1.7;letter-spacing:.03em}
+.note{color:var(--soft);font-size:var(--fs-note);line-height:var(--lh-note);letter-spacing:.03em}
+#form-msg{margin:0 0 0 4px}#form-msg:not(:empty){margin:8px 0 0 4px}
 .course{margin-top:10px;padding:14px 12px 12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.45)}
 .course h3{margin:0 0 8px 4px;font-size:14px;font-weight:600;letter-spacing:.04em}
 .course h3 small{margin-left:8px;color:var(--soft);font-size:10px;font-weight:600;letter-spacing:.1em}
@@ -87,7 +92,8 @@ dd ul{margin:6px 0;padding-left:1.1em}
 .lnk:active,.fixed:active{transform:scale(.97);transition:transform .1s ease}
 .fixed{position:fixed;left:50%;margin-left:calc(min(100% - 32px,388px) / -2);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;width:min(100% - 32px,388px);display:flex;justify-content:center;align-items:center;gap:10px;padding:16px 20px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.06em;box-shadow:0 8px 24px rgba(162,141,115,.35)}
 footer{margin-top:28px;line-height:normal;text-align:center;color:#c0bcb6;font-size:10px;font-weight:500;letter-spacing:.1em}
-@media (max-width:480px){body{padding:12px}.card{padding:28px 22px 24px;border-radius:24px}.fixed{width:min(100% - 24px,388px);margin-left:calc(min(100% - 24px,388px) / -2)}}
+@media (max-width:480px){body{padding:12px}.hero{padding-top:32px}.card{padding:28px 22px 24px;border-radius:24px}.fixed{width:min(100% - 24px,388px);margin-left:calc(min(100% - 24px,388px) / -2)}}
+@media (max-width:360px){.card{padding-left:18px;padding-right:18px}.logo{font-size:24px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 html{scroll-behavior:smooth}
@@ -149,7 +155,7 @@ html{scroll-behavior:smooth}
     <p class="eb">RECRUIT</p>
     <h1>施術スタッフ募集</h1>
     <p class="mute">他店でのご経験をそのまま活かせて、働く曜日も時間も自分で決められます。</p>
-    <ul class="tags"><li>業務委託</li><li>経験者</li><li>資格不要</li><li>履歴書不要</li><li>年齢・性別不問</li></ul>
+    <ul class="tags"><li>業務委託</li><li>経験者</li><li>資格不要</li><li>履歴書不要</li><li>年齢・性別不問</li><li>インボイス登録不要</li></ul>
     <div class="big">
       <p class="l">表示価格の</p>
       <p class="n">65<small>%</small></p>
@@ -161,7 +167,7 @@ html{scroll-behavior:smooth}
   <section class="sec">
     <p class="eb">REWARD</p>
     <h2>報酬早見表</h2>
-    <p class="note" style="margin:0 0 6px">コースごとのあなたの報酬額です（税込・円）。小さい数字は表示価格（割引前の料金）です。</p>
+    <p class="note" style="margin:0 0 6px">コースごとのあなたの報酬額です（税込・円）。小さい数字は表示価格です。</p>
     <div class="course"><h3>ボディ<small>もみほぐし</small></h3><div class="g"><div><span>30分</span><b>1,300</b><small>料金2,000</small></div><div><span>60分</span><b>2,535</b><small>料金3,900</small></div><div><span>90分</span><b>3,770</b><small>料金5,800</small></div><div><span>120分</span><b>5,005</b><small>料金7,700</small></div></div></div>
       <div class="course"><h3>ヘッド<small>ドライヘッドスパ</small></h3><div class="g"><div><span>30分</span><b>1,820</b><small>料金2,800</small></div><div><span>60分</span><b>2,795</b><small>料金4,300</small></div><div><span>90分</span><b>4,030</b><small>料金6,200</small></div><div><span>120分</span><b>5,265</b><small>料金8,100</small></div></div></div>
       <div class="course"><h3>フット<small>足つぼ・フットマッサージ</small></h3><div class="g"><div><span>30分</span><b>1,950</b><small>料金3,000</small></div><div><span>60分</span><b>3,185</b><small>料金4,900</small></div><div><span>90分</span><b>4,420</b><small>料金6,800</small></div><div><span>120分</span><b>5,655</b><small>料金8,700</small></div></div></div>
@@ -174,12 +180,13 @@ html{scroll-behavior:smooth}
     <h2>働き方</h2>
     <ul class="points">
       <li><b>働く曜日・時間は自分で決められます</b><span>働く曜日と時間帯を決めて、毎週そのサイクルで働きます。そのうえで、日ごとの調整も可能です。</span></li>
-      <li><b>他のお仕事との兼業も自由です</b><span>お客様が重なるおそれのある近隣の同業店舗での兼業のみ、ご遠慮いただきます。</span></li>
+      <li><b>他のお仕事との兼業も自由です※</b></li>
       <li><b>集客は店舗が行います</b><span>WEBへの情報掲載やLINE配信など、集客は店舗が担当します。</span></li>
       <li><b>設備・備品は店舗で用意します</b><span>施術に必要なものを揃えています。備品代や場所代などを報酬から差し引くことはありません。</span></li>
       <li><b>インボイス登録は不要です</b><span>登録がなくてもお取引できます。</span></li>
       <li><b>2018年から続く、少人数のお店です</b><span>長く続けているスタッフもいます。</span></li>
     </ul>
+    <p class="note" style="margin:var(--note-gap) 0 0">※お客様が重なるおそれのある近隣の同業店舗での兼業のみ、ご遠慮いただきます。</p>
   </section>
 
   <section class="sec">
@@ -188,7 +195,7 @@ html{scroll-behavior:smooth}
     <dl class="spec">
       <div><dt>職種</dt><dd>施術スタッフ</dd></div>
       <div><dt>契約の種類</dt><dd>業務委託</dd></div>
-      <div><dt>仕事内容</dt><dd>次の施術と、お客様の接客など。<ul><li>ボディ：もみほぐし</li><li>フット：足つぼ・フットマッサージ（オイル使用）</li><li>ヘッド：ドライヘッドスパ</li></ul></dd></div>
+      <div><dt>仕事内容</dt><dd>次の施術と、担当するお客様の接客、およびそれに付随する業務。<ul><li>ボディ：もみほぐし</li><li>フット：足つぼ・フットマッサージ（オイル使用）</li><li>ヘッド：ドライヘッドスパ</li></ul></dd></div>
       <div><dt>応募資格</dt><dd>
         次のいずれかのご経験が、1年以上ある方が目安です。
         <ul><li>もみほぐし</li><li>足つぼ・フットマッサージ</li><li>ドライヘッドスパ（ヘッドマッサージ）</li><li>整体・接骨院・マッサージ店での施術</li></ul>
@@ -206,8 +213,8 @@ html{scroll-behavior:smooth}
     <p class="eb">SALON</p>
     <h2>店舗情報</h2>
     <dl class="spec">
-      <div><dt>店名</dt><dd>relaxation salon momizo（屋号：揉蔵）</dd></div>
-      <div><dt>住所</dt><dd>〒324-0041 栃木県大田原市本町1丁目2701-11<br>サイトー・バルコニー107（ハローワーク大田原の近く）</dd></div>
+      <div><dt>屋号</dt><dd>揉蔵</dd></div>
+      <div><dt>住所</dt><dd>〒324-0041<br>栃木県大田原市本町1丁目2701-11<br>サイトー・バルコニー107（ハローワーク大田原の近く）</dd></div>
       <div><dt>営業時間</dt><dd>
         <table class="hours">
           <tr><th>月・木</th><td>14:00〜24:00</td></tr>
@@ -245,28 +252,28 @@ html{scroll-behavior:smooth}
       <fieldset class="f"><legend>ご住所<span class="req">必須</span></legend>
         <label class="sub"><span>郵便番号</span><input type="tel" id="f-zip" name="zip" autocomplete="postal-code" inputmode="numeric" placeholder="例）3240041" required></label>
         <label class="sub"><span>住所（自動入力）</span><input type="text" id="f-addr" name="addr" readonly tabindex="-1" placeholder="郵便番号を入れると自動で表示されます"></label>
-        <p class="hint" id="zip-msg">数字のみ入力してください。都道府県・市区町村・町域が自動で入ります。</p>
+        <p class="hint" id="zip-msg">数字のみ入力してください。都道府県・市区町村・町域が自動で入ります。番地は入力不要です。</p>
       </fieldset>
-      <div class="f"><label for="f-exp">施術に関わるお仕事のご経験<span class="req">必須</span></label><textarea id="f-exp" name="exp" maxlength="300" placeholder="例）○○整体院　2年（もみほぐし）&#10;△△リラクゼーション　1年（ヘッドスパ・足つぼ）" required></textarea><p class="hint">お店の名前・年数・施術内容をご記入ください（300字まで）。関係のない経歴は不要です。</p></div>
+      <div class="f"><label for="f-exp">施術に関わるお仕事のご経験<span class="req">必須</span></label><textarea id="f-exp" name="exp" maxlength="300" placeholder="例）○○整体院　2年（もみほぐし）&#10;△△リラクゼーション　1年（ヘッドスパ・足つぼ）" required></textarea><p class="hint">お店の名前・年数・施術内容をご記入ください（300字まで）。当店の業務に関連のない経歴は不要です。</p></div>
       <fieldset class="f"><legend>対応できる施術<span class="req">必須</span></legend>
-        <p class="hint">それぞれの施術ができるかどうか、お選びください。</p>
+        <p class="hint">それぞれの施術ができるかどうか、お選びください。少なくとも1つは「できる」を選んでください。</p>
         <div class="skill"><span class="skill-name">もみほぐし</span><div class="seg"><label><input type="radio" name="skill_body" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_body" value="できない"><span>できない</span></label></div></div>
         <div class="skill"><span class="skill-name">足つぼ・フットマッサージ</span><div class="seg"><label><input type="radio" name="skill_foot" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_foot" value="できない"><span>できない</span></label></div></div>
         <div class="skill"><span class="skill-name">ドライヘッドスパ</span><div class="seg"><label><input type="radio" name="skill_head" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_head" value="できない"><span>できない</span></label></div></div>
       </fieldset>
       <div class="f"><label for="f-qual">保有資格<span class="opt">任意</span></label><textarea class="s" id="f-qual" name="qual" maxlength="300" placeholder="例）あん摩マッサージ指圧師&#10;リフレクソロジー認定資格"></textarea><p class="hint">お持ちの資格があればご記入ください。なければ空欄で構いません（300字まで）。</p></div>
       <div class="f"><label for="f-time">連絡しやすい時間帯<span class="opt">任意</span></label><select id="f-time" name="time"><option value="">選択してください</option><option>いつでも</option><option>午前</option><option>午後</option><option>夜</option></select></div>
-      <div class="f"><label for="f-src">応募のきっかけ<span class="opt">任意</span></label><textarea class="s" id="f-src" name="src" maxlength="200" placeholder="例）求人サイトを見て／知人の紹介／店の前を通りかかって"></textarea><p class="hint">ひとことで大丈夫です（200字まで）。</p></div>
-      <div class="f"><label for="f-pr">自己PR<span class="opt">任意</span></label><textarea id="f-pr" name="pr" maxlength="300" placeholder="例）接客が好きで、お客様とお話ししながら丁寧に施術することを大切にしています。"></textarea><p class="hint">ひとことだけでも大丈夫です（300字まで）。</p></div>
+      <div class="f"><label for="f-src">応募のきっかけ<span class="opt">任意</span></label><textarea class="s" id="f-src" name="src" maxlength="200" placeholder="例）求人サイトを見て／知人の紹介／店の前を通りかかって"></textarea><p class="hint">200字まで入力できます。</p></div>
+      <div class="f"><label for="f-pr">自己PR<span class="opt">任意</span></label><textarea id="f-pr" name="pr" maxlength="300" placeholder="例）接客が好きで、お客様とお話ししながら丁寧に施術することを大切にしています。"></textarea><p class="hint">300字まで入力できます。</p></div>
       <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <label class="chk"><input type="checkbox" id="f-agree" required><span>ご入力いただいた情報は、選考のためだけに使用します。内容に同意します。<span class="req" style="margin-left:6px">必須</span></span></label>
       <div>
         <button type="submit" class="send">送信</button>
-        <p class="note" id="form-msg" role="alert" style="margin:8px 0 0 4px;color:#b3261e"></p>
+        <p class="note" id="form-msg" role="alert" style="color:#b3261e"></p>
       </div>
     </form>
-    <p class="note" style="margin:16px 0 0 4px">※公式LINEは情報配信専用のため、応募は受け付けていません。</p>
-    <div class="links" style="margin-top:16px">
+    <p class="note" style="margin:var(--note-gap) 0 0 var(--note-indent)">※公式LINEは情報配信専用のため、応募は受け付けていません。</p>
+    <div class="links" style="margin-top:20px">
       <a class="lnk" href="https://www.google.com/maps/search/?api=1&query=%E6%8F%89%E8%94%B5+%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%A4%A7%E7%94%B0%E5%8E%9F%E5%B8%82%E6%9C%AC%E7%94%BA1%E4%B8%81%E7%9B%AE2701-11" target="_blank" rel="noopener"><span><small>ACCESS</small><b>アクセス・地図</b></span><i>↗</i></a>
     </div>
   </section>
@@ -408,6 +415,10 @@ html{scroll-behavior:smooth}
       msg.textContent="未入力または入力内容に誤りのある項目があります。ご確認ください。";
       if(bad.validationMessage&&bad.willValidate&&(bad===tel||bad===birth||bad===zip))msg.textContent=bad.validationMessage;
       bad.focus();return;
+    }
+    if(!form.querySelector('input[name^="skill_"][value="できる"]:checked')){
+      msg.textContent="対応できる施術を、少なくとも1つは「できる」にしてください。";
+      form.elements["skill_body"][0].focus();return;
     }
     var v=function(id){return form.elements[id].value.trim()||"（未記入）"};
     var name=form.elements["sei"].value.trim()+" "+form.elements["mei"].value.trim();
