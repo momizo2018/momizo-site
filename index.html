@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f4f2ed">
 <meta name="format-detection" content="telephone=no">
 <title>揉蔵 | ご予約</title>
@@ -22,6 +22,10 @@
   --accent: #a28d73;
   --accent-hover: #8f7b63;
   --accent-light: rgba(162,141,115,.13);
+  /* 共通の文字・余白ルール（予約ページ／応募ページで同じ値） */
+  --fs-body:14px; --lh-body:1.85; --ls-body:.02em;
+  --lh-title:1.15;
+  --fs-note:11px; --lh-note:1.7; --note-gap:10px; --note-indent:22px;
 }
 
 * {
@@ -40,6 +44,9 @@ body {
   display: grid;
   place-items: center;
   padding: 16px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
   color: var(--ink);
   font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
     "Hiragino Sans", "Yu Gothic", sans-serif;
@@ -152,7 +159,7 @@ body {
 .title {
   max-width: 100%;
   font-size: clamp(28px, 8.5vw, 38px);
-  line-height: 1.1;
+  line-height: var(--lh-title);
   font-weight: 600;
   letter-spacing: -.05em;
   word-break: keep-all;
@@ -293,10 +300,10 @@ body {
 }
 
 .line-note {
-  margin-top: 10px;
-  padding-left: 22px; /* ボタン内のテキストと完璧に左揃え */
-  font-size: 10px;
-  line-height: 1.5;
+  margin-top: var(--note-gap);
+  padding-left: var(--note-indent); /* ボタン内のテキストと完璧に左揃え */
+  font-size: var(--fs-note);
+  line-height: var(--lh-note);
   letter-spacing: .03em;
   color: var(--soft);
 }
@@ -317,6 +324,7 @@ body {
 
 .footer {
   margin-top: 28px;
+  line-height: normal;
   text-align: center;
   color: #c0bcb6;
   font-size: 10px;
@@ -445,14 +453,17 @@ body {
           </span>
           <span class="line-arrow" aria-hidden="true">↗</span>
         </a>
-        <p class="line-note">※LINEは情報配信専用です。予約受付は行っておりません。</p>
+        <p class="line-note">※公式LINEは情報配信専用のため、予約は受け付けていません。</p>
       </div>
-    </nav>
 
-    <div class="address">
-      <span>〒324-0041 栃木県大田原市本町1丁目2701-11</span>
-      <span>サイトー・バルコニー107</span>
-    </div>
+      <a href="https://momizo2018.github.io/momizo-site/recruit/" class="line" style="margin-top:8px;">
+        <span class="action-copy">
+          <small>05 / RECRUIT</small>
+          スタッフ募集
+        </span>
+        <span class="line-arrow" aria-hidden="true">↗</span>
+      </a>
+    </nav>
 
     <footer class="footer">&copy; 2026 relaxation salon momizo</footer>
   </main>
