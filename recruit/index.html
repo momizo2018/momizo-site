@@ -456,9 +456,10 @@ html{scroll-behavior:smooth}
     for(var i=0;i<on.length;i++){
       var x=on[i];
       if(!x.a.value||!x.b.value)return {msg:"チェックした曜日の開始・終了時間をお選びください。",el:x.a.value?x.b:x.a};
-      if(+x.a.value>=+x.b.value)return {msg:"終了時間は開始時間より後にしてください。",el:x.b};
+      if(+x.a.value===+x.b.value)return {msg:"開始と終了は、違う時間をお選びください。",el:x.b};
     }
-    return {text:on.map(function(x){return x.day+" "+hh(x.a.value)+"〜"+hh(x.b.value)}).join("\n")};
+    /* 終了が開始より前の場合は、24時をまたいで翌日の時間として扱う */
+    return {text:on.map(function(x){return x.day+" "+hh(x.a.value)+"〜"+(+x.b.value<+x.a.value?"翌":"")+hh(x.b.value)}).join("\n")};
   }
 
   /* 送信 */
