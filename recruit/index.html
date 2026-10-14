@@ -35,7 +35,7 @@ h1,h2,h3{margin:0}
 @keyframes enter{from{opacity:0;transform:translateY(20px) scale(.99)}to{opacity:1;transform:none}}
 
 .header{display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid var(--line)}
-.brand{display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;flex-direction:column;gap:4px;text-decoration:none}
 .brand-name{margin:0;font-size:26px;line-height:1;font-weight:700;letter-spacing:-.05em}
 .brand-sub{margin:0;color:var(--soft);font-size:9px;line-height:1;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
 .mark{width:32px;height:32px;display:grid;place-items:center;border:1px solid rgba(162,141,115,.24);border-radius:50%;color:var(--accent);background:var(--accent-light);font-size:11px;font-weight:600;transition:transform .25s ease,background .25s ease}
@@ -185,7 +185,7 @@ html{scroll-behavior:smooth}
 
 <main class="card">
   <div class="header">
-    <div class="brand"><p class="brand-name">momizo</p><p class="brand-sub">Relaxation &amp; Care</p></div>
+    <a class="brand" href="https://momizo2018.github.io/momizo-site/" aria-label="momizo トップページ"><p class="brand-name">momizo</p><p class="brand-sub">Relaxation &amp; Care</p></a>
     <div class="mark" aria-hidden="true">m</div>
   </div>
 
@@ -324,7 +324,8 @@ html{scroll-behavior:smooth}
     </form>
     <p class="note" style="margin:var(--note-gap) 0 0 var(--note-indent)">※公式LINEは情報配信専用のため、応募は受け付けていません。</p>
     <div class="links" style="margin-top:20px">
-      <a class="line" href="https://www.google.com/maps/search/?api=1&query=%E6%8F%89%E8%94%B5+%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%A4%A7%E7%94%B0%E5%8E%9F%E5%B8%82%E6%9C%AC%E7%94%BA1%E4%B8%81%E7%9B%AE2701-11" target="_blank" rel="noopener"><span class="action-copy"><small>ACCESS</small>アクセス・地図</span><span class="line-arrow" aria-hidden="true">↗</span></a>
+      <a class="line" href="https://www.google.com/maps/search/?api=1&query=%E6%8F%89%E8%94%B5+%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%A4%A7%E7%94%B0%E5%8E%9F%E5%B8%82%E6%9C%AC%E7%94%BA1%E4%B8%81%E7%9B%AE2701-11" target="_blank" rel="noopener"><span class="action-copy"><small>01 / ACCESS</small>アクセス・地図</span><span class="line-arrow" aria-hidden="true">↗</span></a>
+      <a class="line" href="https://momizo2018.github.io/momizo-site/"><span class="action-copy"><small>02 / TOP</small>トップページ</span><span class="line-arrow" aria-hidden="true">↗</span></a>
     </div>
   </section>
   <footer>© 2026 relaxation salon momizo</footer>
