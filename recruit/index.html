@@ -517,10 +517,10 @@ html{scroll-behavior:smooth}
       el.setCustomValidity(el.value.trim()?"":"入力してください");
     });
     if(!form.checkValidity()){
-      var bad=form.querySelector(":invalid");
+      var bad=form.querySelector("input:invalid,textarea:invalid,select:invalid");
       msg.textContent="未入力または入力内容に誤りのある項目があります。ご確認ください。";
       if(bad.validationMessage&&bad.willValidate&&(bad===tel||bad===birth||bad===zip))msg.textContent=bad.validationMessage;
-      bad.focus();return;
+      bad.focus();bad.scrollIntoView({block:"center",behavior:"smooth"});return;
     }
     if(!form.querySelector('input[name^="skill_"][value="できる"]:checked')){
       msg.textContent="対応できる施術を、少なくとも1つは「できる」にしてください。";
