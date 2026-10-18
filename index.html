@@ -105,6 +105,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .25s ease;
+}
+
+@media (hover: hover) {
+  .brand:hover { opacity: .65; }
 }
 
 .brand-name {
@@ -405,10 +413,10 @@ body {
 
   <main class="card">
     <header class="header">
-      <div class="brand">
+      <a class="brand" href="https://page.line.me/cvj7583f" aria-label="公式LINE">
         <div class="brand-name">momizo</div>
         <div class="brand-sub">Relaxation &amp; Care</div>
-      </div>
+      </a>
       <div class="mark" aria-hidden="true">m</div>
     </header>
 
