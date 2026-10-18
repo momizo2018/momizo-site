@@ -67,9 +67,14 @@ h2{margin-bottom:14px;font-size:22px;line-height:1.3;font-weight:600;letter-spac
 .course h3 small{margin-left:8px;color:var(--soft);font-size:10px;font-weight:600;letter-spacing:.1em}
 .course h3 .tag{margin-left:8px;padding:1px 8px;border:1px solid var(--line);border-radius:999px;color:var(--soft);font-size:10px;font-style:normal;font-weight:600;letter-spacing:.1em;white-space:nowrap}
 .g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.g div{position:relative;cursor:pointer;padding:8px 2px;border-radius:10px;background:rgba(162,141,115,.22);text-align:center;line-height:1.3;-webkit-tap-highlight-color:transparent;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease,background-color .35s ease}
-.g div.is-active{z-index:2;transform:scale(1.1);background-color:rgba(162,141,115,.3);box-shadow:0 8px 20px rgba(40,34,27,.12)}
-@media (hover:hover){.g div:hover{z-index:2;transform:scale(1.1);background-color:rgba(162,141,115,.3);box-shadow:0 8px 20px rgba(40,34,27,.12)}}
+.g div{position:relative;isolation:isolate;cursor:pointer;padding:8px 2px;text-align:center;line-height:1.3;-webkit-tap-highlight-color:transparent}
+.g div::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:10px;background:rgba(162,141,115,.22);box-shadow:0 0 0 rgba(40,34,27,0);pointer-events:none;will-change:transform;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease,background-color .35s ease}
+.g div>*{pointer-events:none;will-change:transform;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.g div small{display:inline-block}
+.g div.is-active{z-index:2}
+.g div.is-active::before{transform:scale(1.1);background-color:rgba(162,141,115,.3);box-shadow:0 8px 20px rgba(40,34,27,.12)}
+.g div.is-active>*{transform:scale(1.1)}
+@media (hover:hover){.g div:hover{z-index:2}.g div:hover::before{transform:scale(1.1);background-color:rgba(162,141,115,.3);box-shadow:0 8px 20px rgba(40,34,27,.12)}.g div:hover>*{transform:scale(1.1)}}
 .g span{display:block;color:var(--soft);font-size:10px;font-weight:600}
 .g b{display:block;font-size:16px;font-weight:600;letter-spacing:-.02em}
 .g small{color:var(--soft);font-size:9px}
@@ -553,17 +558,24 @@ html{scroll-behavior:smooth}
 })();
 </script>
 <script>
-/* 報酬早見表：タッチ端末ではタップで拡大、もう一度タップまたは他の場所をタップで戻る */
+/* 報酬早見表：タッチ端末ではタップで拡大、もう一度タップまたは他の場所に触れると戻る（PCはCSSのホバー） */
 (function(){
-  var cells=document.querySelectorAll(".g div"),cur=null;
-  function isTouch(e){return e.pointerType?e.pointerType!=="mouse":window.matchMedia("(hover:none)").matches}
+  var cells=document.querySelectorAll(".g div"),cur=null,sx=0,sy=0,st=0,tracking=null;
+  function set(c){
+    if(cur&&cur!==c)cur.classList.remove("is-active");
+    if(c){c.classList.toggle("is-active");cur=c.classList.contains("is-active")?c:null}else{cur=null}
+  }
   Array.prototype.forEach.call(cells,function(c){
-    c.addEventListener("click",function(e){
-      if(!isTouch(e))return;
-      if(cur&&cur!==c)cur.classList.remove("is-active");
-      c.classList.toggle("is-active");
-      cur=c.classList.contains("is-active")?c:null;
-    });
+    c.addEventListener("touchstart",function(e){
+      var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();tracking=c;
+    },{passive:true});
+    c.addEventListener("touchend",function(e){
+      if(tracking!==c)return;
+      tracking=null;
+      var t=e.changedTouches[0];
+      if(Math.abs(t.clientX-sx)<10&&Math.abs(t.clientY-sy)<10&&Date.now()-st<600)set(c);
+    },{passive:true});
+    c.addEventListener("touchcancel",function(){tracking=null},{passive:true});
   });
   document.addEventListener("touchstart",function(e){
     if(cur&&!(e.target.closest&&e.target.closest(".g div"))){cur.classList.remove("is-active");cur=null}
