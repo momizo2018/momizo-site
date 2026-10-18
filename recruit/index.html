@@ -296,8 +296,8 @@ html{scroll-behavior:smooth}
       <fieldset class="f"><legend>電話番号<span class="req">必須</span></legend>
         <label class="sub"><span>電話番号</span><input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="numeric" placeholder="例）09012345678" required></label>
         <p class="hint">数字のみ入力してください（ハイフンは自動で入ります）。</p>
-        <label class="sub"><span>連絡しやすい時間帯</span><select id="f-time" name="time" required><option value="">選択してください</option><option>いつでも</option><option>午前</option><option>午後</option><option>夜</option></select></label>
-        <p class="hint">お電話でご連絡する際の目安にします。</p>
+        <label class="sub"><span>連絡しやすい時間帯</span><textarea class="short" id="f-time" name="time" maxlength="200" placeholder="例）平日 18:00〜21:00&#10;土日 終日OK" required></textarea></label>
+        <p class="hint">お電話でご連絡しやすい曜日と時間をご記入ください（200字まで）。</p>
       </fieldset>
       <div class="f"><label for="f-mail">メールアドレス<span class="req">必須</span></label><input type="email" id="f-mail" name="mail" autocomplete="email" inputmode="email" placeholder="例）example@mail.com" required><p class="hint">ご返信に使います。</p></div>
       <div class="f"><label for="f-birth">生年月日<span class="req">必須</span></label><input type="tel" id="f-birth" name="birth" autocomplete="off" inputmode="numeric" placeholder="例）19900415" required><p class="hint">数字8桁で入力してください（スラッシュは自動で入ります）。</p><p class="age" aria-live="polite">年齢：<b id="age-out">―</b></p></div>
