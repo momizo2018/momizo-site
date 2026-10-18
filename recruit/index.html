@@ -511,6 +511,11 @@ html{scroll-behavior:smooth}
     e.preventDefault();
     msg.textContent="";
     checkTel();updateAge();
+    /* 空白（スペース）だけの入力は未入力として扱う */
+    ["sei","mei","sei_kana","mei_kana","time","exp"].forEach(function(n){
+      var el=form.elements[n];
+      el.setCustomValidity(el.value.trim()?"":"入力してください");
+    });
     if(!form.checkValidity()){
       var bad=form.querySelector(":invalid");
       msg.textContent="未入力または入力内容に誤りのある項目があります。ご確認ください。";
