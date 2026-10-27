@@ -2,30 +2,142 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f4f2ed">
 <meta name="format-detection" content="telephone=no">
 <title>揉蔵 | ご予約</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* =========================================================
+   共通（予約ページ・応募ページで同じ値にそろえる部分）
+   ========================================================= */
 :root {
-  --ink: #171716;
-  --muted: #6b6761;
-  --soft: #9c978f;
-  --line: rgba(23,23,22,.08);
-  --paper: #f4f2ed;
-  --card: rgba(255,254,251,.92);
-  --accent: #a28d73;
-  --accent-hover: #8f7b63;
-  --accent-light: rgba(162,141,115,.13);
-  /* 共通の文字・余白ルール（予約ページ／応募ページで同じ値） */
-  --fs-body:14px; --lh-body:1.85; --ls-body:.02em;
-  --lh-title:1.15;
-  --fs-note:11px; --lh-note:1.7; --note-gap:10px; --note-indent:22px;
+  /* =========================================================
+     段階表（詳しくは「揉蔵サイト デザイン数値規格書」）
+     2ファイルとも同じ内容にする
+     ========================================================= */
+
+  /* ===== 色 ===== */
+  --ink: #171716; --ink-2: #3b3834; --muted: #6b6761; --soft: #9c978f; --faint: #c0bcb6;
+  --paper: #f4f2ed; --paper-hi: #faf9f6; --paper-lo: #eeece7; /* 下地と、その明るい側・暗い側 */
+  --card: rgba(255,254,251,.9);
+  --accent: #a28d73; --accent-hover: #8f7b63;
+  --white: #fff;
+  /* 透明度：.32以下は.04刻み、.4以上は.1刻み */
+  --ink-04: rgba(23,23,22,.04); --ink-12: rgba(23,23,22,.12); --ink-20: rgba(23,23,22,.2); --ink-28: rgba(23,23,22,.28);
+  --white-16: rgba(255,255,255,.16); --white-40: rgba(255,255,255,.4); --white-50: rgba(255,255,255,.5);
+  --white-70: rgba(255,255,255,.7); --white-80: rgba(255,255,255,.8);
+  --accent-08: rgba(162,141,115,.08); --accent-12: rgba(162,141,115,.12); --accent-16: rgba(162,141,115,.16);
+  --accent-24: rgba(162,141,115,.24); --accent-32: rgba(162,141,115,.32);
+  --shade-04: rgba(40,34,27,.04); --shade-08: rgba(40,34,27,.08); --shade-12: rgba(40,34,27,.12);
+  --o-disabled: .4; --o-muted: .6; --o-soft: .8; /* 部品全体の不透明度 */
+
+  /* ===== 寸法：4pxの倍数（--sp-N は N×4px）。2px は微調整用 ===== */
+  --sp-half: 2px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-7: 28px; --sp-8: 32px; --sp-10: 40px;
+
+  /* ===== 配置：縦の間隔（役割で選ぶ） ===== */
+  --gap-tight: var(--sp-1);      /*  4 ラベルとその入力欄、項目名と内容、ロゴの2行 */
+  --gap-item: var(--sp-2);       /*  8 1つの項目の中、横に並ぶ小さな部品の間 */
+  --gap-list: var(--sp-3);       /* 12 並んだ箱・ボタンの間、ラベル→見出し、ボタン→注意書き */
+  --gap-head: var(--sp-4);       /* 16 見出し→その下、区切り線のある行の上下 */
+  --gap-block: var(--sp-6);      /* 24 文章→次のまとまり、まとまりどうし、フォームの項目の間 */
+  --gap-section: var(--sp-8);    /* 32 区切り線の上下、カードの上下の内側、フッターの上 */
+
+  /* ===== 配置：横の位置・内側の余白 ===== */
+  --card-pad-x: var(--sp-6);     /* カードの左右の内側（幅360px以下は下で変更） */
+  --card-pad-y: var(--gap-section);
+  --inset: var(--sp-4);          /* 箱・入力欄・ボタンの左右の内側。箱の中の文字はすべてこの位置にそろう */
+  --inset-compact: var(--sp-3);  /* 幅の狭い入力欄（業務枠の時間） */
+  --inset-panel: var(--sp-6);    /* 「65%」の箱・送信完了の箱の内側（上下左右） */
+  --pad-control: var(--sp-3) var(--inset);       /* 入力欄・選択の箱・同意欄・強調欄 */
+  --pad-box: var(--inset);                       /* コースの箱・働き方の箱 */
+  --pad-pill-sm: var(--sp-half) var(--sp-2);     /* 必須・任意マーク、コースの補足 */
+  --pad-pill: var(--sp-1) var(--sp-3);           /* タグ */
+  --pad-pill-lg: var(--sp-2) var(--sp-3);        /* 選択ボタン（できる／できない） */
+  --pad-cell: var(--gap-item) var(--sp-half);   /* 報酬早見表のマス */
+  --pad-band: var(--sp-1) 0 var(--sp-half);     /* 「ボディ含む」の帯 */
+  /* つなぎ（帯とマスの間）と字の詰め（「%」の前）だけは --sp-half を直接使う */
+  --note-gap: var(--gap-list);   /* ボタン→注意書き */
+  --note-indent: var(--inset);   /* 注意書きの字下げ＝ボタン内の文字の位置 */
+  --page-pad: var(--sp-4);       /* 画面端とカードの間（スマホは下で変更） */
+
+  /* ===== 部品の大きさ（4pxの倍数。8px未満の細部のみ2pxの倍数） ===== */
+  --card-w: 420px;
+  --size-control: 64px;          /* ボタンの高さ */
+  --size-seg: 64px;              /* 選択ボタン（できる／できない）の最小幅 */
+  --size-icon: 32px;             /* 矢印の丸・「m」マーク */
+  --size-check: 20px;            /* チェックボックス */
+  --size-day: 56px;              /* 業務枠の曜日欄の幅 */
+  --h-textarea: 96px; --h-textarea-short: 80px;
+  --size-arrow: 6px;             /* セレクトの▼ */
+  --deco-size: 192px;            /* カード右上の飾りの丸 */
+  --deco-offset: var(--sp-6);    /* 飾りの丸の中心をカードの角から外へずらす量 */
+
+  /* ===== 線：1・2・4px ===== */
+  --bw: 1px; --focus-w: 2px; --focus-offset: 2px; --bw-accent: 4px;
+
+  /* ===== 角丸：4pxの倍数 ===== */
+  --r-sm: 12px; --r-md: 16px; --r-lg: 20px; --r-xl: 24px; --r-pill: 999px;
+
+  /* ===== 影：ずれ・ぼかしは寸法の段階から ===== */
+  --shadow-card: 0 var(--sp-6) calc(var(--sp-8) * 2) var(--shade-08), 0 var(--sp-half) var(--sp-3) var(--shade-04);
+  --shadow-soft: 0 var(--sp-2) var(--sp-4) var(--shade-04);
+  --shadow-raise: 0 var(--sp-2) var(--sp-6) var(--shade-12);
+  --shadow-accent: 0 var(--sp-2) var(--sp-6) var(--accent-24);
+  --shadow-accent-hover: 0 var(--sp-3) var(--sp-8) var(--accent-32);
+
+  /* ===== 書体 ===== */
+  --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-latin: "Inter", sans-serif;
+  --fw-regular: 400; --fw-semibold: 600; --fw-bold: 700; /* Googleフォントの読み込みURLと合わせる */
+
+  /* ===== 文字サイズ：16px以下は1px刻み、それより上は4px刻み ===== */
+  --fs-2xs: 10px; --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-base: 14px; --fs-lg: 16px;
+  --fs-xl: 24px; --fs-2xl: 28px; --fs-3xl: 40px;
+  --fs-display-min: 112px; --fs-display-max: 152px; --fs-display-sub: .35em; /* 「65%」と「%」 */
+  /* 可変サイズ：画面幅 --fluid-at（px）で最大値になる比率で拡大する */
+  --fluid-at: 440;
+  --fs-title: clamp(var(--fs-2xl), calc(100vw * 40 / var(--fluid-at)), var(--fs-3xl));
+  --fs-display: clamp(var(--fs-display-min), calc(100vw * 152 / var(--fluid-at)), var(--fs-display-max));
+
+  /* ===== 行間：1 と、.2刻み ===== */
+  --lh-display: .9; --lh-none: 1; --lh-title: 1.1; --lh-snug: 1.3; --lh-ui: 1.5; --lh-note: 1.7; --lh-body: 1.9;
+
+  /* ===== 字間：.02em の倍数 ===== */
+  --ls-display: -.08em; --ls-tight: -.06em; --ls-snug: -.02em; --ls-none: 0;
+  --ls-body: .02em; --ls-wide: .04em; --ls-wider: .08em; --ls-label: .12em; --ls-caps: .2em;
+
+  /* ===== 動き ===== */
+  /* 時間：0.1秒 × 1・2・3・5・8 */
+  --dur-press: .1s; --dur-fast: .2s; --dur-base: .3s; --dur-page: .5s; --dur-enter: .8s;
+  --ease-out: cubic-bezier(.16,1,.3,1);     /* 登場・ホバー・色の変化 */
+  --ease-in-out: cubic-bezier(.4,0,.2,1);   /* 退場 */
+  /* 量 */
+  --lift: calc(var(--sp-half) * -1);   /* ホバーで浮く */
+  --nudge: var(--sp-half);             /* ホバーで矢印が動く */
+  --enter-y: var(--sp-5);              /* 登場・退場の移動 */
+  --press: .97; --pop: 1.1; --enter-scale: .99; --tilt: -4deg;
+
+  /* ===== 重なり順 ===== */
+  --z-back: -1; --z-raise: 1; --z-top: 10;
+
+  /* ===== 背景 ===== */
+  --bg-page:
+    radial-gradient(circle at 8% 8%, var(--white), transparent 32%),
+    radial-gradient(circle at 92% 92%, var(--accent-16), transparent 32%),
+    linear-gradient(145deg, var(--paper-hi) 0%, var(--paper-lo) 100%);
+
+  /* ===== 画面の枠（2ページ共通） ===== */
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);       /* iPhoneの切り欠き・ホームバーの分をあける */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
@@ -34,373 +146,299 @@
   padding: 0;
 }
 
-html {
-  min-height: 100%;
-  background: var(--paper);
-}
+html { min-height: 100%; background: var(--paper); scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
 
 body {
-  min-height: 100vh;
+  min-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  min-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); /* 対応ブラウザでは、アドレスバーを除いた高さ */
   display: grid;
   place-items: center;
-  padding: 16px;
-  font-size: var(--fs-body);
+  padding: var(--page-pad);
+  font-size: var(--fs-base);
   line-height: var(--lh-body);
   letter-spacing: var(--ls-body);
   color: var(--ink);
-  font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
-    "Hiragino Sans", "Yu Gothic", sans-serif;
+  font-family: var(--font-sans);
   background:
-    radial-gradient(circle at 8% 8%, rgba(255,255,255,.95), transparent 34%),
-    radial-gradient(circle at 94% 92%, rgba(206,195,180,.30), transparent 32%),
-    linear-gradient(145deg, #faf9f6 0%, #eeece7 100%);
+    var(--bg-page);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
-  animation: pageFadeIn 0.6s ease-out both;
+  animation: pageFadeIn var(--dur-page) var(--ease-out) both;
 }
 
+/* ---------- カード ---------- */
 .card {
   position: relative;
-  width: min(100%, 420px);
-  padding: 32px 28px;
+  width: min(100%, var(--card-w));
+  /* カードは画面の高さいっぱいまで伸ばし、フッターを下端に寄せる。
+     内容が短いページでも、ヘッダーは上から・フッターは下から同じ位置に来る */
+  min-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--page-pad) * 2);
+  min-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--page-pad) * 2);
+  display: flex; flex-direction: column;
+  padding: var(--card-pad-y) var(--card-pad-x);
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.85);
-  border-radius: 26px;
+  border: var(--bw) solid var(--white-80);
+  border-radius: var(--r-xl);
   background: var(--card);
-  box-shadow:
-    0 24px 60px rgba(40,34,27,.08),
-    0 2px 10px rgba(40,34,27,.03);
-  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-card);
   -webkit-backdrop-filter: blur(18px);
-  animation: enter .85s cubic-bezier(.16,1,.3,1) both;
-  animation-delay: 0.05s;
+  backdrop-filter: blur(18px);
+  animation: enter var(--dur-enter) var(--ease-out) both;
 }
-
 .card.is-leaving {
-  animation: slideOut .5s cubic-bezier(.4,0,.2,1) forwards;
+  animation: slideOut var(--dur-page) var(--ease-in-out) forwards;
 }
-
 .card::after {
   content: "";
   position: absolute;
-  width: 190px;
-  height: 190px;
-  right: -125px;
-  top: -115px;
+  width: var(--deco-size);
+  height: var(--deco-size);
+  right: calc((var(--deco-size) / 2 + var(--deco-offset)) * -1);
+  top: calc((var(--deco-size) / 2 + var(--deco-offset)) * -1);
   border-radius: 50%;
-  background: rgba(162,141,115,.08);
+  background: var(--accent-08);
   pointer-events: none;
 }
 
+/* ---------- ヘッダー（ロゴ） ---------- */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 22px;
-  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--gap-section);
+  border-bottom: var(--bw) solid var(--ink-12);
 }
-
 .brand {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--gap-tight);
   color: inherit;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity .25s ease;
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
-
-@media (hover: hover) {
-  .brand:hover { opacity: .65; }
-}
-
 .brand-name {
-  font-size: 26px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: -.05em;
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-none);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
 }
-
 .brand-sub {
   color: var(--soft);
-  font-size: 9px;
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: .2em;
+  font-size: var(--fs-2xs);
+  line-height: var(--lh-none);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
 }
-
 .mark {
-  width: 32px;
-  height: 32px;
+  width: var(--size-icon);
+  height: var(--size-icon);
   display: grid;
   place-items: center;
-  border: 1px solid rgba(162,141,115,.24);
+  border: var(--bw) solid var(--accent-24);
   border-radius: 50%;
   color: var(--accent);
-  background: var(--accent-light);
-  font-size: 11px;
-  font-weight: 600;
-  transition: transform .25s ease, background .25s ease;
+  background: var(--accent-12);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
 }
-
 .card:hover .mark {
-  transform: rotate(-4deg);
-  background: rgba(162,141,115,.17);
+  transform: rotate(var(--tilt));
+  background: var(--accent-16);
 }
 
-.main {
-  padding: 38px 0 32px;
-  text-align: left;
-}
-
+/* ---------- 見出し ---------- */
 .kicker {
-  margin-bottom: 10px;
+  margin-bottom: var(--gap-list);
   color: var(--accent);
-  font-size: 10px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: .2em;
+  font-size: var(--fs-2xs);
+  line-height: var(--lh-none);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-caps);
 }
-
 .title {
   max-width: 100%;
-  font-size: clamp(28px, 8.5vw, 38px);
+  font-size: var(--fs-title);
   line-height: var(--lh-title);
-  font-weight: 600;
-  letter-spacing: -.05em;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
   word-break: keep-all;
   overflow-wrap: normal;
   text-wrap: balance;
 }
-
 .description {
-  margin-top: 14px;
+  margin-top: var(--gap-head);
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
-  letter-spacing: .03em;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-note);
+  letter-spacing: var(--ls-wide);
 }
 
-.actions {
-  display: grid;
-  gap: 12px;
-}
-
+/* ---------- ボタン（.reserve＝塗り／.line＝線） ---------- */
 .reserve,
 .line {
   width: 100%;
-  min-height: 62px; /* スマホでのタップしやすさを考慮し高さを微増 */
+  min-height: var(--size-control);
   display: flex;
   align-items: center;
-  text-decoration: none;
-  border-radius: 16px;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
-              background-color 0.3s ease,
-              box-shadow 0.3s ease,
-              border-color 0.3s ease;
-}
-
-.reserve {
   justify-content: space-between;
-  padding: 0 18px 0 22px;
-  color: #fff;
-  background-color: var(--accent);
-  box-shadow: 0 8px 24px rgba(162, 141, 115, 0.25);
+  padding: 0 var(--inset);
+  text-decoration: none;
+  border-radius: var(--r-md);
+  transition: transform var(--dur-base) var(--ease-out),
+              background-color var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
 }
-
+.reserve {
+  color: var(--white);
+  background-color: var(--accent);
+  border: var(--bw) solid transparent; /* 線のボタンと文字の位置をそろえる */
+  box-shadow: var(--shadow-accent);
+}
+.line {
+  color: var(--ink-2);
+  background-color: var(--white-50);
+  border: var(--bw) solid var(--ink-12);
+}
 .reserve-arrow,
 .line-arrow {
-  width: 30px;
-  height: 30px;
+  width: var(--size-icon);
+  height: var(--size-icon);
   display: grid;
   place-items: center;
-  flex: 0 0 30px;
+  flex: 0 0 var(--size-icon);
   border-radius: 50%;
-  font-size: 13px;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease;
+  font-size: var(--fs-md);
+  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
 }
-
 .reserve-arrow {
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: var(--bw) solid var(--white-40);
 }
-
-/* PCホバー時の挙動 */
-@media (hover: hover) {
-  .reserve:hover {
-    background-color: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(162, 141, 115, 0.35);
-  }
-  .reserve:hover .reserve-arrow {
-    transform: translateX(3px);
-    background-color: rgba(255, 255, 255, 0.15);
-  }
-  .line:hover {
-    background-color: rgba(255,255,255,1);
-    border-color: rgba(23,23,22,.18);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(40,34,27,.04);
-  }
-  .line:hover .line-arrow {
-    transform: translate(2px,-2px);
-    background-color: #fff;
-  }
-}
-
-/* スマホタップ時（アクティブ）の心地よい沈み込み */
-.reserve:active, .line:active {
-  transform: scale(0.97);
-  transition: transform 0.1s ease;
-}
-
-.line {
-  justify-content: space-between;
-  padding: 0 18px 0 22px;
-  color: #45423d;
-  background-color: rgba(255,255,255,.45);
-  border: 1px solid rgba(23,23,22,.10);
-}
-
 .line-arrow {
-  border: 1px solid rgba(23,23,22,.10);
-  background-color: rgba(255,255,255,.7);
+  border: var(--bw) solid var(--ink-12);
+  background-color: var(--white-70);
 }
 
 .action-copy {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  line-height: 1;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: .04em;
+  gap: var(--gap-item);
+  line-height: var(--lh-none);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
 }
-
-.reserve .action-copy {
-  color: #fff;
-}
-
 .action-copy small {
-  font-size: 9px;
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: .15em;
-  font-family: "Inter", sans-serif;
+  font-size: var(--fs-2xs);
+  line-height: var(--lh-none);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  font-family: var(--font-latin);
 }
+.reserve .action-copy { color: var(--white); }
+.reserve .action-copy small { color: var(--white-80); }
+.line .action-copy { color: var(--ink-2); }
+.line .action-copy small { color: var(--soft); }
 
-.reserve .action-copy small {
-  color: rgba(255,255,255,.75);
-}
-
-.line .action-copy {
-  color: #3b3834;
-}
-
-.line .action-copy small {
-  color: var(--soft);
-}
-
+/* ボタンの下に注意書きを付ける枠 */
 .line-action-wrapper {
   display: flex;
   flex-direction: column;
 }
-
 .line-note {
   margin-top: var(--note-gap);
-  padding-left: var(--note-indent); /* ボタン内のテキストと完璧に左揃え */
-  font-size: var(--fs-note);
+  padding-left: var(--note-indent); /* ボタン内の文字と左端をそろえる（どちらも --inset） */
+  font-size: var(--fs-xs);
   line-height: var(--lh-note);
-  letter-spacing: .03em;
+  letter-spacing: var(--ls-wide);
   color: var(--soft);
 }
 
-.address {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  color: #77736c;
-  text-align: left;
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: .04em;
-}
-
+/* ---------- フッター ---------- */
 .footer {
-  margin-top: 28px;
-  line-height: normal;
-  text-align: center;
-  color: #c0bcb6;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .1em;
-  font-family: "Inter", sans-serif;
+  margin-top: auto; padding-top: var(--gap-section); /* 少なくとも --gap-section あけ、余った高さはフッターの上に */
+  line-height: var(--lh-snug); text-align: center; color: var(--faint);
+  font-family: var(--font-latin); font-size: var(--fs-2xs); font-weight: var(--fw-regular); letter-spacing: var(--ls-label);
 }
 
-#overlay {
-  display: none;
+/* =========================================================
+   予約ページのみ
+   ========================================================= */
+.main {
+  padding: var(--gap-section) 0 var(--gap-block);
+  text-align: left;
+}
+.actions {
+  display: grid;
+  gap: var(--gap-list);
 }
 
-/* アニメーション */
+/* =========================================================
+   ホバー（マウス操作のPCのみ）
+   ========================================================= */
+@media (hover: hover) {
+  .brand:hover { opacity: var(--o-muted); }
+
+  .reserve:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(var(--lift));
+    box-shadow: var(--shadow-accent-hover);
+  }
+  .reserve:hover .reserve-arrow {
+    transform: translateX(var(--nudge));
+    background-color: var(--white-16);
+  }
+  .line:hover {
+    background-color: var(--white);
+    border-color: var(--ink-20);
+    transform: translateY(var(--lift));
+    box-shadow: var(--shadow-soft);
+  }
+  .line:hover .line-arrow {
+    transform: translate(var(--nudge), calc(var(--nudge) * -1));
+    background-color: var(--white);
+  }
+}
+
+/* 押した瞬間の沈み込み（ホバーより後に書いて優先させる） */
+.reserve:active,
+.line:active {
+  transform: scale(var(--press));
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+/* =========================================================
+   アニメーション
+   ========================================================= */
 @keyframes pageFadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
-
 @keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(.99);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(var(--enter-y)) scale(var(--enter-scale)); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 @keyframes slideOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(calc(var(--enter-y) * -1)); }
 }
 
-/* モバイル向け微調整（基本はClampとFlexで対応済みのため最小限） */
+/* =========================================================
+   画面幅ごとの調整
+   ========================================================= */
 @media (max-width: 480px) {
-  body {
-    padding: 12px;
-  }
-  .card {
-    padding: 28px 22px 24px;
-    border-radius: 24px;
-  }
-  .main {
-    padding: 32px 0 28px;
-  }
+  :root { --page-pad: var(--sp-3); }
 }
-
 @media (max-width: 360px) {
-  .card {
-    padding-left: 18px;
-    padding-right: 18px;
-  }
-  .brand-name {
-    font-size: 24px;
-  }
+  :root { --card-pad-x: var(--sp-5); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
@@ -409,8 +447,6 @@ body {
 </head>
 
 <body>
-  <div id="overlay" aria-hidden="true"></div>
-
   <main class="card">
     <header class="header">
       <a class="brand" href="https://page.line.me/cvj7583f" aria-label="公式LINE">
@@ -423,63 +459,43 @@ body {
     <section class="main">
       <div class="kicker">APPOINTMENT</div>
       <h1 class="title">RESERVATION</h1>
-      <p class="description">
-        WEBまたはお電話からご予約いただけます。
-      </p>
+      <p class="description">WEBまたはお電話からご予約いただけます。</p>
     </section>
 
     <nav class="actions" aria-label="ご案内">
       <a href="#" class="reserve" id="reserve-btn">
-        <span class="action-copy">
-          <small>01 / ONLINE</small>
-          WEB予約
-        </span>
+        <span class="action-copy"><small>01 / ONLINE</small>WEB予約</span>
         <span class="reserve-arrow" aria-hidden="true">→</span>
       </a>
 
       <a href="tel:0287339178" class="line">
-        <span class="action-copy">
-          <small>02 / PHONE</small>
-          0287-33-9178
-        </span>
+        <span class="action-copy"><small>02 / PHONE</small>0287-33-9178</span>
         <span class="line-arrow" aria-hidden="true">↗</span>
       </a>
 
-      <a href="https://www.google.com/maps/search/?api=1&query=揉蔵+栃木県大田原市本町1丁目2701-11" class="line" target="_blank" rel="noopener">
-        <span class="action-copy">
-          <small>03 / ACCESS</small>
-          アクセス・地図
-        </span>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=%E6%8F%89%E8%94%B5+%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%A4%A7%E7%94%B0%E5%8E%9F%E5%B8%82%E6%9C%AC%E7%94%BA1%E4%B8%81%E7%9B%AE2701-11" class="line" target="_blank" rel="noopener">
+        <span class="action-copy"><small>03 / ACCESS</small>アクセス・地図</span>
         <span class="line-arrow" aria-hidden="true">↗</span>
       </a>
 
       <div class="line-action-wrapper">
         <a href="https://page.line.me/cvj7583f" class="line">
-          <span class="action-copy">
-            <small>04 / CONTACT</small>
-            公式LINE
-          </span>
+          <span class="action-copy"><small>04 / CONTACT</small>公式LINE</span>
           <span class="line-arrow" aria-hidden="true">↗</span>
         </a>
         <p class="line-note">※公式LINEは情報配信専用のため、予約は受け付けていません。</p>
       </div>
 
-      <div class="line-action-wrapper" style="margin-top:8px;margin-bottom:8px;">
+      <div class="line-action-wrapper">
         <a href="https://g.page/r/CUU9HvUGSyP-EAE/review" class="line" target="_blank" rel="noopener">
-          <span class="action-copy">
-            <small>05 / REVIEW</small>
-            ご感想を投稿
-          </span>
+          <span class="action-copy"><small>05 / REVIEW</small>ご感想を投稿</span>
           <span class="line-arrow" aria-hidden="true">↗</span>
         </a>
         <p class="line-note">※ご感想の投稿にはGoogleアカウントが必要です。</p>
       </div>
 
       <a href="https://momizo2018.github.io/momizo-site/recruit/" class="line">
-        <span class="action-copy">
-          <small>06 / RECRUIT</small>
-          スタッフ募集
-        </span>
+        <span class="action-copy"><small>06 / RECRUIT</small>セラピスト募集</span>
         <span class="line-arrow" aria-hidden="true">↗</span>
       </a>
     </nav>
@@ -488,40 +504,41 @@ body {
   </main>
 
 <script>
+/* WEB予約：カードを上へ消してから Square の予約ページへ移動する */
 (() => {
-  const reserveBtn = document.getElementById("reserve-btn");
-  const card = document.querySelector(".card");
-
-  const targetUrl =
+  const RESERVE_URL =
     "https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start";
 
-  let transitioning = false;
-
-  function goToReservation(event) {
-    if (event) event.preventDefault();
-    if (transitioning) return;
-
-    transitioning = true;
-    reserveBtn.style.pointerEvents = "none";
-    
-    card.classList.add("is-leaving");
-    document.body.style.transition = "opacity 0.5s ease";
-    document.body.style.opacity = "0";
-
-    setTimeout(() => {
-      window.location.href = targetUrl;
-    }, 500);
+  // 退場の時間は CSS の --dur-page から読む（"0.5s" や "500ms" をミリ秒に）
+  function leaveMs() {
+    const v = getComputedStyle(document.documentElement).getPropertyValue("--dur-page").trim();
+    const n = parseFloat(v);
+    if (!isFinite(n)) return 500;
+    return /ms$/.test(v) ? n : n * 1000;
   }
 
-  reserveBtn.addEventListener("click", goToReservation);
+  const btn = document.getElementById("reserve-btn");
+  const card = document.querySelector(".card");
+  let leaving = false;
 
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
-      transitioning = false;
-      card.classList.remove("is-leaving");
-      document.body.style.opacity = "1";
-      reserveBtn.style.pointerEvents = "auto";
-    }
+  function setLeaving(on) {
+    leaving = on;
+    btn.style.pointerEvents = on ? "none" : "auto";
+    card.classList.toggle("is-leaving", on);
+    document.body.style.transition = "opacity var(--dur-page) var(--ease-in-out)";
+    document.body.style.opacity = on ? "0" : "1";
+  }
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (leaving) return;
+    setLeaving(true);
+    setTimeout(() => { location.href = RESERVE_URL; }, leaveMs());
+  });
+
+  // ブラウザの「戻る」でキャッシュから表示されたときは元の状態に戻す
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) setLeaving(false);
   });
 })();
 </script>
