@@ -9,7 +9,7 @@
 <meta name="description" content="大田原市のリラクゼーションサロン、揉蔵（もみぞう）のセラピスト募集です。他店でのご経験をそのまま活かせます。報酬は表示価格の65%、指名料は100%（いずれも税込）。業務委託、インボイス登録不要、資格不要、年齢・性別不問、履歴書不要。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
 <link rel="icon" href="../assets/icon/icon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
@@ -28,8 +28,8 @@
 
    規則
    1. 間隔は 4・8・12・16・24・32・48・64・96。関係が近いものほど狭く、となりの役割とは1段以上の差をつける
-   2. 文字は 14・16・20。本文は16（例外：ロゴの momizo ヘッダー約33.3・フッター約23.3、求人の「65%」72）。太さは 400 が基本。600 は小見出し・ボタンだけ
-      行間は 1・1.4・1.8。字間は指定せず、書体のまま（例外：ロゴの momizo と求人の「65」は -0.02em。固有値）
+   2. 文字は 14・16・20。本文は16（例外：ロゴの momizo ヘッダー約40.2・フッター約28.1、求人の「65%」72）。太さは 400 が基本。600 は小見出し・ボタンだけ、500 はロゴだけ
+      行間は 1・1.4・1.8。字間は指定せず、書体のまま（例外：ロゴ momizo -0.022em・relaxation salon -0.017em、求人の「65」-0.02em。固有値）
    3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）と著作権表示だけ
    4. 写真の枠は高さ280で固定して横にスクロール。地図は 3:2
    5. 画面幅で値が変わるのは 480px 以下の1か所だけ
@@ -83,11 +83,12 @@
 
   /* 文字 */
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --fw-regular: 400; --fw-semibold: 600;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600;
   --fs-sm: 14px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
   --fs-md: 16px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
-  --fs-logo: calc(var(--fs-lg) / .6);   /* ヘッダーのロゴ（momizo）：relaxation salon を見出しと同じ20pxにそろえた逆算（20÷0.6≒33.3） */
+  --logo-sub: .498;                    /* 固有値：relaxation salon ÷ momizo。2行の字面の幅が同じになる比率 */
+  --fs-logo: calc(var(--fs-lg) / var(--logo-sub));   /* ヘッダーのロゴ（momizo）：relaxation salon を見出しと同じ20pxにそろえた逆算（20÷0.498≒40.2） */
   --lh-none: 1;      /* 1行の部品 */
   --lh-ui: 1.4;      /* 見出し、ボタン */
   --lh-text: 1.8;    /* 文章 */
@@ -142,12 +143,15 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
 .head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 
-/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。2行の間は relaxation salon の -.35em 詰める（ロゴの中の値。大きさを変えても同じ比率）。
-   1つの塊として大きさを変え、relaxation salon は momizo の0.6倍。
-   フッターは relaxation salon を小さい文字と同じ14pxにそろえ、momizo はその逆算（14÷0.6≒23.3）。ヘッダーは relaxation salon を20pxにそろえ、momizo はその逆算（20÷0.6≒33.3） */
-.brand { display: grid; font-size: calc(var(--fs-sm) / .6); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { line-height: var(--lh-ui); letter-spacing: -.02em; }   /* 固有値：大きな Inter は字間が開いて見えるので、momizo だけ詰める（relaxation salon は0） */
-.brand-sub { margin-top: -.35em; font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
+/* ロゴ：momizo（ink-2）の下に relaxation salon（soft）の2行で1つ。どちらも500で、まわりの文字（400）より少し太く。
+   2行の字面の幅は同じ（左右の端がそろう）。1つの塊として大きさを変え、relaxation salon は momizo の0.498倍。
+   フッターは relaxation salon を小さい文字と同じ14pxにそろえ、momizo はその逆算（14÷0.498≒28.1）。ヘッダーは20px（momizo≒40.2）。
+   字間は Inter の推奨値（大きさごとの式）から：momizo（約40px）-0.022em、relaxation salon（20px）-0.017em。
+   momizo の左の -0.036em は、m と r の字形の左の空きの差。これで2行の字面の左端がそろう。
+   2行の間は relaxation salon の -.46em 詰める（momizo の並びの線 → relaxation salon の小文字の上まで、もとの約25.6px を保つ） */
+.brand { display: grid; font-size: calc(var(--fs-sm) / var(--logo-sub)); font-weight: var(--fw-medium); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { margin-left: -.036em; line-height: var(--lh-ui); letter-spacing: -.022em; }
+.brand-sub { margin-top: -.46em; font-size: calc(var(--logo-sub) * 1em); line-height: var(--lh-ui); letter-spacing: -.017em; color: var(--soft); white-space: nowrap; }
 
 /* 営業状況：ヘッダーのいちばん上、右端に1行。点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。
    →8→ ロゴ。中身はスクリプトが入れてから見せる（行の高さは先に取っておき、出たときにロゴが動かないようにする） */
