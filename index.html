@@ -152,6 +152,11 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--line-deco); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 .head .brand { font-size: var(--fs-logo); }
+/* 蔵の挿絵：スタンプカードの鉛筆画の蔵（扉を開けて灯りのもれる蔵と、松と木）を線画にしたもの。ヘッダーの右下、ロゴの下の端にそろえて置く。
+   高さは48（絵は72×48）。蔵の上の端が momizo の字面より下に来るので、momizo の長い字と横に並んでもぶつからない（320px幅で確認）。
+   色は accent。絵は形だけを持ち、色は mask で CSS の accent から塗るので、accent を変えればそのまま変わる */
+.head .wrap { position: relative; }
+.head .wrap::after { content: ""; position: absolute; right: 0; bottom: 0; width: var(--sp-24); height: var(--sp-12); background: var(--accent); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='64' viewBox='0 0 96 64'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 60H92'/%3E%3Cpath d='M16 15l-6 10 3-.5-6 10 4-.5-7 11h24l-7-11 4 .5-6-10 3 .5z'/%3E%3Cpath d='M16 45.5V60M13.5 60l2.5-3 2.5 3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M11 33l3-3M9 43l4-4M20 42l3-3M18 31l2-2'/%3E%3Cpath d='M28 30L48 13l20 17'/%3E%3Cpath d='M24.5 31.5L48 11.5l23.5 20'/%3E%3Cpath d='M45 11.8h6'/%3E%3Cpath fill='%23000' fill-opacity='.16' stroke='none' d='M28 30L48 13l20 17 3.5 1.5L48 11.5 24.5 31.5z'/%3E%3Cpath d='M31 31v29M65 31v29'/%3E%3Cpath d='M31 34.5h34'/%3E%3Cpath d='M31 55h9M56 55h9'/%3E%3Cpath d='M44 21.5h8v6h-8zM46.7 21.5v6M49.3 21.5v6'/%3E%3Cpath d='M41 60V44.5a7 7 0 0 1 14 0V60'/%3E%3Cpath fill='%23000' fill-opacity='.16' stroke='none' d='M41 60V44.5a7 7 0 0 1 14 0V60z'/%3E%3Cpath d='M41 44.5l-5.5-2.2v16.4L41 60M55 44.5l5.5-2.2v16.4L55 60'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M37.4 45v12M39.2 45.6v12.3M58.6 45v12M56.8 45.6v12.3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M33 40l3-3M33 47l2-2M62 40l2-2M60.6 37.8l3.4-3.4M33 58l2-2M61 58l3-3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M36 33.5l2-2M42 33.5l2-2M48 33.5l2-2M54 33.5l2-2M60 33.5l2-2'/%3E%3Cg transform='translate(-3 0)'%3E%3Cpath d='M79 44.5a5.5 5.5 0 0 1-1.2-10.4 6.5 6.5 0 0 1 8.4-7.6 6 6 0 0 1 8 5.6 5.4 5.4 0 0 1-2.2 10.2 5 5 0 0 1-6 2.2 5.5 5.5 0 0 1-7 0z'/%3E%3Cpath d='M85.5 45v15M85.5 50.5l-4-4M85.5 48l3-3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M80 38l3-3M86 33l3-3M88 40l3-3M83 42l2-2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") right bottom / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='64' viewBox='0 0 96 64'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 60H92'/%3E%3Cpath d='M16 15l-6 10 3-.5-6 10 4-.5-7 11h24l-7-11 4 .5-6-10 3 .5z'/%3E%3Cpath d='M16 45.5V60M13.5 60l2.5-3 2.5 3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M11 33l3-3M9 43l4-4M20 42l3-3M18 31l2-2'/%3E%3Cpath d='M28 30L48 13l20 17'/%3E%3Cpath d='M24.5 31.5L48 11.5l23.5 20'/%3E%3Cpath d='M45 11.8h6'/%3E%3Cpath fill='%23000' fill-opacity='.16' stroke='none' d='M28 30L48 13l20 17 3.5 1.5L48 11.5 24.5 31.5z'/%3E%3Cpath d='M31 31v29M65 31v29'/%3E%3Cpath d='M31 34.5h34'/%3E%3Cpath d='M31 55h9M56 55h9'/%3E%3Cpath d='M44 21.5h8v6h-8zM46.7 21.5v6M49.3 21.5v6'/%3E%3Cpath d='M41 60V44.5a7 7 0 0 1 14 0V60'/%3E%3Cpath fill='%23000' fill-opacity='.16' stroke='none' d='M41 60V44.5a7 7 0 0 1 14 0V60z'/%3E%3Cpath d='M41 44.5l-5.5-2.2v16.4L41 60M55 44.5l5.5-2.2v16.4L55 60'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M37.4 45v12M39.2 45.6v12.3M58.6 45v12M56.8 45.6v12.3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M33 40l3-3M33 47l2-2M62 40l2-2M60.6 37.8l3.4-3.4M33 58l2-2M61 58l3-3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M36 33.5l2-2M42 33.5l2-2M48 33.5l2-2M54 33.5l2-2M60 33.5l2-2'/%3E%3Cg transform='translate(-3 0)'%3E%3Cpath d='M79 44.5a5.5 5.5 0 0 1-1.2-10.4 6.5 6.5 0 0 1 8.4-7.6 6 6 0 0 1 8 5.6 5.4 5.4 0 0 1-2.2 10.2 5 5 0 0 1-6 2.2 5.5 5.5 0 0 1-7 0z'/%3E%3Cpath d='M85.5 45v15M85.5 50.5l-4-4M85.5 48l3-3'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M80 38l3-3M86 33l3-3M88 40l3-3M83 42l2-2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") right bottom / contain no-repeat; pointer-events: none; }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
 .head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-20); }
 
@@ -386,6 +391,16 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-semibold); }
 .access { display: grid; gap: var(--gap-section); }   /* 表→地図32 */
 .info .pay { display: block; margin-top: var(--gap-item); font-size: var(--fs-sm); color: var(--muted); }
 .info .pay b { display: block; font-weight: var(--fw-regular); color: var(--soft); }
+
+/* ---------- 印の絵（揉蔵についての3つ：丁寧な手・がま口・スタンプカード） ---------- */
+/* 印の絵：鉛筆画の線の小さな絵（48×48、accent）。読み流す一覧の各項目の頭に置き、何の話かを先に伝える。
+   絵は .e-○○ が --e に持ち、形と色（mask と accent）はここで決める。項目の左に48の欄を取り、絵→16→文 */
+.e { display: grid; grid-template-columns: var(--sp-12) minmax(0, 1fr); column-gap: var(--gap-head); align-content: start; }
+.e > * { grid-column: 2; }
+.e::before { content: ""; grid-column: 1; grid-row: 1 / span 2; width: var(--sp-12); height: var(--sp-12); background: var(--accent); -webkit-mask: var(--e) center / contain no-repeat; mask: var(--e) center / contain no-repeat; }
+.e-hand { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 44l-1-9.5c-1.6-1.4-4.8-4.6-6.8-7.6-1-1.5.6-3.2 2.2-2.1l4.6 3.8V13.5a1.7 1.7 0 0 1 3.4 0V25'/%3E%3Cpath d='M21.4 25V10.5a1.7 1.7 0 0 1 3.4 0V25'/%3E%3Cpath d='M24.8 25V12a1.7 1.7 0 0 1 3.4 0V25.5'/%3E%3Cpath d='M28.2 25.5V15.5a1.7 1.7 0 0 1 3.4 0V31c0 4-1.6 6.6-2.6 8L29 44'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M27 41l2-2M23 37.5c1.5 0 3-.5 4-1.5M20.5 34.8l1.5-1.5'/%3E%3C/g%3E%3C/svg%3E"); }
+.e-purse { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.5 22c-1.8 6-1.4 13 1 17.5 1 1.8 2.8 2.5 4.5 2.5h14c1.7 0 3.5-.7 4.5-2.5 2.4-4.5 2.8-11.5 1-17.5'/%3E%3Cpath d='M10 22.5c3-6 8.5-8.6 14-8.6s11 2.6 14 8.6'/%3E%3Cpath d='M11.5 22c3-5 7.7-7.1 12.5-7.1s9.5 2.1 12.5 7.1'/%3E%3Ccircle cx='21.6' cy='11.2' r='2.4'/%3E%3Ccircle cx='26.4' cy='11.2' r='2.4'/%3E%3Cpath d='M21.6 13.6v.6M26.4 13.6v.6'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M14 32l3-3M14 37l5-5M17 40l4-4M33 31l2-2M31 38l3.5-3.5'/%3E%3C/g%3E%3C/svg%3E"); }
+.e-stamp { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round' transform='rotate(-8 24 24)'%3E%3Crect x='7' y='12' width='34' height='24' rx='2'/%3E%3Crect x='10.5' y='15.5' width='5.5' height='5.5' rx='1.2'/%3E%3Crect x='18' y='15.5' width='5.5' height='5.5' rx='1.2'/%3E%3Crect x='25.5' y='15.5' width='5.5' height='5.5' rx='1.2'/%3E%3Crect x='33' y='15.5' width='5.5' height='5.5' rx='1.2'/%3E%3Crect x='10.5' y='23' width='5.5' height='5.5' rx='1.2'/%3E%3Crect x='18' y='23' width='5.5' height='5.5' rx='1.2'/%3E%3Crect x='25.5' y='23' width='5.5' height='5.5' rx='1.2'/%3E%3Crect x='33' y='23' width='5.5' height='5.5' rx='1.2'/%3E%3Ccircle cx='13.25' cy='18.25' r='1.6' fill='%23000'/%3E%3Ccircle cx='20.75' cy='18.25' r='1.6' fill='%23000'/%3E%3Ccircle cx='28.25' cy='18.25' r='1.6' fill='%23000'/%3E%3Ccircle cx='35.75' cy='18.25' r='1.6' fill='%23000'/%3E%3Ccircle cx='13.25' cy='25.75' r='1.6' fill='%23000'/%3E%3Cpath stroke-width='.75' stroke-opacity='.6' d='M10.5 32.5h12M10.5 32.5'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== このページだけここまで ===== */
 </style>
 <!-- 検索用の店の情報。営業時間は、トップの営業時間の表・求人ページの店舗情報・ヘッダーの営業状況（JS の H）とあわせて4か所。変えるときは全部直す。
@@ -453,15 +468,15 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-semibold); }
       <h2>揉蔵について</h2>
       <div class="about">
         <div class="pillars">
-          <div>
+          <div class="e e-hand">
             <h3>一人ひとりに合わせて、丁寧に。</h3>
             <p>お疲れの箇所やお好みに合わせて、力加減を調整しながら、スタッフが丁寧にもみほぐします。</p>
           </div>
-          <div>
+          <div class="e e-purse">
             <h3>通いやすい料金で。</h3>
             <p>30分2,000円から。短い時間でも、気になるところをしっかりほぐします。</p>
           </div>
-          <div>
+          <div class="e e-stamp">
             <h3>通うほど、お得に。</h3>
             <p>クーポンやスタンプカードなどをご用意しています。</p>
           </div>
