@@ -103,8 +103,10 @@
   --fs-md: 16px;     /* 本文、表、特徴の一覧、ボタン、営業状況（トップ） */
   --fs-sub: 17px;    /* 固有値：明朝の小見出し。明朝はゴシックより字面が小さく細いので、本文16pxより弱く見えないよう1px足す */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
-  --fs-logo: 36px;       /* 固有値：ロゴの momizo。文字の段階に従わない。ヘッダーとフッターで同じ */
-  --fs-logo-sub: 13px;   /* 固有値：ロゴの relaxation salon。ヘッダーとフッターで同じ */
+  --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
+  --fs-logo-sub: 13px;   /* 固有値：ロゴの relaxation salon（ヘッダー） */
+  --fs-logo-foot: 30px;       /* 固有値：フッターのロゴの momizo。締めくくりなので、ヘッダーより一段小さく */
+  --fs-logo-foot-sub: 11px;   /* 固有値：フッターのロゴの relaxation salon。36:13 とほぼ同じ比で縮める */
   --lh-none: 1;      /* 1行の部品 */
   --lh-ui: 1.4;      /* 見出し、ボタン */
   --lh-text: 1.8;    /* 文章 */
@@ -164,7 +166,7 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 
 /* ロゴ：momizo（Fraunces 340・ink-2）→ relaxation salon（Fraunces イタリック 350・soft）の2段。
    Fraunces はセリフの角を丸くできるクラシックなセリフ体で、角の丸さ（SOFT）を最大にして使う。ロゴだけの書体（文中では使わない）。
-   大きさは固有値（momizo 36・relaxation salon 13）で、文字の段階に従わない。ヘッダーとフッターで同じ。飾りは付けず、書体と組み方だけで見せる。
+   大きさは固有値で、文字の段階に従わない。ヘッダーは momizo 36・relaxation salon 13、フッターは一段小さく 30・11（ほぼ同じ比。間と左の端は em なので一緒に縮む）。飾りは付けず、書体と組み方だけで見せる。
    光学サイズ（opsz）：momizo 24、relaxation salon 18（小さい字用の形に寄せつつ、太くなりすぎない値）。
    縦の間：momizo の字面の下（ベースライン）→10→ relaxation salon の字面の上（行間1から逆算して margin .242em）。
    左の端：m の左の空き .036em、r の左の空き .06em を戻して字面でそろえる。
@@ -172,6 +174,8 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .brand { display: grid; justify-items: start; font-family: var(--font-logo); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
 .brand-name { margin-left: -.036em; font-size: var(--fs-logo); font-weight: 340; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 24; line-height: var(--lh-none); letter-spacing: .01em; color: var(--ink-2); }
 .brand-sub { margin: .242em 0 0 -.06em; font-size: var(--fs-logo-sub); font-style: italic; font-weight: 350; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 18; line-height: var(--lh-none); letter-spacing: .08em; color: var(--soft); white-space: nowrap; }
+.site-foot .brand-name { font-size: var(--fs-logo-foot); }
+.site-foot .brand-sub { font-size: var(--fs-logo-foot-sub); }
 
 /* ナビとリンクの行：左右の端までそろえて1行に。
    ページの行はヘッダーとフッターで同じ（トップ → コースと料金 → セラピスト募集。今いるページは faint で、リンクにしない） */
