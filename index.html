@@ -338,21 +338,23 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 .key::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 70% at 0 0, rgba(26,19,14,.7), rgba(26,19,14,.3) 45%, transparent 75%); }
 
 /* 営業状況：キービジュアルの左上に、写真へ溶け込ませて1行（札や面は付けない）。左と上はカードの内側の端（card-pad-x）にそろえる。
-   点＋いまの状態（ink-2）→8→ 閉まる時刻か次に開く日時（muted）。16px・500（写真の上なので、ボタンと同じ太さにして線を太く）。文字の後ろに形の見えない影を敷いて読みやすくする（固有値）。
+   印 →8→ いまの状態 →8→ 閉まる時刻か次に開く日時。状態と時刻は1つの塊として扱い、ボタンの文字と同じ規格（16px・500・ink-2・行間1.4）で書く
+   （状態と時刻で色を分けると、明るい→暗いの段差で行が右下がりに見えるため）。文字の後ろに形の見えない影を敷いて読みやすくする（固有値）。
    中身はスクリプトが入れてから、カードが現れ終わるころにふわっと出す */
 .status {
   position: absolute; z-index: 1; top: var(--card-pad-x); left: var(--card-pad-x);
   display: flex; align-items: center; gap: var(--gap-item);
-  font-size: var(--fs-md); font-weight: var(--fw-ui); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted);
+  font-size: var(--fs-md); font-weight: var(--fw-ui); line-height: var(--lh-ui); white-space: nowrap; color: var(--ink-2);
   text-shadow: 0 0 12px rgba(26,19,14,.9), 0 1px 2px rgba(26,19,14,.7); visibility: hidden;
 }
 .status.on { visibility: visible; animation: status-in var(--dur-enter) var(--ease-out) var(--dock-delay) both; }
 @keyframes status-in { from { opacity: 0; } }
-.status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
-/* 印：はんこのような二重の丸（縁の線＋中の点）。写真の上なので一回り大きく16（中の点は直径6）。閉まっているときは faint で止まったまま */
-.status b::before { content: ""; box-sizing: border-box; width: var(--sp-4); height: var(--sp-4); border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 3px, transparent 3.5px); }
+.status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; }
+/* 印：はんこのような二重の丸（縁の線＋中の点）。印は文字に合わせて字面より一回り小さくする（お知らせの見出し 14px の文字に12 と同じ関係）。
+   16px の文字なので14（中の点は直径5。固有値）。閉まっているときは faint で止まったまま */
+.status b::before { content: ""; flex: none; box-sizing: border-box; width: 14px; height: 14px; border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2.5px, transparent 3px); }
 /* 営業中だけ accent にして、ろうそくの灯りのようにゆっくり明滅させる（周期2.8s。固有値）。動きを減らす設定では止める */
-.status.open b::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 3px, transparent 3.5px); animation: glow 2.8s ease-in-out infinite; }
+.status.open b::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2.5px, transparent 3px); animation: glow 2.8s ease-in-out infinite; }
 @keyframes glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(201,164,108,0); } 50% { box-shadow: 0 0 10px 2px rgba(201,164,108,.55); } }
 @media (prefers-reduced-motion: reduce) { .status.open b::before { animation: none; } }
 /* 層2 ページの共通値 */
