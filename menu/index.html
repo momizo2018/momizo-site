@@ -460,7 +460,12 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
       detail = (n === 1 ? "明日" : DAY[next] + "曜") + " " + t(H[next][0]) + "から";
     }
     const b = document.createElement("b"); b.textContent = state;
-    const s = document.createElement("span"); s.textContent = detail;
+    // 時刻の数字（00:00）だけ .num で包み、一段大きくする（CSS はトップだけ）
+    const s = document.createElement("span");
+    for (const p of detail.split(/(\d{2}:\d{2})/)) {
+      if (/^\d{2}:\d{2}$/.test(p)) { const num = document.createElement("span"); num.className = "num"; num.textContent = p; s.append(num); }
+      else if (p) s.append(p);
+    }
     el.replaceChildren(b, s);
     el.classList.add("on");
   } catch (e) { /* 取れなければ出さない */ }
