@@ -329,16 +329,16 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
    写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ）。→32→ ロゴ */
 .key { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) var(--gap-section); }
 .key img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
-/* 左上の隅だけ、灯りの届かない影を落とす（営業状況を読みやすくするため。焦げ茶 paper-lo .7 →45%で .3 →75%で透明。固有値） */
-.key::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 70% at 0 0, rgba(26,19,14,.7), rgba(26,19,14,.3) 45%, transparent 75%); }
+/* 左上の隅だけ、灯りの届かない影を落とす（営業状況を読みやすくするため。写真は mask で後から描く層に回るので、影は ::after で写真より後に置く。焦げ茶 paper-lo .7 →45%で .3 →75%で透明。固有値） */
+.key::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 70% at 0 0, rgba(26,19,14,.7), rgba(26,19,14,.3) 45%, transparent 75%); }
 
 /* 営業状況：キービジュアルの左上に、写真へ溶け込ませて1行（札や面は付けない）。左と上はカードの内側の端（card-pad-x）にそろえる。
-   点＋いまの状態（ink-2）→8→ 閉まる時刻か次に開く日時（muted）。16px。文字の後ろに形の見えない影を敷いて読みやすくする（固有値）。
+   点＋いまの状態（ink-2）→8→ 閉まる時刻か次に開く日時（muted）。16px・500（写真の上なので、ボタンと同じ太さにして線を太く）。文字の後ろに形の見えない影を敷いて読みやすくする（固有値）。
    中身はスクリプトが入れてから、カードが現れ終わるころにふわっと出す */
 .status {
   position: absolute; z-index: 1; top: var(--card-pad-x); left: var(--card-pad-x);
   display: flex; align-items: center; gap: var(--gap-item);
-  font-size: var(--fs-md); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted);
+  font-size: var(--fs-md); font-weight: var(--fw-ui); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted);
   text-shadow: 0 0 12px rgba(26,19,14,.9), 0 1px 2px rgba(26,19,14,.7); visibility: hidden;
 }
 .status.on { visibility: visible; animation: status-in var(--dur-enter) var(--ease-out) var(--dock-delay) both; }
