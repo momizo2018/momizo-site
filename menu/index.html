@@ -228,7 +228,8 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 @media (hover: hover) { .dock a:hover { opacity: .6; } }
 
 /* ---------- フッター：ロゴ → ページの行 → 区切り線 → 外部 → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる） ---------- */
-.site-foot { margin-top: auto; padding-top: var(--page-section); }
+/* 上の空き96に、スクリプトが1px未満（--foot-nudge）を足して、フッターの面の上の端を画面のピクセルのちょうどにそろえる（「共通：フッターの位置」） */
+.site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
 .foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--line-deco); }
 .foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--line-deco); }
 .foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-20); }
@@ -483,6 +484,28 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
   update();
 })();
 /* ===== 共通：営業状況と画面下のメニューここまで ===== */
+
+/* ===== 共通：フッターの位置 ===== */
+/* 上の中身の高さには端数が出る（本文の行の高さ 28.8、写真や地図の縦横比）。そのままだとフッターの置かれる高さがページごとに1px未満ずれ、
+   1pxの線がにじんだり文字の上下が変わったりして、ページを切り替えると同じフッターが微妙に違って見える。
+   カードの上の端からフッターの面の上の端までが、画面のピクセルのちょうどになるよう、フッターの上の空きに1px未満を足す。
+   カードの高さが変わるたび（お知らせ・フォント・画面の幅）にそろえ直す。カードの現れの動き（transform）はカードと面で打ち消し合う */
+(() => {
+  const card = document.querySelector(".card");
+  const body = document.querySelector(".foot-body");
+  if (!card || !body || !window.ResizeObserver) return;
+  const foot = body.parentElement;
+  const snap = () => {
+    const r = window.devicePixelRatio || 1;
+    const now = parseFloat(foot.style.getPropertyValue("--foot-nudge")) || 0;
+    const y = (body.getBoundingClientRect().top - card.getBoundingClientRect().top - now) * r;
+    const next = ((Math.ceil(y - .001) - y) / r).toFixed(3) + "px";
+    if (foot.style.getPropertyValue("--foot-nudge") !== next) foot.style.setProperty("--foot-nudge", next);
+  };
+  new ResizeObserver(snap).observe(card);
+  addEventListener("resize", snap);
+})();
+/* ===== 共通：フッターの位置ここまで ===== */
 </script>
 <script>
 /* ===== 共通：写真の送りボタン ===== */
