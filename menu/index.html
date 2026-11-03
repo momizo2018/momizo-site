@@ -11,32 +11,18 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&family=Zen+Kaku+Gothic+New:wght@400;500&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..400,0..100,0..1;1,9..144,300..400,0..100,0..1&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..500&family=Zen+Kaku+Gothic+New:wght@400;500&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,24,340,100,0;1,18,350,100,0&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="icon" href="../assets/icon/icon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
 <style>
 /* =========================================================
-   揉蔵サイト スタイル（第13版）
-   - 値は「揉蔵サイト デザイン規格書」のものだけを使う
-   - CSS はページごとに書く（共通の CSS ファイルは使わない）。そのかわり、
-     「共通：○○」〜「共通：○○ここまで」の塊は、それを使うページどうしで一字一句同じにしておく。
-     直すときは使っているページをすべて同じに直し、tools/check_common.py で確かめる
-
-   値の層
-   層1 全体の共通値 … 色・文字・小さな間隔・角丸・部品の大きさ。全ページ同じ（共通：土台の中）
-   層2 ページの共通値 … 大きな間隔（64と96の2つ）。ページごとに1組（このページだけの部品の先頭）
-   層3 固有値 ……… 段階の外にある値。規格書の固有値の章に記載（変更禁止）
-
-   規則
-   1. 間隔は 4・8・12・16・24・32・48・64・96。関係が近いものほど狭く、となりの役割とは1段以上の差をつける
-   2. 文字は 14・16・20。本文は16（例外：ロゴの momizo 36・relaxation salon 13（固有値。規格の段階に従わない）、求人の「65%」72、明朝の小見出し17）。太さは 400 が基本。500 は見出し・ボタン・項目名、600 は小見出しだけ
-      見出しは明朝（Zen Old Mincho）、ほかはゴシック（Zen Kaku Gothic New）。線は真鍮色が飾り、生成りを薄くした色が機能（区切りは点線）。装飾は規格書の「装飾のテーマ」のとおり
-      行間は 1・1.4・1.8。字間は指定せず、書体のまま（例外：ロゴ momizo -0.005em・relaxation salon +0.03em、求人の「65」-0.02em。固有値）
-   3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）と著作権表示だけ
-   4. 写真の枠は高さ280で固定して横にスクロール。地図は 3:2
-   5. 画面幅で値が変わるのは 480px 以下の1か所だけ
+   揉蔵サイト スタイル
+   - 値は「揉蔵サイト デザイン規格書」のものだけを使う。合う値がないときは、いちばん近い段階の値を使う
+   - 固有値（段階の外の値）は規格書の固有値の章にあるものだけ。足す・変えるのは人が決める
+   - CSS はページごとに書く（共通の CSS ファイルは使わない）。「共通：○○」〜「共通：○○ここまで」の塊は、
+     使うページどうしで一字一句同じにし、直したら tools/check_common.py で確かめる
    ========================================================= */
 
 /* ===== 共通：土台 ===== */
@@ -47,33 +33,39 @@
   --accent: #c9a46c; --accent-hover: #dcb985;   /* 真鍮色。触れたときは一段明るく（暗い地では明るくして返す） */
   --on-accent: #211913;                          /* accent の面の上の文字（送信ボタン、選んだ選択ボタン）。7.4 : 1 */
   --paper: #211913; --paper-hi: #2a2018; --paper-lo: #1a130e;
-  --card: rgba(46,36,28,.94);
-  --edge: rgba(241,231,214,.08);                 /* カードの縁 */
-  --lift-face: rgba(241,231,214,.06);            /* 触れたときに一段明るくする面（線のボタン、白抜きボタン） */
-  --veil: rgba(33,25,19,.72);                    /* 写真の上の矢印の丸 */
-  --field: rgba(0,0,0,.18); --field-focus: rgba(0,0,0,.28);   /* 入力欄・選択ボタンの面 */
-  --ink-12: rgba(241,231,214,.14); --ink-20: rgba(241,231,214,.24);
-  --line-deco: rgba(201,164,108,.45);   /* 飾りの線（帯の縁の二重線、飾り枠、ラベル）。機能の線は ink-12・ink-20 */
-  --accent-08: rgba(201,164,108,.08); --accent-16: rgba(201,164,108,.16);
-  --shade-04: rgba(0,0,0,.2); --shade-08: rgba(0,0,0,.35);
+  --err: #ef9a86;                                /* 入力の誤り（求人ページのフォームだけ） */
+  /* 透明な色：もとの色 × 透明度 .08・.16・.24・.32・.48・.64・.96。名前の数字が透明度 */
+  --ink-08: rgba(241,231,214,.08);               /* カードの縁、触れたときに一段明るくする面（白抜きボタン、線のボタン） */
+  --ink-16: rgba(241,231,214,.16);               /* 機能の実線：入力欄の縁、括弧の線 */
+  --ink-24: rgba(241,231,214,.24);               /* 機能の点線（区切り）、白抜きボタンと選択ボタンの枠、リーダー、下線 */
+  --accent-08: rgba(201,164,108,.08);            /* 灯りの面 */
+  --accent-16: rgba(201,164,108,.16);            /* 仮画像、背景のにじみ、帯の上の矢印の丸 */
+  --accent-48: rgba(201,164,108,.48);            /* 飾りの線：帯の縁の二重線、飾り枠、特徴の札の縁、コース名の短い線 */
+  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 入力欄の面 / 入力中の面・カードの近い影 / カードの遠い影 */
+  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);   /* カード / 画面下のメニューの面（上側） */
+  --paper-64: rgba(33,25,19,.64);                /* 写真の上の矢印の丸 */
 
-  /* ===== 層1 全体の共通値 ===== */
+  /* ===== 共通値（全ページ同じ） ===== */
   /* 間隔の段階 */
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px;
   --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
 
-  /* 小さな間隔（役割で選ぶ） */
-  --gap-tight: var(--sp-1);     /*  4 コース名→その下の施術名 */
-  --gap-item: var(--sp-2);      /*  8 営業状況（トップ）の点→文字、ナビ・ページの行の項目どうしの最小、特徴の札どうし */
+  /* 間隔（役割で選ぶ） */
+  --gap-tight: var(--sp-1);     /*  4 名前のすぐ下の添え書き、表の項目名→内容 */
+  --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、ナビ・ページの行の項目どうしの最小、特徴の札どうし、写真どうし、コース名→施術名 */
   --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
   --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
   --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
   --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、フッターの各段の間 */
   --gap-logo: var(--sp-12);     /* 48 ヘッダーのロゴ→ページの行（ロゴを独立させる） */
+  --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
+  --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
 
-  /* 枠の内側（2種類） */
+  /* 枠の内側 */
   --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
   --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
+  --pad-tag: var(--sp-1) var(--sp-3);   /* 上下4・左右12 特徴の札 */
+  --pad-choice: var(--sp-2) var(--sp-4);   /* 上下8・左右16 「できる／できない」の選択ボタン */
 
   /* 横の位置（幅480px以下で変わる） */
   --page-pad: var(--sp-4);
@@ -82,14 +74,14 @@
   --card-pad-y: var(--sp-12);
 
   /* 部品の大きさ */
-  --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ（固有値） */
-  --label-col: var(--sp-16);    /* 64 フォームの曜日の欄の幅（固有値） */
+  --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ */
+  --day-col: var(--sp-16);      /* 64 フォームの曜日の欄の幅 */
   --arrow: var(--sp-8);         /* 32 矢印の丸 */
 
   /* 線・角丸・影 */
   --bw: 1px; --focus-w: 2px;
-  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;   /* r-sm はラベルだけ（固有値） */
-  --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-08), 0 2px var(--sp-3) var(--shade-04);
+  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;   /* r-sm は特徴の札だけ */
+  --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-32), 0 var(--sp-1) var(--sp-3) var(--shade-24);
 
   /* 文字 */
   --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
@@ -98,10 +90,9 @@
   --fw-regular: 400;
   --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
   --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
-  --fw-heading-sub: 600;   /* 小見出し（明朝17）。本文と同じくらいの大きさなので、一段太くして見出しと分かるようにする */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
-  --fs-md: 16px;     /* 本文、表、特徴の一覧、ボタン、営業状況（トップ） */
-  --fs-sub: 17px;    /* 固有値：明朝の小見出し。明朝はゴシックより字面が小さく細いので、本文16pxより弱く見えないよう1px足す */
+  --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
+  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、印つきの1行 */
+  --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
   --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
   --fs-logo-sub: 13px;   /* 固有値：ロゴの relaxation salon（ヘッダー） */
@@ -115,7 +106,9 @@
   --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --lift: -2px; --press: .97; --enter-y: var(--sp-4);
-  --dock-delay: .6s;   /* 固有値：画面下のメニューが出てくるまでの間（カードの現れ .8s に少し重ねる） */
+  --dim: .6;        /* 触れたときの不透明度（画面下のメニューの文字、ロゴ） */
+  --disabled: .4;   /* 使えない状態（送信中のボタン、チェックしていない曜日の時間） */
+  --dock-delay: .6s;   /* 固有値：画面下のメニューが出てくるまでの間 */
 
   /* 背景 */
   --bg-page:
@@ -133,7 +126,7 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(
 body {
   font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
   color: var(--ink-2); background: var(--bg-page);
-  -webkit-font-smoothing: antialiased; font-optical-sizing: none; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
@@ -149,20 +142,19 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
   position: relative; width: min(100%, var(--card-w));
   min-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--page-pad) * 2);
   display: flex; flex-direction: column; padding: var(--card-pad-y) var(--card-pad-x); overflow: hidden;
-  border: var(--bw) solid var(--edge); border-radius: var(--r-xl); background: var(--card); box-shadow: var(--shadow-card);
+  border: var(--bw) solid var(--ink-08); border-radius: var(--r-xl); background: var(--card); box-shadow: var(--shadow-card);
   animation: enter var(--dur-enter) var(--ease-out) both;
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
 
 /* ---------- ヘッダー：ロゴ → ページの行 → 区切り線 → そのページのナビ ---------- */
-/* 営業状況はトップだけ、キービジュアルの左上に置く（トップの「このページだけ」）。
-   ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
-.head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--line-deco); }
+/* ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
+.head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
 /* 帯の縁は二重線（面の端の線 →2→ もう1本）。配置を動かさないよう、線は影と重ねて描く */
-.head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--line-deco); }
+.head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
-.head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-20); }
+.head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-24); }
 
 /* ロゴ：momizo（Fraunces 340・ink-2）→ relaxation salon（Fraunces イタリック 350・soft）の2段。
    Fraunces はセリフの角を丸くできるクラシックなセリフ体で、角の丸さ（SOFT）を最大にして使う。ロゴだけの書体（文中では使わない）。
@@ -183,24 +175,24 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .nav { margin-top: var(--gap-head); }
 .nav a, .link-row a, .link-row span { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
 .link-row [aria-current] { color: var(--faint); }
-@media (hover: hover) { .brand:hover { opacity: .6; } .nav a:hover, .link-row a:hover { color: var(--ink-2); } }
+@media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover, .link-row a:hover { color: var(--ink-2); } }
 
-/* ---------- 見出し：日本語だけ。ページの題とセクション見出しは明朝20・500、小見出しは明朝17・600 ---------- */
+/* ---------- 見出し：日本語だけ。ページの題とセクション見出しは明朝20・500、小見出しは明朝16・600 ---------- */
 h1, h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
-/* 飾り罫：ページの題とセクション見出しの下に、線・菱形・線（洋書の章扉の飾り）。見出し →12→ 飾り罫（56×7、固有値）→32→ 中身。コース名などの項目の見出しには付けない */
+/* 飾り罫：ページの題とセクション見出しの下に、線・菱形・線（洋書の章扉の飾り。固有値の絵）。見出し →12→ 飾り罫 →32→ 中身。コース名などの項目の見出しには付けない */
 .page-title h1::after, .sec h2:not(.name)::after, .band h2::after { content: ""; display: block; width: 56px; height: 7px; margin-top: var(--gap-list); background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%227%22 viewBox=%220 0 56 7%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M0 3.5h22M34 3.5h22%22/%3E%3Cpath d=%22M28 .5l3 3-3 3-3-3z%22/%3E%3C/svg%3E") no-repeat; }
-h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
+h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 
 /* ---------- ページの並び ---------- */
 .sec { padding-top: var(--page-section); }
 
 /* ---------- 線で区切った行（表・特徴の一覧・料金表・働き方・報酬早見表）
    各行の下と一覧の上に区切り線。行の上下16 ---------- */
-.rows { list-style: none; border-top: var(--bw) dashed var(--ink-20); }
-.rows > * { padding: var(--gap-head) 0; border-bottom: var(--bw) dashed var(--ink-20); }
+.rows { list-style: none; border-top: var(--bw) dashed var(--ink-24); }
+.rows > * { padding: var(--gap-head) 0; border-bottom: var(--bw) dashed var(--ink-24); }
 
 /* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
-   カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（rgba(46,36,28,.6) → card）とぼかし。影と角丸は付けない。
+   カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（card-64 → card）とぼかし。影と角丸は付けない。
    上の区切り線は中身の幅だけ。項目どうしは短い縦線で区切る。文字はボタンと同じ 16px・500・ink-2。
    data-until の要素（トップ・メニューはフッター、求人はフォーム）が画面に入ったら、下へ引っ込める ---------- */
 .dock {
@@ -208,48 +200,42 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
   width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   padding: 0 var(--card-pad-x) env(safe-area-inset-bottom, 0px);
-  background: linear-gradient(rgba(46,36,28,.6), var(--card));
+  background: linear-gradient(var(--card-64), var(--card));
   -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
   transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
   /* 開いたとき、カードが現れ終わるころに下から出てくる（1回だけ）。backwards なので、出たあとは .hide の邪魔をしない */
   animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
-.dock::before { content: ""; position: absolute; top: 0; left: var(--card-pad-x); right: var(--card-pad-x); border-top: var(--bw) dashed var(--ink-20); }
+.dock::before { content: ""; position: absolute; top: 0; left: var(--card-pad-x); right: var(--card-pad-x); border-top: var(--bw) dashed var(--ink-24); }
 .dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
 .dock a {
   position: relative; display: grid; place-content: center;
   min-height: var(--size-control); font-weight: var(--fw-ui); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
-.dock a + a::before { content: ""; position: absolute; left: 0; top: 50%; height: var(--sp-6); margin-top: calc(var(--sp-6) / -2); border-left: var(--bw) dashed var(--ink-20); }
+.dock a + a::before { content: ""; position: absolute; left: 0; top: 50%; height: var(--sp-6); margin-top: calc(var(--sp-6) / -2); border-left: var(--bw) dashed var(--ink-24); }
 .dock a:focus-visible { outline-offset: calc(var(--focus-w) * -1); border-radius: var(--r-md); }
 .dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
-@media (hover: hover) { .dock a:hover { opacity: .6; } }
+@media (hover: hover) { .dock a:hover { opacity: var(--dim); } }
 
 /* ---------- フッター：ロゴ → ページの行 → 区切り線 → 外部 → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる） ---------- */
 /* 上の空き96に、スクリプトが1px未満（--foot-nudge）を足して、フッターの面の上の端を画面のピクセルのちょうどにそろえる（「共通：フッターの位置」） */
 .site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
-.foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--line-deco); }
-.foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--line-deco); }
-.foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-20); }
+.foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48); }
+.foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
+.foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-24); }
 .foot-ext { margin-top: var(--gap-head); }   /* 線の上下16。押せる範囲は線のところで接する */
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
-/* ---------- 飾り枠：読んでほしい箱だけ（お知らせ、「65%」の箱、送信完了）。スタンプカードの枠から借りた形 ----------
-   灯りの面（accent-08）の内側6に細い線（line-deco、角丸は外の16から6を引いた10）、四隅に角飾り（12×12、箱の角から12）。
-   6は箱の縁と内側の線が二重の枠に見える最小の間（固有値）。角飾りは accent の色で描いた絵 */
-.notice, .big, .done { position: relative; background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 1 12 0%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%281 0 0 -1 0 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px bottom 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 -1 12 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px bottom 12px / 12px no-repeat, var(--accent-08); }
-.notice::before, .big::before, .done::before { content: ""; position: absolute; inset: 6px; border: var(--bw) solid var(--line-deco); border-radius: 10px; pointer-events: none; }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：写真の枠 ===== */
 /* 写真は角丸の枠に入れず、カードの端から端まで広げる（はじめての方への帯と同じ広げ方）。
    高さは280で固定（固有値）。写真はその高さのまま横に並べ（間8）、横にスクロールして見る。
    次の写真がのぞくように、1枚の幅は枠より48せまくする。1枚だけのときは幅いっぱいに広げる。
-   止まる位置（スナップ）は付けない。色味は地図と同じ考えで少し落ち着かせ、写真どうしのトーンをそろえる（固有値）。
-   画像がないときは仮画像の面 */
+   止まる位置（スナップ）は付けない。色味は少し落ち着かせ、写真どうしのトーンをそろえる（固有値） */
 .ph {
   --ph-h: 280px;
   display: flex; gap: var(--gap-item); height: var(--ph-h);
@@ -261,8 +247,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 .ph img {
   flex: 0 0 auto; width: auto; height: 100%; max-width: calc(100% - var(--sp-12));
   object-fit: cover;
-  background: linear-gradient(160deg, var(--paper-hi) 0%, var(--accent-16) 100%);
-  filter: sepia(.2) saturate(.85) brightness(.86) contrast(1.02);
+  filter: sepia(.2) saturate(.85) brightness(.85);
 }
 .ph img:only-child { width: 100%; max-width: none; }
 /* マウスの人向けの送りボタン（矢印の丸）。スクロールできる枠にだけ、スクリプトで付ける。端まで来た側は消す */
@@ -270,7 +255,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 .ph-btn {
   position: absolute; top: 50%; z-index: 1; width: var(--arrow); height: var(--arrow); margin-top: calc(var(--arrow) / -2);
   display: none; place-items: center; padding: 0; cursor: pointer;
-  border: var(--bw) solid transparent; border-radius: 50%; background: var(--veil);
+  border: var(--bw) solid transparent; border-radius: 50%; background: var(--paper-64);
   font: inherit; line-height: var(--lh-none); color: var(--muted);
   transition: opacity var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
 }
@@ -281,49 +266,47 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 
 /* ===== 共通：料金の単位 ===== */
 /* 単位「税込」：表の上に引いた点線の右端に置き、表の見出しのように表とつなげる（総額表示。金額や文章には入れない）。
-   14px・soft、点線は ink-20、線→文字8。表との間は .unit を置くページで決める */
+   14px・soft、点線は ink-24、線→文字8。表との間は .unit を置くページで決める */
 .unit { display: flex; align-items: center; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
-.unit::before { content: ""; flex: 1; border-top: var(--bw) dashed var(--ink-20); }
+.unit::before { content: ""; flex: 1; border-top: var(--bw) dashed var(--ink-24); }
 /* ===== 共通：料金の単位ここまで ===== */
-/* ===== このページだけ：コースと料金 ===== */
-/* 層2 ページの共通値 */
-:root {
-  --page-group: var(--sp-16);     /* 64 ナビ→最初の内容、コースどうし */
-  --page-section: var(--sp-24);   /* 96 セクションどうし、最後の内容→フッター */
-}
+/* ===== 共通：題と副題 ===== */
+/* コース名：本の題と副題のように、名前 →8→ 短い線（16、accent-48）＋施術名（明朝14・400・soft） */
+.name { display: grid; gap: var(--gap-item); }
+.name small { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-heading); font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--soft); }
+.name small::before { content: ""; flex: 0 0 var(--sp-4); border-top: var(--bw) solid var(--accent-48); }
+/* ===== 共通：題と副題ここまで ===== */
 
+/* ===== このページだけ：コースと料金 ===== */
 /* ---------- ページの並び ---------- */
 .page-title { padding-top: var(--page-group); }
-/* ページの題のひとこと：小見出しと同じ明朝17px・600・ink-2 →16→ 本文 */
-.lead { font-family: var(--font-heading); font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
+/* ページの題のひとこと：小見出しと同じ明朝16px・600・ink-2 →16→ 本文 */
+.lead { font-family: var(--font-heading); font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
 .courses { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
 
-/* ---------- コース名：本の題と副題のように、名前（明朝20・500）→8→ 短い線（16、line-deco）＋施術名（明朝14・400・soft）。リクエスト料も同じ形 ---------- */
-.name { display: grid; gap: var(--gap-item); }
-.name small { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-heading); font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--soft); }
-.name small::before { content: ""; flex: 0 0 var(--sp-4); border-top: var(--bw) solid var(--line-deco); }
+/* ---------- コース名：名前（明朝20・500）。題と副題の形は「共通：題と副題」。リクエスト料も同じ形 ---------- */
 
 /* ---------- コース：写真 →32→ コース名 →16→ 説明 →32→ 料金表 ---------- */
 .course .name { margin: var(--gap-section) 0 0; }
 .course .name + p { margin-top: var(--gap-head); }
 
 /* ---------- 料金表：喫茶店のメニューのように、時間と料金を点のリーダーでつなぐ。時間 →（内訳）→ 料金。料金は最後の段の右端 ----------
-   リーダーが行を目でつなぐので、行の区切り線は付けない。行の上下8。リーダーは間6の点（直径2、ink-20）で、下の端を料金の並びの線にそろえる */
+   リーダーが行を目でつなぐので、行の区切り線は付けない。行の上下8。リーダーは間4の点（直径2、ink-24）で、下の端を料金の並びの線にそろえる */
 /* 単位：表の上に1か所だけ「税込」（総額表示）。料金の数字には半角の「¥」を付ける */
 .unit { margin-top: var(--gap-section); margin-bottom: var(--gap-item); }   /* 形は「共通：料金の単位」 */
-.prices { border-top: 0; }
-.prices > * { padding: var(--gap-item) 0; border-bottom: 0; }
+.prices { list-style: none; }
+.prices > * { padding: var(--gap-item) 0; }
 .prices li { display: grid; grid-template-columns: 1fr auto; gap: var(--gap-tight) var(--gap-item); align-items: baseline; }
 .prices li:not(:has(small)) .t { display: flex; align-items: baseline; gap: var(--gap-item); }
-.prices li:not(:has(small)) .t::after { content: ""; flex: 1; height: var(--sp-1); background: radial-gradient(circle, var(--ink-20) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }
-.prices li:has(small)::before { content: ""; grid-row: 2; grid-column: 1; align-self: end; height: var(--sp-1); margin-bottom: calc(var(--fs-lg) * .135); background: radial-gradient(circle, var(--ink-20) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }   /* 内訳のある行は、料金の段の左をリーダーで埋める */
+.prices li:not(:has(small)) .t::after { content: ""; flex: 1; height: var(--sp-1); background: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }
+.prices li:has(small)::before { content: ""; grid-row: 2; grid-column: 1; align-self: end; height: var(--sp-1); margin-bottom: calc(var(--fs-lg) * .135); background: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }   /* 内訳のある行は、料金の段の左をリーダーで埋める */
 .prices .t { line-height: var(--lh-ui); }
 .prices .t small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }   /* 内訳は時間の下に */
 /* 内訳のある行は3段：時間 → 内訳（幅いっぱい）→ 料金（右端）。料金はいつも行の最後の段の右端 */
 .prices li:has(small) .t { grid-column: 1 / -1; }
 .prices li:has(small) b { grid-row: 2; grid-column: 2; }
-.prices small span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) dashed var(--ink-20); }   /* 組み合わせの区切り：画面下のメニューと同じ細い縦線 */
+.prices small span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) dashed var(--ink-24); }   /* 組み合わせの区切り：画面下のメニューと同じ細い縦線 */
 .prices b { font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* ===== このページだけここまで ===== */
 </style>
@@ -356,7 +339,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
       <h2 class="name">ボディコース<small>もみほぐし</small></h2>
       <p>肩や首、腰、背中、脚など、気になるところを中心に丁寧にもみほぐすコースです。力加減は、お好みに合わせて調整します。ほぐす範囲は、60分で半身、90分からは全身が目安です。</p>
       <p class="unit">税込</p>
-      <ul class="prices rows">
+      <ul class="prices">
         <li><span class="t">30分</span><b>¥2,000</b></li>
         <li><span class="t">60分</span><b>¥3,900</b></li>
         <li><span class="t">90分</span><b>¥5,800</b></li>
@@ -368,7 +351,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
       <h2 class="name">ヘッドコース<small>ドライヘッドスパ</small></h2>
       <p>オイルを使わずに、頭から首、胸元をほぐすコースです。お好みで、お顔もほぐします。頭まわりをじっくりケアしたい方や、ゆっくりリラックスしたい方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
       <p class="unit">税込</p>
-      <ul class="prices rows">
+      <ul class="prices">
         <li><span class="t">30分<small>ドライヘッドスパのみ</small></span><b>¥2,800</b></li>
         <li><span class="t">60分<small><span>ドライヘッドスパ15分</span><span>もみほぐし45分</span></small></span><b>¥4,300</b></li>
         <li><span class="t">90分<small><span>ドライヘッドスパ15分</span><span>もみほぐし75分</span></small></span><b>¥6,200</b></li>
@@ -380,7 +363,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
       <h2 class="name">フットコース<small>足つぼ・リフレクソロジー</small></h2>
       <p>足裏を中心に、オイルを使ってほぐすコースです。立ち仕事や歩くことが多い方、足の疲れやだるさが気になる方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
       <p class="unit">税込</p>
-      <ul class="prices rows">
+      <ul class="prices">
         <li><span class="t">30分<small>足つぼ・リフレクソロジーのみ</small></span><b>¥3,000</b></li>
         <li><span class="t">60分<small><span>足つぼ・リフレクソロジー30分</span><span>もみほぐし30分</span></small></span><b>¥4,900</b></li>
         <li><span class="t">90分<small><span>足つぼ・リフレクソロジー30分</span><span>もみほぐし60分</span></small></span><b>¥6,800</b></li>
@@ -392,7 +375,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
       <h2 class="name">フルコース<small>3つの組み合わせ</small></h2>
       <p>足つぼ・リフレクソロジー、ドライヘッドスパ、もみほぐしの3つを組み合わせたコースです。90分から、頭から足まで全身をじっくりケアします。ゆったりとした時間をお過ごしください。</p>
       <p class="unit">税込</p>
-      <ul class="prices rows">
+      <ul class="prices">
         <li><span class="t">90分<small><span>足つぼ・リフレクソロジー30分</span><span>ドライヘッドスパ15分</span><span>もみほぐし45分</span></small></span><b>¥7,200</b></li>
         <li><span class="t">120分<small><span>足つぼ・リフレクソロジー30分</span><span>ドライヘッドスパ15分</span><span>もみほぐし75分</span></small></span><b>¥9,100</b></li>
       </ul>
@@ -402,7 +385,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
   <section class="sec" id="request">
     <h2 class="name">リクエスト料<small>ご指定</small></h2>
     <p class="unit">税込</p>
-    <ul class="prices rows">
+    <ul class="prices">
       <li><span class="t">担当者・性別<small>担当者を直接ご指名いただくか、性別でご指定いただけます</small></span><b>¥400</b></li>
     </ul>
   </section>
@@ -429,48 +412,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 </nav>
 
 <script>
-/* ===== 共通：営業状況と画面下のメニュー ===== */
-/* 日本時間の「いま」 */
-const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-
-/* 営業状況（トップのキービジュアルの左上）。点＋いまの状態と、閉まる時刻か次に開く日時を1行に。
-   置くのはトップだけ。ほかのページには #status がないので、何もしない。
-   営業時間（H）は、トップの営業時間の表・構造化データ、求人ページの店舗情報と同じ。変えるときは全部直す
-   （H は3ページとも、この塊の中にある。tools/check_common.py で3ページが同じか確かめられる） */
-(() => {
-  const H = { 0: [10, 22], 1: [14, 24], 2: null, 3: null, 4: [14, 24], 5: [14, 22], 6: [10, 22] };   // 日〜土。null は定休日
-  const DAY = ["日", "月", "火", "水", "木", "金", "土"];
-  const el = document.getElementById("status");
-  if (!el) return;
-  try {
-    const jp = jstNow();
-    const d = jp.getDay();
-    const now = jp.getHours() + jp.getMinutes() / 60;
-    const t = (n) => String(n).padStart(2, "0") + ":00";
-    const h = H[d];
-    let state, detail;
-    if (h && now >= h[0] && now < h[1]) {
-      state = "現在営業中"; detail = t(h[1]) + "まで"; el.classList.add("open");
-    } else if (h && now < h[0]) {
-      state = "開店前"; detail = "本日 " + t(h[0]) + "から";
-    } else {
-      let n = 1; while (!H[(d + n) % 7]) n++;
-      const next = (d + n) % 7;
-      state = h ? "営業終了" : "定休日";
-      detail = (n === 1 ? "明日" : DAY[next] + "曜") + " " + t(H[next][0]) + "から";
-    }
-    const b = document.createElement("b"); b.textContent = state;
-    // 時刻の数字（00:00）だけ .num で包み、一段大きくする（CSS はトップだけ）
-    const s = document.createElement("span");
-    for (const p of detail.split(/(\d{2}:\d{2})/)) {
-      if (/^\d{2}:\d{2}$/.test(p)) { const num = document.createElement("span"); num.className = "num"; num.textContent = p; s.append(num); }
-      else if (p) s.append(p);
-    }
-    el.replaceChildren(b, s);
-    el.classList.add("on");
-  } catch (e) { /* 取れなければ出さない */ }
-})();
-
+/* ===== 共通：画面下のメニュー ===== */
 /* 画面下のメニュー：data-until の要素（フッターやフォーム）が画面に入ったら、下へ引っ込める */
 (() => {
   const dock = document.getElementById("dock");
@@ -488,7 +430,7 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
   addEventListener("resize", onScroll);
   update();
 })();
-/* ===== 共通：営業状況と画面下のメニューここまで ===== */
+/* ===== 共通：画面下のメニューここまで ===== */
 
 /* ===== 共通：フッターの位置 ===== */
 /* 上の中身の高さには端数が出る（本文の行の高さ 28.8、写真や地図の縦横比）。そのままだとフッターの置かれる高さがページごとに1px未満ずれ、
