@@ -62,7 +62,7 @@
 
   /* 小さな間隔（役割で選ぶ） */
   --gap-tight: var(--sp-1);     /*  4 コース名→その下の施術名 */
-  --gap-item: var(--sp-2);      /*  8 営業状況の点→文字、ナビ・ページの行の項目どうしの最小、特徴の札どうし */
+  --gap-item: var(--sp-2);      /*  8 営業状況（トップ）の点→文字、ナビ・ページの行の項目どうしの最小、特徴の札どうし */
   --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
   --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
   --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
@@ -97,8 +97,8 @@
   --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
   --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
   --fw-heading-sub: 600;   /* 小見出し（明朝17）。本文と同じくらいの大きさなので、一段太くして見出しと分かるようにする */
-  --fs-sm: 14px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
-  --fs-md: 16px;     /* 本文、表、特徴の一覧、ボタン */
+  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
+  --fs-md: 16px;     /* 本文、表、特徴の一覧、ボタン、営業状況（トップ） */
   --fs-sub: 17px;    /* 固有値：明朝の小見出し。明朝はゴシックより字面が小さく細いので、本文16pxより弱く見えないよう1px足す */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
   --fs-logo: 36px;       /* 固有値：ロゴの momizo。文字の段階に従わない。ヘッダーとフッターで同じ */
@@ -150,8 +150,8 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
 
-/* ---------- ヘッダー：営業状況（右上に1行）→ ロゴ → ページの行 → 区切り線 → そのページのナビ ---------- */
-/* 営業状況はロゴと別の行に置くので、どの幅でもロゴとぶつからない。
+/* ---------- ヘッダー：ロゴ → ページの行 → 区切り線 → そのページのナビ ---------- */
+/* 営業状況はトップだけ、キービジュアルの左上に置く（トップの「このページだけ」）。
    ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
 .head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--line-deco); }
 /* 帯の縁は二重線（面の端の線 →2→ もう1本）。配置を動かさないよう、線は影と重ねて描く */
@@ -170,19 +170,6 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .brand { display: grid; justify-items: start; font-family: var(--font-logo); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
 .brand-name { margin-left: -.036em; font-size: var(--fs-logo); font-weight: 340; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 24; line-height: var(--lh-none); letter-spacing: .01em; color: var(--ink-2); }
 .brand-sub { margin: .242em 0 0 -.06em; font-size: var(--fs-logo-sub); font-style: italic; font-weight: 350; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 18; line-height: var(--lh-none); letter-spacing: .08em; color: var(--soft); white-space: nowrap; }
-
-/* 営業状況：ヘッダーのいちばん上、右端に1行。点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。
-   →8→ ロゴ。中身はスクリプトが入れてから見せる（行の高さは先に取っておき、出たときにロゴが動かないようにする） */
-.status {
-  order: -1; justify-self: end; margin-bottom: var(--gap-item);
-  display: flex; align-items: baseline; gap: var(--gap-item); min-height: calc(var(--fs-sm) * var(--lh-ui));
-  font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); visibility: hidden;
-}
-.status.on { visibility: visible; }
-.status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
-/* 印：はんこのような二重の丸（縁の線＋中の点）。ないときは faint、あるときは accent */
-.status b::before { content: ""; box-sizing: border-box; width: var(--sp-3); height: var(--sp-3); border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2px, transparent 2.5px); }
-.status.open b::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2px, transparent 2.5px); }
 
 /* ナビとリンクの行：左右の端までそろえて1行に。
    ページの行はヘッダーとフッターで同じ（トップ → コースと料金 → セラピスト募集。今いるページは faint で、リンクにしない） */
@@ -489,7 +476,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
 <header class="head">
   <div class="wrap">
     <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
-    <p class="status" id="status"></p>
   </div>
   <nav class="link-row head-pages" aria-label="ページ">
     <a href="../">トップ</a><a href="../menu/">コースと料金</a><span aria-current="page">セラピスト募集</span>
@@ -749,7 +735,8 @@ main #form-msg { margin-top: 0; color: var(--err); }
 /* 日本時間の「いま」 */
 const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
 
-/* 営業状況（ヘッダー右）。点＋いまの状態と、閉まる時刻か次に開く日時を1行に。
+/* 営業状況（トップのキービジュアルの左上）。点＋いまの状態と、閉まる時刻か次に開く日時を1行に。
+   置くのはトップだけ。ほかのページには #status がないので、何もしない。
    営業時間（H）は、トップの営業時間の表・構造化データ、求人ページの店舗情報と同じ。変えるときは全部直す
    （H は3ページとも、この塊の中にある。tools/check_common.py で3ページが同じか確かめられる） */
 (() => {
