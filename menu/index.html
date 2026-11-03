@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
 <style>
 /* =========================================================
-   揉蔵サイト スタイル（第12版）
+   揉蔵サイト スタイル（第13版）
    - 値は「揉蔵サイト デザイン規格書」のものだけを使う
    - CSS はページごとに書く（共通の CSS ファイルは使わない）。そのかわり、
      「共通：○○」〜「共通：○○ここまで」の塊は、それを使うページどうしで一字一句同じにしておく。
@@ -31,7 +31,7 @@
    規則
    1. 間隔は 4・8・12・16・24・32・48・64・96。関係が近いものほど狭く、となりの役割とは1段以上の差をつける
    2. 文字は 14・16・20。本文は16（例外：ロゴの momizo 36・relaxation salon 13（固有値。規格の段階に従わない）、求人の「65%」72、明朝の小見出し17）。太さは 400 が基本。500 は見出し・ボタン・項目名、600 は小見出しだけ
-      見出しは明朝（Zen Old Mincho）、ほかはゴシック（Zen Kaku Gothic New）。線は茶色が飾り、墨色が機能（区切りは点線）。装飾は規格書の「装飾のテーマ」のとおり
+      見出しは明朝（Zen Old Mincho）、ほかはゴシック（Zen Kaku Gothic New）。線は真鍮色が飾り、生成りを薄くした色が機能（区切りは点線）。装飾は規格書の「装飾のテーマ」のとおり
       行間は 1・1.4・1.8。字間は指定せず、書体のまま（例外：ロゴ momizo -0.005em・relaxation salon +0.03em、求人の「65」-0.02em。固有値）
    3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）と著作権表示だけ
    4. 写真の枠は高さ280で固定して横にスクロール。地図は 3:2
@@ -208,7 +208,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 .rows > * { padding: var(--gap-head) 0; border-bottom: var(--bw) dashed var(--ink-20); }
 
 /* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
-   カードの中に溶け込む形：カードの幅の内側に、白の透ける面（white-50 → card）とぼかし。影と角丸は付けない。
+   カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（rgba(46,36,28,.6) → card）とぼかし。影と角丸は付けない。
    上の区切り線は中身の幅だけ。項目どうしは短い縦線で区切る。文字はボタンと同じ 16px・500・ink-2。
    data-until の要素（トップ・メニューはフッター、求人はフォーム）が画面に入ったら、下へ引っ込める ---------- */
 .dock {
@@ -245,7 +245,7 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ---------- 飾り枠：読んでほしい箱だけ（お知らせ、「65%」の箱、送信完了）。スタンプカードの枠から借りた形 ----------
-   ベージュの面（accent-08）の内側6に細い線（line-deco、角丸は外の16から6を引いた10）、四隅に角飾り（12×12、箱の角から12）。
+   灯りの面（accent-08）の内側6に細い線（line-deco、角丸は外の16から6を引いた10）、四隅に角飾り（12×12、箱の角から12）。
    6は箱の縁と内側の線が二重の枠に見える最小の間（固有値）。角飾りは accent の色で描いた絵 */
 .notice, .big, .done { position: relative; background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 1 12 0%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%281 0 0 -1 0 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px bottom 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 -1 12 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px bottom 12px / 12px no-repeat, var(--accent-08); }
 .notice::before, .big::before, .done::before { content: ""; position: absolute; inset: 6px; border: var(--bw) solid var(--line-deco); border-radius: 10px; pointer-events: none; }
