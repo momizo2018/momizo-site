@@ -350,6 +350,9 @@ h3 { font-size: var(--fs-sub); font-weight: var(--fw-heading-sub); }
 .status.on { visibility: visible; animation: status-in var(--dur-enter) var(--ease-out) var(--dock-delay) both; }
 @keyframes status-in { from { opacity: 0; } }
 .status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; }
+/* 時刻の数字だけ一段大きく20（文字の段階の20。太さ・色は塊のまま）。Inter の数字は和文より背が低く、16 のままだと行の上の輪郭が右へ下がって
+   右下がりに見えるため、字面の高さを和文（16px の漢字）にそろえる。行の高さは変えない（line-height 0） */
+.status .num { font-size: var(--fs-lg); line-height: 0; }
 /* 印：はんこのような二重の丸（縁の線＋中の点）。印は文字に合わせて字面より一回り小さくする（お知らせの見出し 14px の文字に12 と同じ関係）。
    16px の文字なので14（中の点は直径5。固有値）。閉まっているときは faint で止まったまま */
 .status b::before { content: ""; flex: none; box-sizing: border-box; width: 14px; height: 14px; border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2.5px, transparent 3px); }
@@ -629,7 +632,12 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
       detail = (n === 1 ? "明日" : DAY[next] + "曜") + " " + t(H[next][0]) + "から";
     }
     const b = document.createElement("b"); b.textContent = state;
-    const s = document.createElement("span"); s.textContent = detail;
+    // 時刻の数字（00:00）だけ .num で包み、一段大きくする（CSS はトップだけ）
+    const s = document.createElement("span");
+    for (const p of detail.split(/(\d{2}:\d{2})/)) {
+      if (/^\d{2}:\d{2}$/.test(p)) { const num = document.createElement("span"); num.className = "num"; num.textContent = p; s.append(num); }
+      else if (p) s.append(p);
+    }
     el.replaceChildren(b, s);
     el.classList.add("on");
   } catch (e) { /* 取れなければ出さない */ }
