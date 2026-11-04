@@ -720,7 +720,7 @@ document.querySelectorAll(".ph").forEach((ph) => {
     ul.replaceChildren(...list.map((n) => {
       const li = document.createElement("li");
       li.textContent = n.text;
-      const u = untilText(n.until);
+      const u = untilText(n.until);　
       if (u) { const sm = document.createElement("small"); sm.textContent = u; li.append(sm); }
       return li;
     }));
