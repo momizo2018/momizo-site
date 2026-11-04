@@ -409,6 +409,23 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .notice-list, .notice-empty { animation: fade var(--dur-base) var(--ease-out) both; }   /* 中身は出たときにふわっと */
 @keyframes fade { from { opacity: 0; } }
 
+/* ---------- お知らせの別窓：お知らせがあるときだけ、開いたときに重ねて出す（ヒーローの枠はそのまま残す）
+   中身はヒーローの枠と同じ（飾り枠の箱、見出し、お知らせ）→24→「閉じる」（白抜きのボタン）。
+   幅はカードの内側と同じ。後ろは paper-64 の幕とぼかし（12）。閉じたら、その回の訪問中は出さない。
+   開いている間は、上下のバー（営業状況のバー、画面下のメニュー）を出さず、閉じてからいつもの間で出す ---------- */
+.pop {
+  width: min(100% - (var(--page-pad) + var(--card-pad-x)) * 2, var(--card-w) - var(--card-pad-x) * 2); max-width: none;
+  margin: auto; padding: 0; border: 0; border-radius: var(--r-md); background: var(--card); color: inherit; box-shadow: var(--shadow-card);
+}
+.pop .notice { margin-top: 0; }
+.pop h2:focus { outline: none; }   /* 開いたときは見出しに移る（読み上げで「お知らせ」から始まる）。ボタンに枠を出さないため */
+.pop-close { margin-top: var(--gap-block); }
+.pop::backdrop { background: var(--paper-64); -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3)); }
+.pop[open] { animation: pop-in var(--dur-enter) var(--ease-out) both; }
+.pop[open]::backdrop { animation: fade var(--dur-base) var(--ease-out) both; }
+@keyframes pop-in { from { opacity: 0; translate: 0 var(--enter-y); } }
+.has-pop .dock, .has-pop .topbar.on { visibility: hidden; animation: none; }
+
 /* ---------- 揉蔵について ---------- */
 /* 大事にしている3つ（小見出し →16→ 1〜2文）を32ずつあけて並べ →32→ 特徴の一覧（ラベルを折り返して横に並べる）→24→ ボタン */
 .pillars { display: grid; gap: var(--gap-section); }
@@ -606,6 +623,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 </footer>
 </div>
 
+<dialog class="pop" id="notice-pop" aria-labelledby="notice-pop-h">
+  <section class="notice" data-state="list">
+    <h2 id="notice-pop-h" tabindex="-1" autofocus>お知らせ</h2>
+    <ul class="notice-list" id="notices-pop"></ul>
+    <button class="btn ghost pop-close" type="button">閉じる</button>
+  </section>
+</dialog>
 <aside class="topbar" id="status" aria-label="営業状況">
   <p id="status-text"></p>
   <button class="topbar-close" type="button" aria-label="営業状況を閉じる"></button>
@@ -739,12 +763,29 @@ document.querySelectorAll(".ph").forEach((ph) => {
    Apps Script の doGet が、いま出すものだけを返す。編集はシートだけで、このファイルは触らない。
    ・枠はいつも出しておく。中身は「読み込み中（1行分の空き）」→「お知らせ」か「ありません」
    ・前回読んだ内容をブラウザに覚えておき、開いた瞬間はそれを出す（2回目からは待たずに表示）
-   ・読み込みに失敗したときは、前回の内容のまま。前回もなければ「ありません」 */
+   ・読み込みに失敗したときは、前回の内容のまま。前回もなければ「ありません」
+   ・お知らせがあるときだけ、同じ中身を別窓でも出す。閉じたら、その回の訪問中（sessionStorage）は出さない。
+     別窓を開いている間は、上下のバーを出さない（html の has-pop）。閉じると、バーはいつもの間で出てくる */
 (() => {
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=notices";
   const KEY = "momizo-notices";
   const box = document.getElementById("notice");
   const ul = document.getElementById("notices");
+  const pop = document.getElementById("notice-pop");
+  const popUl = document.getElementById("notices-pop");
+  const POP_KEY = "momizo-notice-closed";
+  let popDone = false;
+  try { popDone = !!sessionStorage.getItem(POP_KEY); } catch (e) {}
+  if (!pop || typeof pop.showModal !== "function") popDone = true;
+  if (pop) {
+    pop.querySelector(".pop-close").addEventListener("click", () => pop.close());
+    pop.addEventListener("click", (e) => { if (e.target === pop) pop.close(); });   // 後ろの幕を押しても閉じる
+    pop.addEventListener("close", () => {
+      popDone = true;
+      try { sessionStorage.setItem(POP_KEY, "1"); } catch (e) {}
+      document.documentElement.classList.remove("has-pop");
+    });
+  }
   const now = jstNow();
   const today = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
   const alive = (list) => (Array.isArray(list) ? list : []).filter((n) => n && n.text && (!n.until || today <= n.until) && (!n.from || n.from <= today));
@@ -759,14 +800,22 @@ document.querySelectorAll(".ph").forEach((ph) => {
     const sig = JSON.stringify(list.map((n) => [n.text, n.until]));
     if (sig === shown) return;
     shown = sig;
-    ul.replaceChildren(...list.map((n) => {
+    const items = () => list.map((n) => {
       const li = document.createElement("li");
       li.textContent = n.text;
       const u = untilText(n.until);
       if (u) { const sm = document.createElement("small"); sm.textContent = u; li.append(sm); }
       return li;
-    }));
+    });
+    ul.replaceChildren(...items());
     box.dataset.state = list.length ? "list" : "empty";
+    if (!pop) return;
+    popUl.replaceChildren(...items());
+    if (!list.length) { if (pop.open) pop.close(); return; }
+    if (!popDone && !pop.open) {
+      document.documentElement.classList.add("has-pop");
+      pop.showModal();
+    }
   };
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
