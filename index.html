@@ -339,15 +339,14 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：飾り枠ここまで ===== */
 
 /* ===== このページだけ：トップ ===== */
-/* キービジュアル：ヘッダーのいちばん上に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
-   写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。右下に営業状況 →32→ ロゴ */
-.key { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) var(--gap-section); }
+/* 営業状況：ヘッダーのいちばん上に1行（カードの上の内側 card-pad-y の位置、左は card-pad-x）→32→ キービジュアル。
+   写真の上に重ねると、ロゴの見出しに見えたり、写真の線と比べて傾いて見えたりするので、写真の外に置く。
+   形はお知らせの見出しと同じ「印つきの1行」（下の「お知らせ」で一緒に決める）。中身が入るまでも1行分の高さを取り、入ったらふわっと出す */
+.status { min-height: calc(var(--fs-sm) * var(--lh-ui)); margin-bottom: var(--gap-section); white-space: nowrap; visibility: hidden; }
+/* キービジュアル：営業状況の下に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
+   写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。→32→ ロゴ */
+.key { margin: 0 calc(var(--card-pad-x) * -1) var(--gap-section); }
 .key img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
-
-/* 営業状況：キービジュアルの右下、下の端の溶けている範囲の中に1行（面・影は付けない）。右は card-pad-x、下はキービジュアルの下の端。
-   左下だとロゴと端がそろって、ロゴの見出しのように読めるので右に置く。
-   形はお知らせの見出しと同じ「印つきの1行」（下の「お知らせ」で一緒に決める）。中身はスクリプトが入れてから、ふわっと出す */
-.status { position: absolute; right: var(--card-pad-x); bottom: 0; white-space: nowrap; visibility: hidden; }
 .status.on { visibility: visible; animation: fade var(--dur-base) var(--ease-out) both; }
 
 /* ---------- ヒーロー：本文 → お知らせ → 写真。h1 は読み上げ用に隠す ---------- */
@@ -441,7 +440,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 <body>
 <div class="card">
 <header class="head">
-  <div class="key"><img src="assets/img/key.webp" alt="" width="960" height="659" fetchpriority="high"><p class="status" id="status"></p></div>
+  <p class="status" id="status"></p>
+  <div class="key"><img src="assets/img/key.webp" alt="" width="960" height="659" fetchpriority="high"></div>
   <div class="wrap">
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
   </div>
@@ -585,7 +585,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* 日本時間の「いま」（営業状況とお知らせで使う） */
 const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
 
-/* 営業状況（トップのキービジュアルの右下）。印つきの1行で、いまの状態と、閉まる時刻か次に開く日時を半角スペースでつないだ1つの文にする。
+/* 営業状況（トップのヘッダーのいちばん上）。印つきの1行で、いまの状態と、閉まる時刻か次に開く日時を半角スペースでつないだ1つの文にする。
    営業時間（H）は、トップの営業時間の表・構造化データ、求人ページの店舗情報と同じ。変えるときは全部直す */
 (() => {
   const H = { 0: [10, 22], 1: [14, 24], 2: null, 3: null, 4: [14, 24], 5: [14, 22], 6: [10, 22] };   // 日〜土。null は定休日
