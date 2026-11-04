@@ -89,7 +89,7 @@
   --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
   --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
   --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、印つきの1行 */
+  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、お知らせの見出し */
   --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
   --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
@@ -106,7 +106,8 @@
   --lift: -2px; --press: .97; --enter-y: var(--sp-4);
   --dim: .6;        /* 触れたときの不透明度（画面下のメニューの文字、ロゴ） */
   --disabled: .4;   /* 使えない状態（送信中のボタン、チェックしていない曜日の時間） */
-  --dock-delay: .6s;   /* 固有値：画面下のメニューが出てくるまでの間 */
+  --dock-delay: .6s;   /* 固有値：画面下のメニュー（と営業状況のバー）が出てくるまでの間 */
+  --bar-glow: 4s;      /* 固有値：上下のバーの明滅の周期 */
 
   /* 背景 */
   --bg-page:
@@ -205,6 +206,11 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
+/* バーの明滅：面に灯りの色（accent-16）をゆっくり重ねて、ほどいてを繰り返す（周期は固有値）。文字は点滅させない。
+   画面の上の営業状況のバー（トップ）も同じ明滅を使う。動きを減らす設定では止める */
+.dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
+@keyframes bar-glow { 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .dock::after { animation: none !important; } }
 .dock::before { content: ""; position: absolute; top: 0; left: var(--card-pad-x); right: var(--card-pad-x); border-top: var(--bw) dashed var(--ink-24); }
 .dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
 .dock a {
