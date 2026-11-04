@@ -770,7 +770,7 @@ document.querySelectorAll(".ph").forEach((ph) => {
    ・前回読んだ内容をブラウザに覚えておき、開いた瞬間はそれを出す（2回目からは待たずに表示）
    ・読み込みに失敗したときは、前回の内容のまま。前回もなければ「ありません」
    ・お知らせは、ページの枠も別窓も本文8行分の高さまで。超えたらその中でスクロールする
-   ・セルの中の改行はそのまま出す。空の行（改行の続き）は1つにまとめる
+   ・セルの中の改行はそのまま出す。空の行は1行まで残し、それより続く空の行は1行にまとめる
    ・お知らせがあるときだけ、同じ中身を別窓でも出す。閉じたら、その回の訪問中（sessionStorage）は出さない。
      別窓を開いている間は、上下のバーを出さない（html の has-pop）。閉じると、バーはいつもの間で出てくる */
 (() => {
@@ -819,7 +819,7 @@ document.querySelectorAll(".ph").forEach((ph) => {
     shown = sig;
     const items = () => list.map((n) => {
       const li = document.createElement("li");
-      li.textContent = String(n.text).replace(/\r\n?/g, "\n").replace(/\n{2,}/g, "\n").trim();
+      li.textContent = String(n.text).replace(/\r\n?/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
       const u = untilText(n.until);
       if (u) { const sm = document.createElement("small"); sm.textContent = u; li.append(sm); }
       return li;
