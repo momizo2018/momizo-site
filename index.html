@@ -399,8 +399,12 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .notice[data-state="list"] h2::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2px, transparent 2.5px); }
 .notice h2 { margin: 0 0 var(--gap-list); }
 .notice-list { list-style: none; }
+/* お知らせの部分は本文8行分の高さまで。超えたらその中でスクロールする（ページの枠も別窓も同じ）。
+   続きがあるあいだは、下の1行分を薄くして続きを見せる（スクリプトが .more を付け外し） */
+.notice-list { max-height: calc(var(--fs-md) * var(--lh-text) * 8); overflow-y: auto; }
+.notice-list.more { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); }
 .notice-list li { white-space: pre-line; }   /* シートのセルの中の改行は、そのまま改行する（ヒーローの枠と別窓の両方） */
-.notice-list li + li { margin-top: var(--gap-list); padding-top: var(--gap-list); border-top: var(--bw) dashed var(--ink-24); }
+.notice-list li + li { margin-top: var(--gap-head); padding-top: var(--gap-head); border-top: var(--bw) dashed var(--ink-24); }   /* 線で区切った行の上下16（表と同じ） */
 .notice-list small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 .notice-empty { color: var(--muted); }
 .notice-empty a { text-decoration-color: var(--ink-24); text-underline-offset: var(--sp-1); }
@@ -421,10 +425,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .pop .notice { margin-top: 0; }
 .pop h2:focus { outline: none; }   /* 開いたときは見出しに移る（読み上げで「お知らせ」から始まる）。ボタンに枠を出さないため */
 .pop-close { margin-top: var(--gap-block); }
-/* お知らせが長いときは、お知らせの部分だけを8行分の高さまでにして、その中でスクロールする（見出しと「閉じる」は動かない）。
-   続きがあるあいだは、下の1行分を薄くして、続きがあることを見せる（スクリプトが .more を付け外し） */
-.pop .notice-list { max-height: calc(var(--fs-md) * var(--lh-text) * 8); overflow-y: auto; overscroll-behavior: contain; }
-.pop .notice-list.more { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); }
 .pop::backdrop { background: var(--paper-64); -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3)); }
 .pop[open] { animation: pop-in var(--dur-enter) var(--ease-out) both; }
 .pop[open]::backdrop { animation: fade var(--dur-base) var(--ease-out) both; }
@@ -513,7 +513,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
       <p>大田原市のリラクゼーションサロン、揉蔵（もみぞう）です。<br>もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。</p>
       <section class="notice" id="notice" data-state="loading" aria-labelledby="notice-h" aria-live="polite">
         <h2 id="notice-h">お知らせ</h2>
-        <ul class="notice-list" id="notices"></ul>
+        <ul class="notice-list" id="notices" aria-label="お知らせの一覧"></ul>
         <p class="notice-empty">いまお知らせはありません。最新の情報は<a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a>でもお届けしています。</p>
       </section>
       <div class="ph hero-ph"><img src="assets/img/hero-1.webp" alt="店の外観。レンガの建物の1階に、看板とガラス張りの入口" width="747" height="560" decoding="async"><img src="assets/img/hero-2.webp" alt="待合の一角。ランプの灯る丸テーブルと、料金表" width="420" height="560" decoding="async"><img src="assets/img/hero-3.webp" alt="店内。窓ぎわのカーテンと、施術用のベッド" width="747" height="560" loading="lazy" decoding="async"><img src="assets/img/hero-4.webp" alt="店内。カーテンで仕切って並ぶ施術用のベッド" width="747" height="560" loading="lazy" decoding="async"><img src="assets/img/hero-5.webp" alt="受付カウンターと、奥の更衣スペース" width="747" height="560" loading="lazy" decoding="async"></div>
@@ -769,6 +769,8 @@ document.querySelectorAll(".ph").forEach((ph) => {
    ・枠はいつも出しておく。中身は「読み込み中（1行分の空き）」→「お知らせ」か「ありません」
    ・前回読んだ内容をブラウザに覚えておき、開いた瞬間はそれを出す（2回目からは待たずに表示）
    ・読み込みに失敗したときは、前回の内容のまま。前回もなければ「ありません」
+   ・お知らせは、ページの枠も別窓も本文8行分の高さまで。超えたらその中でスクロールする
+   ・セルの中の改行はそのまま出す。空の行（改行の続き）は1つにまとめる
    ・お知らせがあるときだけ、同じ中身を別窓でも出す。閉じたら、その回の訪問中（sessionStorage）は出さない。
      別窓を開いている間は、上下のバーを出さない（html の has-pop）。閉じると、バーはいつもの間で出てくる */
 (() => {
@@ -776,22 +778,25 @@ document.querySelectorAll(".ph").forEach((ph) => {
   const KEY = "momizo-notices";
   const box = document.getElementById("notice");
   const ul = document.getElementById("notices");
+  let resizing = false;
+  addEventListener("resize", () => { if (!resizing) { resizing = true; requestAnimationFrame(() => { resizing = false; more(ul); if (pop && pop.open) more(popUl); }); } });
+  ul.addEventListener("scroll", () => more(ul), { passive: true });
   const pop = document.getElementById("notice-pop");
   const popUl = document.getElementById("notices-pop");
   const POP_KEY = "momizo-notice-closed";
   let popDone = false;
-  // 別窓のお知らせに続きがあるか：スクロールできるときはキーボードでも動かせるようにし、終わりまで来たら薄くするのをやめる
-  const more = () => {
-    const scrolls = popUl.scrollHeight > popUl.clientHeight + 1;
-    if (scrolls) popUl.tabIndex = 0; else popUl.removeAttribute("tabindex");
-    popUl.classList.toggle("more", scrolls && popUl.scrollHeight - popUl.scrollTop - popUl.clientHeight > 1);
+  // お知らせに続きがあるか：スクロールできるときはキーボードでも動かせるようにし、終わりまで来たら薄くするのをやめる
+  const more = (list) => {
+    const scrolls = list.scrollHeight > list.clientHeight + 1;
+    if (scrolls) list.tabIndex = 0; else list.removeAttribute("tabindex");
+    list.classList.toggle("more", scrolls && list.scrollHeight - list.scrollTop - list.clientHeight > 1);
   };
   try { popDone = !!sessionStorage.getItem(POP_KEY); } catch (e) {}
   if (!pop || typeof pop.showModal !== "function") popDone = true;
   if (pop) {
     pop.querySelector(".pop-close").addEventListener("click", () => pop.close());
     pop.addEventListener("click", (e) => { if (e.target === pop) pop.close(); });   // 後ろの幕を押しても閉じる
-    popUl.addEventListener("scroll", () => more(), { passive: true });
+    popUl.addEventListener("scroll", () => more(popUl), { passive: true });
     pop.addEventListener("close", () => {
       popDone = true;
       try { sessionStorage.setItem(POP_KEY, "1"); } catch (e) {}
@@ -814,13 +819,14 @@ document.querySelectorAll(".ph").forEach((ph) => {
     shown = sig;
     const items = () => list.map((n) => {
       const li = document.createElement("li");
-      li.textContent = n.text;
+      li.textContent = String(n.text).replace(/\r\n?/g, "\n").replace(/\n{2,}/g, "\n").trim();
       const u = untilText(n.until);
       if (u) { const sm = document.createElement("small"); sm.textContent = u; li.append(sm); }
       return li;
     });
     ul.replaceChildren(...items());
     box.dataset.state = list.length ? "list" : "empty";
+    more(ul);
     if (!pop) return;
     popUl.replaceChildren(...items());
     if (!list.length) { if (pop.open) pop.close(); return; }
@@ -828,7 +834,7 @@ document.querySelectorAll(".ph").forEach((ph) => {
       document.documentElement.classList.add("has-pop");
       pop.showModal();
     }
-    if (pop.open) more();
+    if (pop.open) more(popUl);
   };
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
