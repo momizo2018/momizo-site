@@ -339,10 +339,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：飾り枠ここまで ===== */
 
 /* ===== このページだけ：トップ ===== */
-/* 営業状況：ヘッダーのいちばん上に1行（カードの上の内側 card-pad-y の位置、左は card-pad-x）→32→ キービジュアル。
+/* 営業状況：ヘッダーのいちばん上に1行（カードの上の内側 card-pad-y の位置、左は card-pad-x）→8→ キービジュアル（写真の上にそっと乗せる）。
    写真の上に重ねると、ロゴの見出しに見えたり、写真の線と比べて傾いて見えたりするので、写真の外に置く。
    形はお知らせの見出しと同じ「印つきの1行」（下の「お知らせ」で一緒に決める）。中身が入るまでも1行分の高さを取り、入ったらふわっと出す */
-.status { min-height: calc(var(--fs-sm) * var(--lh-ui)); margin-bottom: var(--gap-section); white-space: nowrap; visibility: hidden; }
+.status { min-height: calc(var(--fs-sm) * var(--lh-ui)); margin-bottom: var(--gap-item); white-space: nowrap; visibility: hidden; }
 /* キービジュアル：営業状況の下に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
    写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。→32→ ロゴ */
 .key { margin: 0 calc(var(--card-pad-x) * -1) var(--gap-section); }
