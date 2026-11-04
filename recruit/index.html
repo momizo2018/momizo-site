@@ -39,7 +39,7 @@
   --accent-08: rgba(201,164,108,.08);            /* 灯りの面 */
   --accent-16: rgba(201,164,108,.16);            /* 仮画像、背景のにじみ、帯の上の矢印の丸 */
   --accent-48: rgba(201,164,108,.48);            /* 飾りの線：帯の縁の二重線、飾り枠、特徴の札の縁、コース名の短い線 */
-  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 入力欄の面 / 入力中の面・カードの近い影 / カードの遠い影 */
+  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 選択ボタンの面 / カードの近い影 / カードの遠い影 */
   --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);   /* カード / 画面下のメニューの面（上側） */
   --paper-64: rgba(33,25,19,.64);                /* 写真の上の矢印の丸 */
 
@@ -381,25 +381,26 @@ main .f-err { font-size: var(--fs-sm); color: var(--err); }   /* 項目ごとの
 .sub > span { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 main .age { font-size: var(--fs-sm); color: var(--muted); }
 .age b { font-size: var(--fs-md); font-weight: var(--fw-regular); color: var(--ink-2); }
-/* 入力欄：本文と同じ16px（16px未満だと iPhone で拡大されるので、下げない）、面 shade-16（入力中は shade-24）、縁 ink-16、角丸16、内側 pad-part */
+/* 入力欄：本文と同じ16px（16px未満だと iPhone で拡大されるので、下げない）。明るい面（ink-2）に焦げ茶の文字（paper）、縁 ink-16、角丸16、内側 pad-part。入力中は縁を accent */
 .form input[type=text], .form input[type=tel], .form input[type=email], .form select, .form textarea {
-  width: 100%; padding: var(--pad-part); border: var(--bw) solid var(--ink-16); border-radius: var(--r-md); background: var(--shade-16);
-  color: var(--ink-2); font: inherit; font-size: var(--fs-md); line-height: var(--lh-ui);
-  -webkit-appearance: none; appearance: none; transition: border-color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+  width: 100%; padding: var(--pad-part); border: var(--bw) solid var(--ink-16); border-radius: var(--r-md); background: var(--ink-2);
+  color: var(--paper); font: inherit; font-size: var(--fs-md); line-height: var(--lh-ui);
+  -webkit-appearance: none; appearance: none; transition: border-color var(--dur-base) var(--ease-out);
 }
-/* セレクトの▼（8px・soft）。▼の左右にも、文字の左と同じ余白 */
+/* セレクトの▼（8px・faint）。▼の左右にも、文字の左と同じ余白 */
 .form select {
   --pad-x: var(--gap-head);
-  background-image: linear-gradient(45deg, transparent 50%, var(--soft) 50%), linear-gradient(135deg, var(--soft) 50%, transparent 50%);
+  background-image: linear-gradient(45deg, transparent 50%, var(--faint) 50%), linear-gradient(135deg, var(--faint) 50%, transparent 50%);
   padding-right: calc(var(--pad-x) * 2 + var(--sp-2));
   background-position: calc(100% - var(--pad-x) - var(--sp-1)) 50%, calc(100% - var(--pad-x)) 50%; background-size: var(--sp-1) var(--sp-1); background-repeat: no-repeat;
 }
 /* 記入欄：どれも同じ5行分の高さ。縦にだけ伸ばせる。いちばん長い記入例（ご経験の4行）が、余白1行を残して収まる */
 .form textarea { min-height: calc(var(--fs-md) * var(--lh-ui) * 5 + var(--sp-3) * 2 + var(--bw) * 2); resize: vertical; }
 .form ::placeholder { color: var(--faint); opacity: 1; }
-.form input:focus, .form select:focus, .form textarea:focus { border-color: var(--accent); background: var(--shade-24); outline: none; }
+.form input:focus, .form select:focus, .form textarea:focus { border-color: var(--accent); outline: none; }
 .form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
-.form input[readonly], .form input[readonly]:focus { background: transparent; border-color: var(--ink-16); cursor: default; }
+/* 住所（自動入力）は入力できないので、明るい面を付けず、カードの上の文字（ink-2）のまま */
+.form input[readonly], .form input[readonly]:focus { background: transparent; border-color: var(--ink-16); color: var(--ink-2); cursor: default; }
 /* 対応できる施術：囲みの欄に、施術名と「できる／できない」の選択ボタン */
 .skill { display: grid; justify-items: start; gap: var(--gap-item); padding: var(--pad-part); border: var(--bw) solid transparent; border-radius: var(--r-md); background: var(--accent-08); }
 .seg { display: flex; gap: var(--gap-item); }
