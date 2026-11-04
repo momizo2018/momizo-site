@@ -421,6 +421,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .pop .notice { margin-top: 0; }
 .pop h2:focus { outline: none; }   /* 開いたときは見出しに移る（読み上げで「お知らせ」から始まる）。ボタンに枠を出さないため */
 .pop-close { margin-top: var(--gap-block); }
+/* お知らせが長いときは、お知らせの部分だけを8行分の高さまでにして、その中でスクロールする（見出しと「閉じる」は動かない）。
+   続きがあるあいだは、下の1行分を薄くして、続きがあることを見せる（スクリプトが .more を付け外し） */
+.pop .notice-list { max-height: calc(var(--fs-md) * var(--lh-text) * 8); overflow-y: auto; overscroll-behavior: contain; }
+.pop .notice-list.more { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); }
 .pop::backdrop { background: var(--paper-64); -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3)); }
 .pop[open] { animation: pop-in var(--dur-enter) var(--ease-out) both; }
 .pop[open]::backdrop { animation: fade var(--dur-base) var(--ease-out) both; }
@@ -627,7 +631,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 <dialog class="pop" id="notice-pop" aria-labelledby="notice-pop-h">
   <section class="notice" data-state="list">
     <h2 id="notice-pop-h" tabindex="-1" autofocus>お知らせ</h2>
-    <ul class="notice-list" id="notices-pop"></ul>
+    <ul class="notice-list" id="notices-pop" aria-label="お知らせの一覧"></ul>
     <button class="btn ghost pop-close" type="button">閉じる</button>
   </section>
 </dialog>
@@ -776,11 +780,18 @@ document.querySelectorAll(".ph").forEach((ph) => {
   const popUl = document.getElementById("notices-pop");
   const POP_KEY = "momizo-notice-closed";
   let popDone = false;
+  // 別窓のお知らせに続きがあるか：スクロールできるときはキーボードでも動かせるようにし、終わりまで来たら薄くするのをやめる
+  const more = () => {
+    const scrolls = popUl.scrollHeight > popUl.clientHeight + 1;
+    if (scrolls) popUl.tabIndex = 0; else popUl.removeAttribute("tabindex");
+    popUl.classList.toggle("more", scrolls && popUl.scrollHeight - popUl.scrollTop - popUl.clientHeight > 1);
+  };
   try { popDone = !!sessionStorage.getItem(POP_KEY); } catch (e) {}
   if (!pop || typeof pop.showModal !== "function") popDone = true;
   if (pop) {
     pop.querySelector(".pop-close").addEventListener("click", () => pop.close());
     pop.addEventListener("click", (e) => { if (e.target === pop) pop.close(); });   // 後ろの幕を押しても閉じる
+    popUl.addEventListener("scroll", () => more(), { passive: true });
     pop.addEventListener("close", () => {
       popDone = true;
       try { sessionStorage.setItem(POP_KEY, "1"); } catch (e) {}
@@ -817,6 +828,7 @@ document.querySelectorAll(".ph").forEach((ph) => {
       document.documentElement.classList.add("has-pop");
       pop.showModal();
     }
+    if (pop.open) more();
   };
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
