@@ -41,7 +41,7 @@
   --accent-08: rgba(201,164,108,.08);            /* 灯りの面 */
   --accent-16: rgba(201,164,108,.16);            /* 仮画像、背景のにじみ、帯の上の矢印の丸 */
   --accent-48: rgba(201,164,108,.48);            /* 飾りの線：帯の縁の二重線、飾り枠、特徴の札の縁、コース名の短い線 */
-  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 入力欄の面 / 入力中の面・カードの近い影 / カードの遠い影 */
+  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 選択ボタンの面 / カードの近い影 / カードの遠い影 */
   --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);   /* カード / 画面下のメニューの面（上側） */
   --paper-64: rgba(33,25,19,.64);                /* 写真の上の矢印の丸 */
 
@@ -340,13 +340,14 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 
 /* ===== このページだけ：トップ ===== */
 /* キービジュアル：ヘッダーのいちばん上に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
-   写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。左下に営業状況 →32→ ロゴ */
+   写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。右下に営業状況 →32→ ロゴ */
 .key { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) var(--gap-section); }
 .key img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
 
-/* 営業状況：キービジュアルの左下、下の端の溶けている範囲の中に1行（面・影は付けない）。左は card-pad-x、下はキービジュアルの下の端。
+/* 営業状況：キービジュアルの右下、下の端の溶けている範囲の中に1行（面・影は付けない）。右は card-pad-x、下はキービジュアルの下の端。
+   左下だとロゴと端がそろって、ロゴの見出しのように読めるので右に置く。
    形はお知らせの見出しと同じ「印つきの1行」（下の「お知らせ」で一緒に決める）。中身はスクリプトが入れてから、ふわっと出す */
-.status { position: absolute; left: var(--card-pad-x); bottom: 0; white-space: nowrap; visibility: hidden; }
+.status { position: absolute; right: var(--card-pad-x); bottom: 0; white-space: nowrap; visibility: hidden; }
 .status.on { visibility: visible; animation: fade var(--dur-base) var(--ease-out) both; }
 
 /* ---------- ヒーロー：本文 → お知らせ → 写真。h1 は読み上げ用に隠す ---------- */
@@ -584,7 +585,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* 日本時間の「いま」（営業状況とお知らせで使う） */
 const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
 
-/* 営業状況（トップのキービジュアルの左下）。印つきの1行で、いまの状態と、閉まる時刻か次に開く日時を半角スペースでつないだ1つの文にする。
+/* 営業状況（トップのキービジュアルの右下）。印つきの1行で、いまの状態と、閉まる時刻か次に開く日時を半角スペースでつないだ1つの文にする。
    営業時間（H）は、トップの営業時間の表・構造化データ、求人ページの店舗情報と同じ。変えるときは全部直す */
 (() => {
   const H = { 0: [10, 22], 1: [14, 24], 2: null, 3: null, 4: [14, 24], 5: [14, 22], 6: [10, 22] };   // 日〜土。null は定休日
