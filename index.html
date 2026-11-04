@@ -108,7 +108,8 @@
   --lift: -2px; --press: .97; --enter-y: var(--sp-4);
   --dim: .6;        /* 触れたときの不透明度（画面下のメニューの文字、ロゴ） */
   --disabled: .4;   /* 使えない状態（送信中のボタン、チェックしていない曜日の時間） */
-  --dock-delay: .6s;   /* 固有値：画面下のメニューが出てくるまでの間 */
+  --dock-delay: .6s;   /* 固有値：画面下のメニュー（と営業状況のバー）が出てくるまでの間 */
+  --bar-glow: 4s;      /* 固有値：上下のバーの明滅の周期 */
 
   /* 背景 */
   --bg-page:
@@ -207,6 +208,11 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
+/* バーの明滅：面に灯りの色（accent-16）をゆっくり重ねて、ほどいてを繰り返す（周期は固有値）。文字は点滅させない。
+   画面の上の営業状況のバー（トップ）も同じ明滅を使う。動きを減らす設定では止める */
+.dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
+@keyframes bar-glow { 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .dock::after { animation: none !important; } }
 .dock::before { content: ""; position: absolute; top: 0; left: var(--card-pad-x); right: var(--card-pad-x); border-top: var(--bw) dashed var(--ink-24); }
 .dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
 .dock a {
@@ -339,6 +345,38 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：飾り枠ここまで ===== */
 
 /* ===== このページだけ：トップ ===== */
+/* 営業状況のバー：画面の上に出す、画面下のメニューと対になるバー（ページの中には置かない）。
+   幅と面は画面下のメニューと同じで、面のグラデーションは上下を逆にする（card → card-64）。下に中身の幅だけの区切りの点線。
+   文は 14px・400・ink-2・行間1.4。高さは文に合わせ（上下の内側8）、折り返したら高くなる。右に閉じる印（×、12、soft。押せる範囲は36）。
+   開いたとき、画面下のメニューと同じ間のあとに上から出てくる。閉じたら上へ引っ込め、その回の訪問中は出さない */
+.topbar {
+  position: fixed; left: 50%; top: 0; z-index: 10;
+  width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
+  display: flex; align-items: center; gap: var(--gap-head);
+  padding: calc(env(safe-area-inset-top, 0px) + var(--sp-2)) var(--card-pad-x) var(--sp-2);
+  background: linear-gradient(var(--card), var(--card-64));
+  -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
+  font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--ink-2);
+  visibility: hidden;
+  transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out), visibility 0s var(--dur-base);
+}
+.topbar.on { visibility: visible; transition-delay: 0s; animation: topbar-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards; }
+@keyframes topbar-in { from { translate: -50% -100%; opacity: 0; } }
+.topbar::before { content: ""; position: absolute; bottom: 0; left: var(--card-pad-x); right: var(--card-pad-x); border-top: var(--bw) dashed var(--ink-24); }
+.topbar::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .topbar::after { animation: none !important; } }
+.topbar.hide { translate: -50% -100%; opacity: 0; pointer-events: none; }
+.topbar p { flex: 1; }
+.topbar-close {
+  position: relative; flex: none; width: var(--sp-3); height: var(--sp-3); padding: 0; border: 0; color: var(--soft); cursor: pointer;
+  background:
+    linear-gradient(45deg, transparent calc(50% - var(--bw) / 2), currentColor 0 calc(50% + var(--bw) / 2), transparent 0),
+    linear-gradient(-45deg, transparent calc(50% - var(--bw) / 2), currentColor 0 calc(50% + var(--bw) / 2), transparent 0);
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.topbar-close::after { content: ""; position: absolute; inset: calc(var(--sp-3) * -1); }   /* 押せる範囲 36 */
+@media (hover: hover) { .topbar-close:hover { opacity: var(--dim); } }
+
 /* キービジュアル：ヘッダーのいちばん上に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
    写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。→32→ ロゴ */
 .key { margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) var(--gap-section); }
@@ -400,7 +438,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .e-stamp { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Crect x='12.5' y='16' width='23' height='16' rx='1.5'/%3E%3Ccircle cx='17.6' cy='21.4' r='1.8'/%3E%3Ccircle cx='24' cy='21.4' r='1.8'/%3E%3Ccircle cx='30.4' cy='21.4' r='1.8'/%3E%3Ccircle cx='17.6' cy='27.2' r='1.8'/%3E%3Ccircle cx='24' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3Ccircle cx='30.4' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== このページだけここまで ===== */
 </style>
-<!-- 検索用の店の情報。営業時間は、トップの営業時間の表・求人ページの店舗情報とあわせて3か所。変えるときは全部直す。
+<!-- 検索用の店の情報。営業時間は、トップの営業時間の表・求人ページの店舗情報・トップの営業状況のバー（JS の H）とあわせて4か所。変えるときは全部直す。
      24時閉店は "23:59" と書く（構造化データの決まり）。火・水は書かない＝定休日 -->
 <script type="application/ld+json">
 {
@@ -568,15 +606,56 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 </footer>
 </div>
 
+<aside class="topbar" id="status" aria-label="営業状況">
+  <p id="status-text"></p>
+  <button class="topbar-close" type="button" aria-label="営業状況を閉じる"></button>
+</aside>
 <nav class="dock" id="dock" data-until=".site-foot" aria-label="ご予約">
   <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEBで予約する</a>
   <a href="tel:0287339178">電話をかける</a>
 </nav>
 
 <script>
-/* ===== このページだけ：日本時間 ===== */
-/* 日本時間の「いま」（お知らせで使う） */
+/* ===== このページだけ：営業状況のバー ===== */
+/* 日本時間の「いま」（営業状況のバーとお知らせで使う） */
 const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+
+/* 営業状況のバー：いまの状態と、閉まる時刻か次に開く日時を、です・ます調の文で出す。
+   営業時間（H）は、トップの営業時間の表・構造化データ、求人ページの店舗情報と同じ。変えるときは全部直す。
+   閉じる印で閉じたら、その回の訪問中（sessionStorage）は出さない */
+(() => {
+  const H = { 0: [10, 22], 1: [14, 24], 2: null, 3: null, 4: [14, 24], 5: [14, 22], 6: [10, 22] };   // 日〜土。null は定休日
+  const DAY = ["日", "月", "火", "水", "木", "金", "土"];
+  const KEY = "momizo-status-closed";
+  const bar = document.getElementById("status");
+  if (!bar) return;
+  try { if (sessionStorage.getItem(KEY)) { bar.remove(); return; } } catch (e) {}
+  try {
+    const jp = jstNow();
+    const d = jp.getDay();
+    const now = jp.getHours() + jp.getMinutes() / 60;
+    const t = (n) => String(n).padStart(2, "0") + ":00";
+    const h = H[d];
+    let text;
+    if (h && now >= h[0] && now < h[1]) {
+      text = "ただいま営業中です。本日は" + t(h[1]) + "まで営業しています。";
+    } else if (h && now < h[0]) {
+      text = "本日は" + t(h[0]) + "から営業します。";
+    } else {
+      let n = 1; while (!H[(d + n) % 7]) n++;
+      const next = (d + n) % 7;
+      const when = (n === 1 ? "明日" : DAY[next] + "曜") + "は" + t(H[next][0]) + "から営業します。";
+      text = (h ? "本日の営業は終了しました。" : "本日は定休日です。") + when;
+    }
+    document.getElementById("status-text").textContent = text;
+    bar.classList.add("on");
+  } catch (e) { bar.remove(); return; }   // 取れなければ出さない
+  bar.querySelector(".topbar-close").addEventListener("click", () => {
+    bar.classList.add("hide");
+    bar.inert = true;
+    try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
+  });
+})();
 /* ===== このページだけここまで ===== */
 
 /* ===== 共通：画面下のメニュー ===== */
