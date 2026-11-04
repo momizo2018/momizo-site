@@ -91,7 +91,7 @@
   --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
   --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
   --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、印つきの1行 */
+  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、お知らせの見出し */
   --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
   --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
@@ -339,15 +339,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：飾り枠ここまで ===== */
 
 /* ===== このページだけ：トップ ===== */
-/* 営業状況：ヘッダーのいちばん上に1行（カードの上の内側 card-pad-y の位置、左は card-pad-x）→8→ キービジュアル（写真の上にそっと乗せる）。
-   写真の上に重ねると、ロゴの見出しに見えたり、写真の線と比べて傾いて見えたりするので、写真の外に置く。
-   形はお知らせの見出しと同じ「印つきの1行」（下の「お知らせ」で一緒に決める）。中身が入るまでも1行分の高さを取り、入ったらふわっと出す */
-.status { min-height: calc(var(--fs-sm) * var(--lh-ui)); margin-bottom: var(--gap-item); white-space: nowrap; visibility: hidden; }
-/* キービジュアル：営業状況の下に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
+/* キービジュアル：ヘッダーのいちばん上に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
    写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。→32→ ロゴ */
-.key { margin: 0 calc(var(--card-pad-x) * -1) var(--gap-section); }
+.key { margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) var(--gap-section); }
 .key img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
-.status.on { visibility: visible; animation: fade var(--dur-base) var(--ease-out) both; }
 
 /* ---------- ヒーロー：本文 → お知らせ → 写真。h1 は読み上げ用に隠す ---------- */
 .hero { padding-top: var(--page-group); }
@@ -357,14 +352,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 
 /* ---------- お知らせ：ヒーローの本文と写真の間に、いつも置く枠
    面と縁は「飾り枠」（accent-08 の面、内側に accent-48 の線、四隅に角飾り）。
-   見出しは営業状況と同じ「印つきの1行」。
    data-state：loading（1行分の空き）→ list（お知らせ）か empty（公式LINEへの一言） ---------- */
 .notice { margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); }   /* 面と飾り枠は「共通：飾り枠」 */
-/* 印つきの1行（お知らせの見出し、営業状況）：印（12の円・中の点の直径4）→8→ 文（14・400・soft・行間1.4）。
-   印は、お知らせがあるときと営業中は accent、それ以外は faint */
-.notice h2, .status { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
-.notice h2::before, .status::before { content: ""; flex: none; box-sizing: border-box; width: var(--sp-3); height: var(--sp-3); border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2px, transparent 2.5px); transition: border-color var(--dur-base) var(--ease-out); }
-.notice[data-state="list"] h2::before, .status.open::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2px, transparent 2.5px); }
+/* お知らせの見出し：印（12の円・中の点の直径4）→8→ 文（14・400・soft・行間1.4）。
+   印は、お知らせがあるときは accent、ないときは faint */
+.notice h2 { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
+.notice h2::before { content: ""; flex: none; box-sizing: border-box; width: var(--sp-3); height: var(--sp-3); border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2px, transparent 2.5px); transition: border-color var(--dur-base) var(--ease-out); }
+.notice[data-state="list"] h2::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2px, transparent 2.5px); }
 .notice h2 { margin: 0 0 var(--gap-list); }
 .notice-list { list-style: none; }
 .notice-list li + li { margin-top: var(--gap-list); padding-top: var(--gap-list); border-top: var(--bw) dashed var(--ink-24); }
@@ -406,7 +400,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .e-stamp { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Crect x='12.5' y='16' width='23' height='16' rx='1.5'/%3E%3Ccircle cx='17.6' cy='21.4' r='1.8'/%3E%3Ccircle cx='24' cy='21.4' r='1.8'/%3E%3Ccircle cx='30.4' cy='21.4' r='1.8'/%3E%3Ccircle cx='17.6' cy='27.2' r='1.8'/%3E%3Ccircle cx='24' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3Ccircle cx='30.4' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== このページだけここまで ===== */
 </style>
-<!-- 検索用の店の情報。営業時間は、トップの営業時間の表・求人ページの店舗情報・トップの営業状況（JS の H）とあわせて4か所。変えるときは全部直す。
+<!-- 検索用の店の情報。営業時間は、トップの営業時間の表・求人ページの店舗情報とあわせて3か所。変えるときは全部直す。
      24時閉店は "23:59" と書く（構造化データの決まり）。火・水は書かない＝定休日 -->
 <script type="application/ld+json">
 {
@@ -440,7 +434,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 <body>
 <div class="card">
 <header class="head">
-  <p class="status" id="status"></p>
   <div class="key"><img src="assets/img/key.webp" alt="" width="960" height="659" fetchpriority="high"></div>
   <div class="wrap">
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
@@ -581,39 +574,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 </nav>
 
 <script>
-/* ===== このページだけ：営業状況 ===== */
-/* 日本時間の「いま」（営業状況とお知らせで使う） */
+/* ===== このページだけ：日本時間 ===== */
+/* 日本時間の「いま」（お知らせで使う） */
 const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-
-/* 営業状況（トップのヘッダーのいちばん上）。印つきの1行で、いまの状態と、閉まる時刻か次に開く日時を半角スペースでつないだ1つの文にする。
-   営業時間（H）は、トップの営業時間の表・構造化データ、求人ページの店舗情報と同じ。変えるときは全部直す */
-(() => {
-  const H = { 0: [10, 22], 1: [14, 24], 2: null, 3: null, 4: [14, 24], 5: [14, 22], 6: [10, 22] };   // 日〜土。null は定休日
-  const DAY = ["日", "月", "火", "水", "木", "金", "土"];
-  const el = document.getElementById("status");
-  if (!el) return;
-  try {
-    const jp = jstNow();
-    const d = jp.getDay();
-    const now = jp.getHours() + jp.getMinutes() / 60;
-    const t = (n) => String(n).padStart(2, "0") + ":00";
-    const h = H[d];
-    let state, detail;
-    if (h && now >= h[0] && now < h[1]) {
-      state = "現在営業中"; detail = t(h[1]) + "まで"; el.classList.add("open");
-    } else if (h && now < h[0]) {
-      state = "開店前"; detail = "本日 " + t(h[0]) + "から";
-    } else {
-      let n = 1; while (!H[(d + n) % 7]) n++;
-      const next = (d + n) % 7;
-      state = h ? "営業終了" : "定休日";
-      detail = (n === 1 ? "明日" : DAY[next] + "曜") + " " + t(H[next][0]) + "から";
-    }
-    el.textContent = state + " " + detail;
-    el.classList.add("on");
-  } catch (e) { /* 取れなければ出さない */ }
-})();
-
 /* ===== このページだけここまで ===== */
 
 /* ===== 共通：画面下のメニュー ===== */
