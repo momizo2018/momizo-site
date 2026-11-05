@@ -405,6 +405,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .notice-list.more { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); }
 .notice-list li { white-space: pre-line; }   /* シートのセルの中の改行は、そのまま改行する（ヒーローの枠と別窓の両方） */
 .notice-list li + li { margin-top: var(--gap-head); padding-top: var(--gap-head); border-top: var(--bw) dashed var(--ink-24); }   /* 線で区切った行の上下16（表と同じ） */
+/* お知らせの見出し（シートの見出しの列。空なら出さない）：小見出しと同じ明朝16・600・ink-2（h3）→4→ 本文 →4→ 期限 */
+.notice-list h3 { margin-bottom: var(--gap-tight); white-space: normal; }
 .notice-list small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 .notice-empty { color: var(--muted); }
 .notice-empty a { text-decoration-color: var(--ink-24); text-underline-offset: var(--sp-1); }
@@ -770,6 +772,7 @@ document.querySelectorAll(".ph").forEach((ph) => {
    ・前回読んだ内容をブラウザに覚えておき、開いた瞬間はそれを出す（2回目からは待たずに表示）
    ・読み込みに失敗したときは、前回の内容のまま。前回もなければ「ありません」
    ・お知らせは、ページの枠も別窓も本文8行分の高さまで。超えたらその中でスクロールする
+   ・見出しの列があれば、本文の上に見出しを出す（空なら本文だけ）
    ・セルの中の改行はそのまま出す。空の行は1行まで残し、それより続く空の行は1行にまとめる
    ・お知らせがあるときだけ、同じ中身を別窓でも出す。閉じたら、その回の訪問中（sessionStorage）は出さない。
      別窓を開いている間は、上下のバーを出さない（html の has-pop）。閉じると、バーはいつもの間で出てくる */
@@ -814,12 +817,14 @@ document.querySelectorAll(".ph").forEach((ph) => {
   let shown = null;
   const render = (list) => {
     list = alive(list);
-    const sig = JSON.stringify(list.map((n) => [n.text, n.until]));
+    const sig = JSON.stringify(list.map((n) => [n.title, n.text, n.until]));
     if (sig === shown) return;
     shown = sig;
     const items = () => list.map((n) => {
       const li = document.createElement("li");
-      li.textContent = String(n.text).replace(/\r\n?/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+      const t = String(n.title || "").trim();
+      if (t) { const h = document.createElement("h3"); h.textContent = t; li.append(h); }
+      li.append(String(n.text).replace(/\r\n?/g, "\n").replace(/\n{3,}/g, "\n\n").trim());
       const u = untilText(n.until);
       if (u) { const sm = document.createElement("small"); sm.textContent = u; li.append(sm); }
       return li;
