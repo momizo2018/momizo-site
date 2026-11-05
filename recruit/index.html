@@ -291,6 +291,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .unit { display: flex; align-items: center; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 .unit::before { content: ""; flex: 1; border-top: var(--bw) dashed var(--ink-24); }
 /* ===== 共通：料金の単位ここまで ===== */
+/* ===== 共通：リーダー ===== */
+/* 「時間……金額」の点線。時間に class="leader" を付ける。時間と点線を一つの箱に入れ、点線が残りの幅を埋める（広がれば伸び、狭まれば縮み、縮みきると消える。文字とは重ならない）。
+   時間は折り返さない：初めて開いたとき、Webフォントの差し替えのあとで欄の幅が測り直されず（iPhone などの WebKit）、数字と「分」の間で折れて縦に積まれるのを防ぐ */
+:root { --leader-dots: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }   /* 点線の模様（ink-24 の点、6px 間隔） */
+.leader { display: flex; align-items: baseline; gap: var(--gap-item); white-space: nowrap; }
+.leader::after { content: ""; flex: 1; height: var(--sp-1); background: var(--leader-dots); }
+/* ===== 共通：リーダーここまで ===== */
 /* ===== 共通：ラベル ===== */
 /* 特徴の札（図書館のラベルのような札）：縁 accent-48・角丸4・面 accent-08・14px・muted。札どうし8で折り返して並べる。
    求人ページの題の下の特徴の札と、トップの揉蔵についての特徴の一覧 */
@@ -350,10 +357,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .br { order: 2; padding: var(--gap-item) 0 var(--gap-tight) var(--gap-list); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--muted); }
 .br, .br ~ .g > div:not(:first-child) { border-left: var(--bw) solid var(--ink-16); padding-left: var(--gap-list); }
 /* 1行（span＝時間、b＝報酬額、small＝表示価格）：時間 ……… 報酬額、その下の右端に表示価格 */
-.g > div { display: grid; grid-template-columns: auto 1fr auto; column-gap: var(--gap-item); align-items: baseline; padding: var(--gap-item) 0; line-height: var(--lh-ui); font-variant-numeric: tabular-nums; }
-.g > div::before { content: ""; grid-row: 1; grid-column: 2; height: var(--sp-1); background: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }
-.g span { grid-row: 1; grid-column: 1; color: var(--ink-2); }
-.g b { grid-row: 1; grid-column: 3; font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); color: var(--ink-2); }
+.g > div { display: grid; grid-template-columns: 1fr auto; column-gap: var(--gap-item); align-items: baseline; padding: var(--gap-item) 0; line-height: var(--lh-ui); font-variant-numeric: tabular-nums; }
+.g span { grid-row: 1; grid-column: 1; color: var(--ink-2); }   /* 時間と点線：「共通：リーダー」（class="leader"） */
+.g b { grid-row: 1; grid-column: 2; font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); color: var(--ink-2); }
 .g small { grid-row: 2; grid-column: 1 / -1; justify-self: end; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 
 /* ---------- 働き方：特徴の一覧と同じ線の一覧（.rows）。1文（16・ink-2）→4→ 説明（14・muted） ---------- */
@@ -520,10 +526,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
           <h3 class="name">ボディコース<small>もみほぐし</small></h3>
           <p class="unit">税込</p>
           <div class="g">
-            <div><span>30分</span><b>¥1,300</b><small>¥2,000</small></div>
-            <div><span>60分</span><b>¥2,535</b><small>¥3,900</small></div>
-            <div><span>90分</span><b>¥3,770</b><small>¥5,800</small></div>
-            <div><span>120分</span><b>¥5,005</b><small>¥7,700</small></div>
+            <div><span class="leader">30分</span><b>¥1,300</b><small>¥2,000</small></div>
+            <div><span class="leader">60分</span><b>¥2,535</b><small>¥3,900</small></div>
+            <div><span class="leader">90分</span><b>¥3,770</b><small>¥5,800</small></div>
+            <div><span class="leader">120分</span><b>¥5,005</b><small>¥7,700</small></div>
           </div>
         </div>
         <div class="rate">
@@ -531,10 +537,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
           <p class="unit">税込</p>
           <div class="br"><span>もみほぐしを含む</span></div>
           <div class="g">
-            <div><span>30分</span><b>¥1,820</b><small>¥2,800</small></div>
-            <div><span>60分</span><b>¥2,795</b><small>¥4,300</small></div>
-            <div><span>90分</span><b>¥4,030</b><small>¥6,200</small></div>
-            <div><span>120分</span><b>¥5,265</b><small>¥8,100</small></div>
+            <div><span class="leader">30分</span><b>¥1,820</b><small>¥2,800</small></div>
+            <div><span class="leader">60分</span><b>¥2,795</b><small>¥4,300</small></div>
+            <div><span class="leader">90分</span><b>¥4,030</b><small>¥6,200</small></div>
+            <div><span class="leader">120分</span><b>¥5,265</b><small>¥8,100</small></div>
           </div>
         </div>
         <div class="rate">
@@ -542,26 +548,26 @@ main #form-msg { margin-top: 0; color: var(--err); }
           <p class="unit">税込</p>
           <div class="br"><span>もみほぐしを含む</span></div>
           <div class="g">
-            <div><span>30分</span><b>¥1,950</b><small>¥3,000</small></div>
-            <div><span>60分</span><b>¥3,185</b><small>¥4,900</small></div>
-            <div><span>90分</span><b>¥4,420</b><small>¥6,800</small></div>
-            <div><span>120分</span><b>¥5,655</b><small>¥8,700</small></div>
+            <div><span class="leader">30分</span><b>¥1,950</b><small>¥3,000</small></div>
+            <div><span class="leader">60分</span><b>¥3,185</b><small>¥4,900</small></div>
+            <div><span class="leader">90分</span><b>¥4,420</b><small>¥6,800</small></div>
+            <div><span class="leader">120分</span><b>¥5,655</b><small>¥8,700</small></div>
           </div>
         </div>
         <div class="rate">
           <h3 class="name">フルコース<small>3つの組み合わせ</small></h3>
           <p class="unit">税込</p>
           <div class="g g-from-90">
-            <div><span>90分</span><b>¥4,680</b><small>¥7,200</small></div>
-            <div><span>120分</span><b>¥5,915</b><small>¥9,100</small></div>
+            <div><span class="leader">90分</span><b>¥4,680</b><small>¥7,200</small></div>
+            <div><span class="leader">120分</span><b>¥5,915</b><small>¥9,100</small></div>
           </div>
         </div>
         <div class="rate">
           <h3 class="name">リクエスト料<small>担当者の指定</small></h3>
           <p class="unit">税込</p>
           <div class="g">
-            <div><span>個人指名</span><b>¥400</b><small>¥400</small></div>
-            <div><span>性別指定</span><b>¥400</b><small>¥400</small></div>
+            <div><span class="leader">個人指名</span><b>¥400</b><small>¥400</small></div>
+            <div><span class="leader">性別指定</span><b>¥400</b><small>¥400</small></div>
           </div>
         </div>
       </div>
