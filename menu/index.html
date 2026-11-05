@@ -276,6 +276,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .unit { display: flex; align-items: center; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 .unit::before { content: ""; flex: 1; border-top: var(--bw) dashed var(--ink-24); }
 /* ===== 共通：料金の単位ここまで ===== */
+/* ===== 共通：リーダー ===== */
+/* 「時間……金額」の点線。時間に class="leader" を付ける。時間と点線を一つの箱に入れ、点線が残りの幅を埋める（広がれば伸び、狭まれば縮み、縮みきると消える。文字とは重ならない）。
+   時間は折り返さない：初めて開いたとき、Webフォントの差し替えのあとで欄の幅が測り直されず（iPhone などの WebKit）、数字と「分」の間で折れて縦に積まれるのを防ぐ */
+:root { --leader-dots: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }   /* 点線の模様（ink-24 の点、6px 間隔） */
+.leader { display: flex; align-items: baseline; gap: var(--gap-item); white-space: nowrap; }
+.leader::after { content: ""; flex: 1; height: var(--sp-1); background: var(--leader-dots); }
+/* ===== 共通：リーダーここまで ===== */
 /* ===== 共通：題と副題 ===== */
 /* コース名：本の題と副題のように、名前 →8→ 短い線（16、accent-48）＋施術名（明朝14・400・soft） */
 .name { display: grid; gap: var(--gap-item); }
@@ -304,10 +311,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .prices { list-style: none; }
 .prices > * { padding: var(--gap-item) 0; }
 .prices li { display: grid; grid-template-columns: 1fr auto; gap: var(--gap-tight) var(--gap-item); align-items: baseline; }
-/* 内訳のある行は li に class="detail" を付けて見分ける。:has(small) で見分けると、読み込みの途中（<small> が届く前）の判定が残ることがあり（LINE内ブラウザなどの WebKit）、時間が1文字ずつ縦に積まれて崩れる */
-.prices li:not(.detail) .t { display: flex; align-items: baseline; gap: var(--gap-item); }
-.prices li:not(.detail) .t::after { content: ""; flex: 1; height: var(--sp-1); background: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }
-.prices li.detail::before { content: ""; grid-row: 2; grid-column: 1; align-self: end; height: var(--sp-1); margin-bottom: calc(var(--fs-lg) * .135); background: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }   /* 内訳のある行は、料金の段の左をリーダーで埋める */
+/* 内訳のない行は、時間に class="leader"（「共通：リーダー」）。内訳のある行は li に class="detail" を付けて見分ける */
+.prices li.detail::before { content: ""; grid-row: 2; grid-column: 1; align-self: end; height: var(--sp-1); margin-bottom: calc(var(--fs-lg) * .135); background: var(--leader-dots); }   /* 内訳のある行は、料金の段の左をリーダーで埋める（時間が上の段なので「共通：リーダー」の形は使わず、模様だけ同じ） */
 .prices .t { line-height: var(--lh-ui); }
 .prices .t small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }   /* 内訳は時間の下に */
 /* 内訳のある行は3段：時間 → 内訳（幅いっぱい）→ 料金（右端）。料金はいつも行の最後の段の右端 */
@@ -347,10 +352,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
       <p>肩や首、腰、背中、脚など、気になるところを中心に丁寧にもみほぐすコースです。力加減は、お好みに合わせて調整します。ほぐす範囲は、60分で半身、90分からは全身が目安です。</p>
       <p class="unit">税込</p>
       <ul class="prices">
-        <li><span class="t">30分</span><b>¥2,000</b></li>
-        <li><span class="t">60分</span><b>¥3,900</b></li>
-        <li><span class="t">90分</span><b>¥5,800</b></li>
-        <li><span class="t">120分</span><b>¥7,700</b></li>
+        <li><span class="t leader">30分</span><b>¥2,000</b></li>
+        <li><span class="t leader">60分</span><b>¥3,900</b></li>
+        <li><span class="t leader">90分</span><b>¥5,800</b></li>
+        <li><span class="t leader">120分</span><b>¥7,700</b></li>
       </ul>
     </article>
     <article class="course" id="head">
@@ -394,8 +399,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
     <p>担当者を直接ご指名いただくか、性別でご指定いただけます。</p>
     <p class="unit">税込</p>
     <ul class="prices">
-      <li><span class="t">個人指名</span><b>¥400</b></li>
-      <li><span class="t">性別指定</span><b>¥400</b></li>
+      <li><span class="t leader">個人指名</span><b>¥400</b></li>
+      <li><span class="t leader">性別指定</span><b>¥400</b></li>
     </ul>
   </section>
 
