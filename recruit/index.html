@@ -509,11 +509,11 @@ main #form-msg { margin-top: 0; color: var(--err); }
     <p class="t">割引・決済手数料などは店舗が負担し、割引前の表示価格で計算します。</p>
   </div>
 
-  <!-- ===== 報酬早見表（報酬額＝表示価格×65%。料金を変えたら、トップ・メニューとあわせて3か所直す） ===== -->
+  <!-- ===== 報酬早見表（報酬額＝表示価格×65%、リクエスト料は100%。料金を変えたら、トップ・メニューとあわせて3か所直す。リクエスト料を変えたら、メニューの料金表とあわせて2か所直す） ===== -->
   <section class="sec" id="reward">
     <div class="wrap">
       <h2>報酬早見表</h2>
-      <p class="sec-note">コースごとの報酬額です。小さい数字は表示価格です。</p>
+      <p class="sec-note">コースとリクエスト料の報酬額です。小さい数字は表示価格です。</p>
 
       <div class="rows">
         <div class="rate">
@@ -554,6 +554,14 @@ main #form-msg { margin-top: 0; color: var(--err); }
           <div class="g g-from-90">
             <div><span>90分</span><b>¥4,680</b><small>¥7,200</small></div>
             <div><span>120分</span><b>¥5,915</b><small>¥9,100</small></div>
+          </div>
+        </div>
+        <div class="rate">
+          <h3 class="name">リクエスト料<small>担当者の指定</small></h3>
+          <p class="unit">税込</p>
+          <div class="g">
+            <div><span>個人指名</span><b>¥400</b><small>¥400</small></div>
+            <div><span>性別指定</span><b>¥400</b><small>¥400</small></div>
           </div>
         </div>
       </div>
