@@ -405,8 +405,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .notice-list.more { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); }
 .notice-list li { white-space: pre-line; }   /* シートのセルの中の改行は、そのまま改行する（ヒーローの枠と別窓の両方） */
 .notice-list li + li { margin-top: var(--gap-head); padding-top: var(--gap-head); border-top: var(--bw) dashed var(--ink-24); }   /* 線で区切った行の上下16（表と同じ） */
-/* お知らせの見出し（シートの見出しの列。空なら出さない）：小見出しと同じ明朝16・600・ink-2（h3）→4→ 本文 →4→ 期限 */
-.notice-list h3 { margin-bottom: var(--gap-tight); white-space: normal; }
+/* お知らせの見出し（シートの見出しの列。空なら出さない）：小見出しと同じ明朝16・600・ink-2（h3）→16→ 本文 →4→ 期限。間は小見出し→中身と同じ */
+.notice-list h3 { margin-bottom: var(--gap-head); white-space: normal; }
 .notice-list small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 .notice-empty { color: var(--muted); }
 .notice-empty a { text-decoration-color: var(--ink-24); text-underline-offset: var(--sp-1); }
