@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#211913">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex">   <!-- 作りかけ：検索に出さない。ナビ・サイトマップにも入れていない。仕上がったら、この行を消してナビとサイトマップに足す -->
+<link rel="canonical" href="https://momizo2018.github.io/momizo-site/staff/">
+<title>揉蔵 | セラピスト紹介</title>
+<meta name="description" content="揉蔵（もみぞう）のセラピストをご紹介します。担当者は、ご予約のときにご指名いただけます。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..500&family=Zen+Kaku+Gothic+New:wght@400;500&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,24,340,100,0;1,18,350,100,0&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="icon" href="../assets/icon/icon-192.png" sizes="192x192" type="image/png">
+<link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
+<style>
+/* =========================================================
+   揉蔵サイト スタイル
+   - 値は「揉蔵サイト デザイン規格書」のものだけを使う。合う値がないときは、いちばん近い段階の値を使う
+   - 固有値（段階の外の値）は規格書の固有値の章にあるものだけ。足す・変えるのは人が決める
+   - CSS はページごとに書く（共通の CSS ファイルは使わない）。「共通：○○」〜「共通：○○ここまで」の塊は、
+     使うページどうしで一字一句同じにし、直したら tools/check_common.py で確かめる
+   ========================================================= */
+
+/* ===== 共通：土台 ===== */
+:root {
+  /* ===== 色 ===== */
+  /* 夜の灯りのサロン：焦げ茶の地に、生成りの文字と、ランプの灯りのような真鍮色。キービジュアルの写真のトーンに合わせる */
+  --ink-2: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #8c7b66;   /* 文字：生成り → 沈めたベージュ。カードの上でそれぞれ 12.5・9.1・6.8・3.8 : 1 */
+  --accent: #c9a46c; --accent-hover: #dcb985;   /* 真鍮色。触れたときは一段明るく（暗い地では明るくして返す） */
+  --on-accent: #211913;                          /* accent の面の上の文字（送信ボタン、選んだ選択ボタン）。7.4 : 1 */
+  --paper: #211913; --paper-hi: #2a2018; --paper-lo: #1a130e;
+  --err: #ef9a86;                                /* 入力の誤り（求人ページのフォームだけ） */
+  /* 透明な色：もとの色 × 透明度 .08・.16・.24・.32・.48・.64・.96。名前の数字が透明度 */
+  --ink-08: rgba(241,231,214,.08);               /* カードの縁、触れたときに一段明るくする面（白抜きボタン、線のボタン） */
+  --ink-16: rgba(241,231,214,.16);               /* 機能の実線：入力欄の縁、括弧の線 */
+  --ink-24: rgba(241,231,214,.24);               /* 機能の点線（区切り）、白抜きボタンと選択ボタンの枠、リーダー、下線 */
+  --accent-08: rgba(201,164,108,.08);            /* 灯りの面 */
+  --accent-16: rgba(201,164,108,.16);            /* 仮画像、背景のにじみ、帯の上の矢印の丸 */
+  --accent-48: rgba(201,164,108,.48);            /* 飾りの線：帯の縁の二重線、飾り枠、特徴の札の縁、コース名の短い線 */
+  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 選択ボタンの面 / カードの近い影 / カードの遠い影 */
+  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);   /* カード / 画面下のメニューの面（上側） */
+  --paper-64: rgba(33,25,19,.64);                /* 写真の上の矢印の丸 */
+
+  /* ===== 共通値（全ページ同じ） ===== */
+  /* 間隔の段階 */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px;
+  --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
+
+  /* 間隔（役割で選ぶ） */
+  --gap-tight: var(--sp-1);     /*  4 名前のすぐ下の添え書き、表の項目名→内容 */
+  --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、ナビ・ページの行の項目どうしの最小、特徴の札どうし、写真どうし、コース名→施術名 */
+  --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
+  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
+  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
+  --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、フッターの各段の間 */
+  --gap-logo: var(--sp-12);     /* 48 ヘッダーのロゴ→ページの行（ロゴを独立させる） */
+  --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
+  --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
+
+  /* 枠の内側 */
+  --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
+  --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
+  --pad-tag: var(--sp-1) var(--sp-3);   /* 上下4・左右12 特徴の札 */
+  --pad-choice: var(--sp-2) var(--sp-4);   /* 上下8・左右16 「できる／できない」の選択ボタン */
+
+  /* 横の位置（幅480px以下で変わる） */
+  --page-pad: var(--sp-4);
+  --card-w: 480px;              /* 固有値 */
+  --card-pad-x: var(--sp-8);
+  --card-pad-y: var(--sp-12);
+
+  /* 部品の大きさ */
+  --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ */
+  --day-col: var(--sp-16);      /* 64 フォームの曜日の欄の幅 */
+  --arrow: var(--sp-8);         /* 32 矢印の丸 */
+
+  /* 線・角丸・影 */
+  --bw: 1px; --focus-w: 2px;
+  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;   /* r-sm は特徴の札だけ */
+  --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-32), 0 var(--sp-1) var(--sp-3) var(--shade-24);
+
+  /* 文字 */
+  --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;   /* 見出し（ページの題・セクション見出し・コース名・施術名・小見出し）。欧文のクラシックなセリフ体と並べる前提の明朝で、線の強弱が穏やか */
+  --font-logo: "Fraunces", "Zen Old Mincho", serif;   /* ロゴだけ（角の丸いクラシックなセリフ体） */
+  --fw-regular: 400;
+  --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
+  --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
+  --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
+  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、お知らせの見出し */
+  --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
+  --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
+  --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
+  --fs-logo-sub: 13px;   /* 固有値：ロゴの relaxation salon（ヘッダー） */
+  --fs-logo-foot: 30px;       /* 固有値：フッターのロゴの momizo。締めくくりなので、ヘッダーより一段小さく */
+  --fs-logo-foot-sub: 11px;   /* 固有値：フッターのロゴの relaxation salon。36:13 とほぼ同じ比で縮める */
+  --lh-none: 1;      /* 1行の部品 */
+  --lh-ui: 1.4;      /* 見出し、ボタン */
+  --lh-text: 1.8;    /* 文章 */
+
+  /* 動き */
+  --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --lift: -2px; --press: .97; --enter-y: var(--sp-4);
+  --dim: .6;        /* 触れたときの不透明度（画面下のメニューの文字、ロゴ） */
+  --disabled: .4;   /* 使えない状態（送信中のボタン、チェックしていない曜日の時間） */
+  --dock-delay: .6s;   /* 固有値：画面下のメニュー（と営業状況のバー）が出てくるまでの間 */
+  --bar-glow: 4s;      /* 固有値：上下のバーの明滅の周期 */
+
+  /* 背景 */
+  --bg-page:
+    radial-gradient(circle at 8% 8%, var(--accent-16), transparent 40%),
+    radial-gradient(circle at 92% 92%, var(--accent-16), transparent 32%),
+    linear-gradient(145deg, var(--paper-hi) 0%, var(--paper-lo) 100%);
+
+  color-scheme: dark;
+}
+@media (max-width: 480px) { :root { --page-pad: var(--sp-2); --card-pad-x: var(--sp-4); --card-pad-y: var(--sp-8); } }
+
+/* ---------- 土台 ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); }
+body {
+  font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
+  color: var(--ink-2); background: var(--bg-page);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  min-height: 100svh; display: grid; place-items: start center;
+  padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
+}
+/* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
+h1, h2, h3 { font-family: var(--font-heading); font-weight: var(--fw-heading); line-height: var(--lh-ui); }
+main p { color: var(--muted); }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
+section[id], article[id] { scroll-margin-top: var(--page-group); }
+
+/* ---------- カード ---------- */
+.card {
+  position: relative; width: min(100%, var(--card-w));
+  min-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--page-pad) * 2);
+  display: flex; flex-direction: column; padding: var(--card-pad-y) var(--card-pad-x); overflow: hidden;
+  border: var(--bw) solid var(--ink-08); border-radius: var(--r-xl); background: var(--card); box-shadow: var(--shadow-card);
+  animation: enter var(--dur-enter) var(--ease-out) both;
+}
+@keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
+
+/* ---------- ヘッダー：ロゴ → ページの行 → 区切り線 → そのページのナビ ---------- */
+/* ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
+.head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
+/* 帯の縁は二重線（面の端の線 →2→ もう1本）。配置を動かさないよう、線は影と重ねて描く */
+.head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
+.head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
+/* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
+.head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-24); }
+
+/* ロゴ：momizo（Fraunces 340・ink-2）→ relaxation salon（Fraunces イタリック 350・soft）の2段。
+   Fraunces はセリフの角を丸くできるクラシックなセリフ体で、角の丸さ（SOFT）を最大にして使う。ロゴだけの書体（文中では使わない）。
+   大きさは固有値で、文字の段階に従わない。ヘッダーは momizo 36・relaxation salon 13、フッターは一段小さく 30・11（ほぼ同じ比。間と左の端は em なので一緒に縮む）。飾りは付けず、書体と組み方だけで見せる。
+   光学サイズ（opsz）：momizo 24、relaxation salon 18（小さい字用の形に寄せつつ、太くなりすぎない値）。
+   縦の間：momizo の字面の下（ベースライン）→10→ relaxation salon の字面の上（行間1から逆算して margin .242em）。
+   左の端：m の左の空き .036em、r の左の空き .06em を戻して字面でそろえる。
+   字間：momizo +0.01em、relaxation salon +0.08em（小さいイタリックを少し開けて、ゆったり見せる） */
+.brand { display: grid; justify-items: start; font-family: var(--font-logo); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { margin-left: -.036em; font-size: var(--fs-logo); font-weight: 340; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 24; line-height: var(--lh-none); letter-spacing: .01em; color: var(--ink-2); }
+.brand-sub { margin: .242em 0 0 -.06em; font-size: var(--fs-logo-sub); font-style: italic; font-weight: 350; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 18; line-height: var(--lh-none); letter-spacing: .08em; color: var(--soft); white-space: nowrap; }
+.site-foot .brand-name { font-size: var(--fs-logo-foot); }
+.site-foot .brand-sub { font-size: var(--fs-logo-foot-sub); }
+
+/* ナビとリンクの行：左右の端までそろえて1行に。
+   ページの行はヘッダーとフッターで同じ（トップ → コースと料金 → セラピスト募集。今いるページは faint で、リンクにしない） */
+.nav, .link-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-item); }
+.nav { margin-top: var(--gap-head); }
+.nav a, .link-row a, .link-row span { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
+.link-row [aria-current] { color: var(--faint); }
+@media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover, .link-row a:hover { color: var(--ink-2); } }
+
+/* ---------- 見出し：日本語だけ。ページの題とセクション見出しは明朝20・500、小見出しは明朝16・600 ---------- */
+h1, h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
+/* 飾り罫：ページの題とセクション見出しの下に、線・菱形・線（洋書の章扉の飾り。固有値の絵）。見出し →12→ 飾り罫 →32→ 中身。コース名などの項目の見出しには付けない */
+.page-title h1::after, .sec h2:not(.name)::after, .band h2::after { content: ""; display: block; width: 56px; height: 7px; margin-top: var(--gap-list); background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%227%22 viewBox=%220 0 56 7%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M0 3.5h22M34 3.5h22%22/%3E%3Cpath d=%22M28 .5l3 3-3 3-3-3z%22/%3E%3C/svg%3E") no-repeat; }
+h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
+
+/* ---------- ページの並び ---------- */
+.sec { padding-top: var(--page-section); }
+
+/* ---------- 線で区切った行（表・特徴の一覧・料金表・働き方・報酬早見表）
+   各行の下と一覧の上に区切り線。行の上下16 ---------- */
+.rows { list-style: none; border-top: var(--bw) dashed var(--ink-24); }
+.rows > * { padding: var(--gap-head) 0; border-bottom: var(--bw) dashed var(--ink-24); }
+
+/* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
+   カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（card-64 → card）とぼかし。影と角丸は付けない。
+   上の区切り線は中身の幅だけ。項目どうしは短い縦線で区切る。文字はボタンと同じ 16px・500・ink-2。
+   data-until の要素（トップ・メニューはフッター、求人はフォーム）が画面に入ったら、下へ引っ込める ---------- */
+.dock {
+  position: fixed; left: 50%; bottom: 0; z-index: 10;
+  width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  padding: 0 var(--card-pad-x) env(safe-area-inset-bottom, 0px);
+  background: linear-gradient(var(--card-64), var(--card));
+  -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
+  transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
+  /* 開いたとき、カードが現れ終わるころに下から出てくる（1回だけ）。backwards なので、出たあとは .hide の邪魔をしない */
+  animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
+}
+@keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
+/* バーの明滅：面に灯りの色（accent-16）をゆっくり重ねて、ほどいてを繰り返す（周期は固有値）。文字は点滅させない。
+   画面の上の営業状況のバー（トップ）も同じ明滅を使う。動きを減らす設定では止める */
+.dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
+@keyframes bar-glow { 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .dock::after { animation: none !important; } }
+.dock::before { content: ""; position: absolute; top: 0; left: var(--card-pad-x); right: var(--card-pad-x); border-top: var(--bw) dashed var(--ink-24); }
+.dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
+.dock a {
+  position: relative; display: grid; place-content: center;
+  min-height: var(--size-control); font-weight: var(--fw-ui); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap;
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+.dock a + a::before { content: ""; position: absolute; left: 0; top: 50%; height: var(--sp-6); margin-top: calc(var(--sp-6) / -2); border-left: var(--bw) dashed var(--ink-24); }
+.dock a:focus-visible { outline-offset: calc(var(--focus-w) * -1); border-radius: var(--r-md); }
+.dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
+@media (hover: hover) { .dock a:hover { opacity: var(--dim); } }
+
+/* ---------- フッター：ロゴ → ページの行 → 区切り線 → 外部 → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる） ---------- */
+/* 上の空き96に、スクリプトが1px未満（--foot-nudge）を足して、フッターの面の上の端を画面のピクセルのちょうどにそろえる（「共通：フッターの位置」） */
+.site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
+.foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48); }
+.foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
+.foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-24); }
+.foot-ext { margin-top: var(--gap-head); }   /* 線の上下16。押せる範囲は線のところで接する */
+.footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+/* ===== 共通：土台ここまで ===== */
+
+/* ===== 共通：写真の枠 ===== */
+/* 写真は角丸の枠に入れず、カードの端から端まで広げる（はじめての方への帯と同じ広げ方）。
+   高さは280で固定（固有値）。写真はその高さのまま横に並べ（間8）、横にスクロールして見る。
+   次の写真がのぞくように、1枚の幅は枠より48せまくする。1枚だけのときは幅いっぱいに広げる。
+   止まる位置（スナップ）は付けない。色味は少し落ち着かせ、写真どうしのトーンをそろえる（固有値） */
+.ph {
+  --ph-h: 280px;
+  display: flex; gap: var(--gap-item); height: var(--ph-h);
+  margin-inline: calc(var(--card-pad-x) * -1);
+  overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; contain: inline-size;
+  scrollbar-width: none;
+}
+.ph::-webkit-scrollbar { display: none; }
+.ph img {
+  flex: 0 0 auto; width: auto; height: 100%; max-width: calc(100% - var(--sp-12));
+  object-fit: cover;
+  filter: sepia(.2) saturate(.85) brightness(.85);
+}
+.ph img:only-child { width: 100%; max-width: none; }
+/* マウスの人向けの送りボタン（矢印の丸）。スクロールできる枠にだけ、スクリプトで付ける。端まで来た側は消す */
+.ph-box { position: relative; }
+.ph-btn {
+  position: absolute; top: 50%; z-index: 1; width: var(--arrow); height: var(--arrow); margin-top: calc(var(--arrow) / -2);
+  display: none; place-items: center; padding: 0; cursor: pointer;
+  border: var(--bw) solid transparent; border-radius: 50%; background: var(--paper-64);
+  font: inherit; line-height: var(--lh-none); color: var(--muted);
+  transition: opacity var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+}
+.ph-btn.prev { left: 0; } .ph-btn.next { right: 0; }
+.ph-btn[disabled] { opacity: 0; pointer-events: none; }
+@media (hover: hover) and (pointer: fine) { .ph-btn { display: grid; } .ph-btn:hover { background: var(--accent); color: var(--on-accent); } }
+/* ===== 共通：写真の枠ここまで ===== */
+
+/* ===== 共通：項目と内容の表・地図・線のボタン ===== */
+/* 項目と内容の表（.rows と組み合わせる）：項目名（soft）→4→ 内容。
+   項目名を上に置くので、画面が狭くても内容の幅を取れる */
+.info { display: grid; }
+.info > div { display: grid; gap: var(--gap-tight); }
+.info dt { color: var(--soft); }
+.hours dd { font-variant-numeric: tabular-nums; }
+
+/* 地図：3:2（固有値）。色味は少し落ち着かせる */
+.mapbox { border-radius: var(--r-md); overflow: hidden; background: var(--paper); aspect-ratio: 3 / 2; }
+.mapbox iframe { display: block; width: 100%; height: 100%; border: 0; filter: grayscale(.5) sepia(.3) brightness(.8); }
+
+/* 線のボタン（外部サイトへのリンク）：左に名前、右に矢印の丸 */
+.line {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--gap-head);
+  min-height: var(--size-control); padding: var(--pad-part);
+  border: var(--bw) solid transparent; border-radius: var(--r-md); background-color: var(--accent-08); text-decoration: none;
+  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+}
+.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-ui); }
+.line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--card); line-height: var(--lh-none); color: var(--muted); }
+.line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
+@media (hover: hover) { .line:hover { background-color: var(--ink-08); transform: translateY(var(--lift)); } }
+/* 帯の上の線のボタンは、帯と逆にカードの面。矢印の丸はいつも箱と逆の面 */
+.band .line { background-color: var(--card); }
+.band .line-arrow { background: var(--accent-16); }
+.maplink { margin-top: var(--gap-list); }   /* 地図→地図のボタン12 */
+/* ===== 共通：項目と内容の表・地図・線のボタンここまで ===== */
+
+/* ===== 共通：ラベル ===== */
+/* 特徴の札（図書館のラベルのような札）：縁 accent-48・角丸4・面 accent-08・14px・muted。札どうし8で折り返して並べる。
+   求人ページの題の下の特徴の札と、トップの揉蔵についての特徴の一覧 */
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--gap-item); }
+.tags li { padding: var(--pad-tag); border: var(--bw) solid var(--accent-48); border-radius: var(--r-sm); background: var(--accent-08); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
+/* ===== 共通：ラベルここまで ===== */
+/* ===== 共通：題と副題 ===== */
+/* コース名：本の題と副題のように、名前 →8→ 短い線（16、accent-48）＋施術名（明朝14・400・soft） */
+.name { display: grid; gap: var(--gap-item); }
+.name small { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-heading); font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--soft); }
+.name small::before { content: ""; flex: 0 0 var(--sp-4); border-top: var(--bw) solid var(--accent-48); }
+/* ===== 共通：題と副題ここまで ===== */
+
+/* ===== このページだけ：セラピスト紹介（作りかけ） ===== */
+/* ---------- ページの並び ---------- */
+.page-title { padding-top: var(--page-group); }
+/* ページの題のひとこと：小見出しと同じ明朝16px・600・ink-2 →16→ 本文 */
+.lead { font-family: var(--font-heading); font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
+.lead + p { margin-top: var(--gap-head); }
+
+/* ---------- 1人分：写真 →32→ 名前（副題：役職）→16→ 性別の札 →16→ 心がけていること →32→ 得意・苦手・ひとことの表 ----------
+   写真は「共通：写真の枠」（横にスクロール。2枚以上も可）。写真がない人は枠ごと出さない */
+.staff-list { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
+.staff .ph + .name { margin-top: var(--gap-section); }
+.staff .tags { margin-top: var(--gap-head); }
+.staff .care { margin-top: var(--gap-head); white-space: pre-line; }   /* シートのセルの中の改行はそのまま */
+.staff .info { margin-top: var(--gap-section); }
+.staff .info dd { white-space: pre-line; }
+
+/* ---------- 読み込みの状態：読み込み中は空きを取り、中身はふわっと出す ---------- */
+.staff-box[data-state="loading"] .staff-list { min-height: var(--ph-min, 280px); }
+.staff-note { margin-top: var(--page-group); color: var(--muted); }
+.staff-note a { text-decoration-color: var(--ink-24); text-underline-offset: var(--sp-1); }
+.staff-box:not([data-state="sample"]) .staff-sample, .staff-box:not([data-state="error"]) .staff-error, .staff-box:not([data-state="empty"]) .staff-empty { display: none; }
+.staff-list > *, .staff-note { animation: fade var(--dur-base) var(--ease-out) both; }
+@keyframes fade { from { opacity: 0; } }
+/* ===== このページだけここまで ===== */
+</style>
+</head>
+
+<body>
+<div class="card">
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+  </div>
+  <nav class="link-row head-pages" aria-label="ページ">
+    <a href="../">トップ</a><a href="../menu/">コースと料金</a><span aria-current="page">セラピスト紹介</span><a href="../recruit/">セラピスト募集</a>
+  </nav>
+</header>
+
+<main>
+  <div class="page-title">
+    <h1>セラピスト紹介</h1>
+    <p class="lead">揉蔵のセラピストをご紹介します。</p>
+    <p>担当者は、ご予約のときにご指名いただけます（リクエスト料 ¥400）。出勤日と空き状況は、WEB予約でご確認いただけます。</p>
+  </div>
+
+  <!-- 中身は「スタッフ」シートから読み込む（下のスクリプト）。シートがまだつながっていないときは見本を出す -->
+  <div class="staff-box" id="staff" data-state="loading">
+    <p class="staff-note staff-sample">これは見本です。「スタッフ」シートに書くと、その内容に差し替わります。</p>
+    <div class="staff-list" id="staff-list" aria-live="polite"></div>
+    <p class="staff-note staff-empty">セラピストの紹介は、ただいま準備中です。</p>
+    <p class="staff-note staff-error">紹介を読み込めませんでした。時間をおいて開き直すか、<a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a>でお問い合わせください。</p>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-body">
+    <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+    <nav class="link-row foot-pages" aria-label="ページ">
+      <a href="../">トップ</a><a href="../menu/">コースと料金</a><span aria-current="page">セラピスト紹介</span><a href="../recruit/">セラピスト募集</a>
+    </nav>
+    <nav class="link-row foot-ext" aria-label="予約と連絡">
+      <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEB予約</a><a href="tel:0287339178">電話</a><a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a><a href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener">口コミを書く</a>
+    </nav>
+    <p class="footer" lang="en">&copy; 2026 relaxation salon momizo</p>
+  </div>
+</footer>
+</div>
+
+<nav class="dock" id="dock" data-until=".site-foot" aria-label="ご予約">
+  <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEBで予約する</a>
+  <a href="tel:0287339178">電話をかける</a>
+</nav>
+
+<script>
+/* ===== 共通：画面下のメニュー ===== */
+/* 画面下のメニュー：data-until の要素（フッターやフォーム）が画面に入ったら、下へ引っ込める */
+(() => {
+  const dock = document.getElementById("dock");
+  const until = dock && document.querySelector(dock.dataset.until);
+  if (!until) return;
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const hide = until.getBoundingClientRect().top < innerHeight;
+    dock.classList.toggle("hide", hide);
+    dock.inert = hide;
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  update();
+})();
+/* ===== 共通：画面下のメニューここまで ===== */
+
+/* ===== 共通：フッターの位置 ===== */
+/* 上の中身の高さには端数が出る（本文の行の高さ 28.8、写真や地図の縦横比）。そのままだとフッターの置かれる高さがページごとに1px未満ずれ、
+   1pxの線がにじんだり文字の上下が変わったりして、ページを切り替えると同じフッターが微妙に違って見える。
+   カードの上の端からフッターの面の上の端までが、画面のピクセルのちょうどになるよう、フッターの上の空きに1px未満を足す。
+   カードの高さが変わるたび（お知らせ・フォント・画面の幅）にそろえ直す。カードの現れの動き（transform）はカードと面で打ち消し合う */
+(() => {
+  const card = document.querySelector(".card");
+  const body = document.querySelector(".foot-body");
+  if (!card || !body || !window.ResizeObserver) return;
+  const foot = body.parentElement;
+  const snap = () => {
+    const r = window.devicePixelRatio || 1;
+    const now = parseFloat(foot.style.getPropertyValue("--foot-nudge")) || 0;
+    const y = (body.getBoundingClientRect().top - card.getBoundingClientRect().top - now) * r;
+    const next = ((Math.ceil(y - .001) - y) / r).toFixed(3) + "px";
+    if (foot.style.getPropertyValue("--foot-nudge") !== next) foot.style.setProperty("--foot-nudge", next);
+  };
+  new ResizeObserver(snap).observe(card);
+  addEventListener("resize", snap);
+})();
+/* ===== 共通：フッターの位置ここまで ===== */
+</script>
+<script>
+/* ===== 共通：写真の送りボタン ===== */
+/* 写真の枠：2枚以上の枠にだけ、マウス向けの送りボタン（矢印の丸）を付ける。端まで来た側は消す。
+   動きを減らす設定の人には、なめらかに送らず、すぐ動かす */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+document.querySelectorAll(".ph").forEach((ph) => {
+  if (ph.children.length < 2) return;
+  const box = document.createElement("div");
+  box.className = "ph-box";
+  ph.before(box);
+  box.append(ph);
+  const make = (cls, label, txt, dir) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "ph-btn " + cls;
+    b.setAttribute("aria-label", label);
+    b.textContent = txt;
+    b.addEventListener("click", () => ph.scrollBy({ left: dir * ph.clientWidth * .8, behavior: reduce.matches ? "auto" : "smooth" }));
+    box.append(b);
+    return b;
+  };
+  const prev = make("prev", "前の写真", "←", -1);
+  const next = make("next", "次の写真", "→", 1);
+  const update = () => {
+    prev.disabled = ph.scrollLeft <= 1;
+    next.disabled = ph.scrollLeft >= ph.scrollWidth - ph.clientWidth - 1;
+  };
+  ph.addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update);
+  ph.querySelectorAll("img").forEach((img) => img.addEventListener("load", update));
+  update();
+});
+/* ===== 共通：写真の送りボタンここまで ===== */
+</script>
+<script>
+/* セラピスト紹介：「スタッフ」シートから読み込んで並べる（作りかけ）
+   ・シートの列は位置で読む（A 写真・B 名前・C 役職・D 性別・E 心がけていること・F 得意・G 苦手・H ひとこと）。読むのは Apps Script の getStaff_
+   ・写真：assets/img/staff/ に置いた WebP のファイル名（拡張子なし）。2枚以上は「、」か空白で区切る。空なら写真の枠ごと出さない
+   ・空の項目は出さない。名前が空の行は Apps Script の側で飛ばす
+   ・前回読み込んだ中身（localStorage）があれば先に出し、新しい中身が届いたら差し替える
+   ・Apps Script がまだスタッフに対応していない（type=staff を知らない）ときは、見本を出す
+   ・課題：あとから並べた写真には、マウス向けの送りボタン（「共通：写真の送りボタン」）が付かない。統合の前に直す */
+(() => {
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=staff";
+  const KEY = "momizo-staff";
+  const box = document.getElementById("staff");
+  const list = document.getElementById("staff-list");
+  const SAMPLE = [
+    { photo: [{ src: "../assets/img/course-head.webp", alt: "見本の写真" }], name: "見本 さくら", role: "店長", gender: "女性",
+      care: "お話を伺いながら、その日のお疲れに合わせて力加減を変えています。\n終わったあとに体が軽くなったと感じていただけるよう、丁寧にほぐします。",
+      good: "肩まわり、強めの力加減", weak: "とても弱い力加減", note: "休日は温泉めぐりをしています。" },
+    { photo: [], name: "見本 たろう", role: "セラピスト", gender: "男性",
+      care: "初めての方にも安心していただけるよう、施術の前にご希望をしっかり伺います。",
+      good: "足つぼ・リフレクソロジー", weak: "", note: "" },
+  ];
+  const txt = (v) => String(v == null ? "" : v).replace(/\r\n?/g, "\n").trim();
+  const photos = (v) => Array.isArray(v) ? v : String(v || "").split(/[\s,、]+/).filter((n) => /^[\w-]+$/.test(n)).map((n) => ({ src: "../assets/img/staff/" + n + ".webp" }));
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const card = (p) => {
+    const name = txt(p.name);
+    const a = el("article", "staff");
+    const ph = photos(p.photo);
+    if (ph.length) {
+      const f = el("div", "ph");
+      ph.forEach((x, i) => { const img = el("img"); img.src = x.src; img.alt = x.alt || name + "の写真" + (ph.length > 1 ? "（" + (i + 1) + "）" : ""); img.loading = "lazy"; img.decoding = "async"; f.append(img); });
+      a.append(f);
+    }
+    const h = el("h2", "name", name);
+    if (txt(p.role)) h.append(el("small", null, txt(p.role)));
+    a.append(h);
+    if (txt(p.gender)) { const t = el("ul", "tags"); t.append(el("li", null, txt(p.gender))); a.append(t); }
+    if (txt(p.care)) a.append(el("p", "care", txt(p.care)));
+    const rows = [["得意", p.good], ["苦手", p.weak], ["ひとこと", p.note]].filter(([, v]) => txt(v));
+    if (rows.length) {
+      const dl = el("dl", "info rows");
+      rows.forEach(([k, v]) => { const d = el("div"); d.append(el("dt", null, k), el("dd", null, txt(v))); dl.append(d); });
+      a.append(dl);
+    }
+    return a;
+  };
+  const show = (people, state) => {
+    const ok = (people || []).filter((p) => p && txt(p.name));
+    list.replaceChildren(...ok.map(card));
+    box.dataset.state = ok.length ? state : "empty";
+  };
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
+  if (Array.isArray(cached) && cached.length) show(cached, "list");
+  const ctrl = new AbortController();
+  setTimeout(() => ctrl.abort(), 8000);
+  fetch(ENDPOINT, { signal: ctrl.signal })
+    .then((r) => r.json())
+    .then((d) => {
+      if (d && d.ok && Array.isArray(d.staff)) {
+        try { localStorage.setItem(KEY, JSON.stringify(d.staff)); } catch (e) {}
+        show(d.staff, "list");
+      } else if (d && d.error === "unknown type") {
+        show(SAMPLE, "sample");   // Apps Script がまだスタッフに対応していない
+      } else throw new Error("bad response");
+    })
+    .catch(() => { if (box.dataset.state === "loading") { list.replaceChildren(); box.dataset.state = "error"; } });
+})();
+</script>
+</body>
+</html>
