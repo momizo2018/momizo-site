@@ -293,7 +293,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .lead { font-family: var(--font-heading); font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
 
-/* ---------- 1人分：写真 →32→ 名前（副題：役職）→16→ 札（性別・担当コース）→16→ コメント →16→ 施術歴 ----------
+/* ---------- 1人分：写真 →32→ 名前（副題：役職）→8→ 人物の行（性別┊施術歴）→16→ 札（担当コース）→16→ コメント ----------
    写真は「共通：写真の枠」（横にスクロール。2枚以上も可）。写真がない人は枠ごと出さない。空の項目は出さない */
 .staff-list { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
 /* 写真の高さ：スタッフの写真は縦横の比率がまちまちなので、このページだけ枠の高さを決めない（人が決めた例外）。
@@ -303,10 +303,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .staff .ph img { height: var(--ph-h); }
 /* スマホで撮った縦長（3:4）がそのまま入る。それより縦に長い写真（9:16 など）は 3:4 で止め、上下を切る */
 .staff .ph img:only-child { width: 100%; height: auto; max-height: calc(100cqi * 4 / 3); }
+.staff .name { margin-bottom: 0; }   /* 下の間は、続くものの上の間で決める（コース名と同じ） */
 .staff .ph + .name { margin-top: var(--gap-section); }
-.staff .tags, .staff .comment, .staff .career { margin-top: var(--gap-head); }
+.staff .tags, .staff .comment { margin-top: var(--gap-head); }
 .staff .comment { white-space: pre-line; }   /* シートのセルの中の改行はそのまま */
-.staff .career { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
+/* 人物の行：名前の下に、性別と施術歴を14px・soft で。区切りは料金表の内訳と同じ細い縦の点線（画面下のメニューの区切りと同じ） */
+.staff .profile { margin-top: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
+.staff .profile span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) dashed var(--ink-24); }
 
 /* ---------- 読み込みの状態：読み込み中は空きを取り、中身はふわっと出す ---------- */
 .staff-box[data-state="loading"] .staff-list { min-height: var(--ph-min, 280px); }
@@ -494,11 +497,11 @@ document.querySelectorAll(".ph").forEach((ph) => {
     const h = el("h2", "name", name);
     if (txt(p.role)) h.append(el("small", null, txt(p.role)));
     a.append(h);
-    const tags = [txt(p.gender), ...courses(p.courses)].filter(Boolean);
+    const prof = [txt(p.gender), career(p.since)].filter(Boolean);   // 人物の行：性別┊施術歴（ある方だけ）
+    if (prof.length) { const r = el("p", "profile"); prof.forEach((x) => r.append(el("span", null, x))); a.append(r); }
+    const tags = courses(p.courses);   // 札は担当コースだけ
     if (tags.length) { const t = el("ul", "tags"); tags.forEach((x) => t.append(el("li", null, x))); a.append(t); }
     if (txt(p.comment)) a.append(el("p", "comment", txt(p.comment)));
-    const c = career(p.since);
-    if (c) a.append(el("p", "career", c));
     return a;
   };
   const show = (people, state) => {
