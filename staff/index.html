@@ -56,8 +56,8 @@
   --gap-tight: var(--sp-1);     /*  4 名前のすぐ下の添え書き、表の項目名→内容 */
   --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、特徴の札どうし、写真どうし、コース名→施術名 */
   --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
-  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目の行どうし */
-  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身、ナビの項目どうし（横） */
+  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目どうし */
+  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
   --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、ナビの帯の上、フッターのロゴ→著作権表示 */
   --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
   --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
@@ -170,9 +170,9 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .site-foot .brand-sub { font-size: var(--fs-logo-foot-sub); }
 
 /* ページ内の目次：本文の頭（ページの題とひとことの下。トップはヒーローの下）に、上下を点線で挟んだ帯で置く。目次のないページには置かない。
-   項目は見出しと同じ言葉（省略しない）で、左から並べ、入りきらなければ折り返して左にそろえる（14px・muted。項目どうし横24・縦16）。
+   項目は見出しと同じ言葉（省略しない）で、左から並べ、入りきらなければ折り返して左にそろえる（14px・muted。項目どうし縦横とも16）。
    押せる範囲は上下に8ずつ広げる（縦に並んだ項目どうしで接する） */
-.nav { display: flex; flex-wrap: wrap; gap: var(--gap-head) var(--gap-block); margin-top: var(--gap-section); padding: var(--gap-head) 0; border-top: var(--bw) dashed var(--ink-24); border-bottom: var(--bw) dashed var(--ink-24); }
+.nav { display: flex; flex-wrap: wrap; gap: var(--gap-head); margin-top: var(--gap-section); padding: var(--gap-head) 0; border-top: var(--bw) dashed var(--ink-24); border-bottom: var(--bw) dashed var(--ink-24); }
 .nav a { padding: var(--gap-item) 0; margin: calc(var(--gap-item) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover { color: var(--ink-2); } }
 
@@ -228,6 +228,11 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
 .foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48); }
 .foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
+.foot-row { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-item); }   /* ロゴ ↔ ページの先頭へ */
+/* ページの先頭へ：フッターのロゴの右端に、矢印の丸（線のボタンの矢印と同じ形。帯の上なので accent-16 の面）。
+   フッターの中にあるので、見えるのはページのいちばん下まで来たときだけ。押すと先頭へ（動きを減らす設定では、すぐ） */
+.to-top { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--accent-16); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
+@media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
@@ -362,7 +367,7 @@ html.has-menu { overflow: hidden; }
 </style>
 </head>
 
-<body>
+<body id="top">
 <div class="card">
 <header class="head">
   <div class="wrap">
@@ -387,7 +392,10 @@ html.has-menu { overflow: hidden; }
 
 <footer class="site-foot">
   <div class="foot-body">
-    <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+    <div class="foot-row">
+      <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+      <a class="to-top" href="#top" aria-label="ページの先頭へ"><span aria-hidden="true">↑</span></a>
+    </div>
     <p class="footer" lang="en">&copy; 2026 relaxation salon momizo</p>
   </div>
 </footer>
