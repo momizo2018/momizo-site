@@ -296,6 +296,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ---------- 1人分：写真 →32→ 名前（副題：役職）→16→ 札（性別・担当コース）→16→ コメント →16→ 施術歴 ----------
    写真は「共通：写真の枠」（横にスクロール。2枚以上も可）。写真がない人は枠ごと出さない。空の項目は出さない */
 .staff-list { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
+/* 写真の高さ：スタッフの写真は縦横の比率がまちまちなので、このページだけ枠の高さを決めない（人が決めた例外）。
+   スマホで撮った縦長の写真が主。1枚だけのときは、横幅いっぱいにして高さは写真の比率のまま（切らない・空きを作らない）。
+   2枚以上のときは、いつもの高さ（280）で横に並べ、幅は写真の比率のまま（切らない） */
+.staff .ph { height: auto; container-type: inline-size; }
+.staff .ph img { height: var(--ph-h); }
+/* スマホで撮った縦長（3:4）がそのまま入る。それより縦に長い写真（9:16 など）は 3:4 で止め、上下を切る */
+.staff .ph img:only-child { width: 100%; height: auto; max-height: calc(100cqi * 4 / 3); }
 .staff .ph + .name { margin-top: var(--gap-section); }
 .staff .tags, .staff .comment, .staff .career { margin-top: var(--gap-head); }
 .staff .comment { white-space: pre-line; }   /* シートのセルの中の改行はそのまま */
