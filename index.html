@@ -57,7 +57,6 @@
   --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目の行どうし */
   --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身、ナビの項目どうし（横） */
   --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、ナビの帯の上、フッターのロゴ→著作権表示 */
-  --gap-logo: var(--sp-12);     /* 48 （いまは使っていない） */
   --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
   --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
 
@@ -91,7 +90,7 @@
   --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
   --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
   --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、お知らせの見出し */
+  --fs-sm: 14px;     /* 補足・注意書き、ナビ、著作権表示、コースの施術名、表の単位、お知らせの見出し */
   --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
   --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
@@ -233,7 +232,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
-/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはページの行を置かない）。
+/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはリンクの行を置かない）。
    三本線：画面の右上に固定（カードの右上の内側にそろえる）。写真の送りボタンと同じ半透明の丸（paper-64、32）。
    トップの営業状況のバーが出ている間は、バーの高さだけ下げる（スクリプトが --menu-bar を入れる）。お知らせの別窓を開いている間は隠す。
    開くと、カードと同じ面の板が画面の上から下りてくる（幅は画面下のメニューと同じ）。後ろは paper-64 の幕で、ページは動かさない。
@@ -273,8 +272,6 @@ html.has-menu { overflow: hidden; }
 .menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
 .menu-list [aria-current] { color: var(--faint); }
 .menu-soon { font-size: var(--fs-sm); color: var(--soft); }   /* 準備中のページを押したときだけ「準備中です」 */
-.soon-note { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }   /* 本文の中の準備中のリンクの下。空のときは高さ0 */
-.soon-note:not(:empty) { margin-top: var(--gap-list); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
 
@@ -375,6 +372,8 @@ html.has-menu { overflow: hidden; }
 .e { --mark: var(--sp-8); display: grid; grid-template-columns: var(--mark) minmax(0, 1fr); column-gap: var(--gap-head); align-content: start; }
 .e > * { grid-column: 2; }
 .e::before { content: ""; grid-column: 1; grid-row: 1 / span 2; width: var(--mark); height: var(--mark); background: var(--accent); -webkit-mask: var(--e) center / contain no-repeat; mask: var(--e) center / contain no-repeat; }
+/* ¥の印：トップの揉蔵についてと、求人の働き方の両方で使う */
+.e-purse { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='24' r='10.5'/%3E%3Cpath d='M19.8 17.8l4.2 5.6 4.2-5.6M24 23.4V31M20.2 24.8h7.6M20.2 27.8h7.6'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== 共通：印ここまで ===== */
 
 /* ===== 共通：飾り枠 ===== */
@@ -435,10 +434,9 @@ html.has-menu { overflow: hidden; }
 .notice { margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); }   /* 面と飾り枠は「共通：飾り枠」 */
 /* お知らせの見出し：印（12の円・中の点の直径4）→8→ 文（14・400・soft・行間1.4）。
    印は、お知らせがあるときは accent、ないときは faint */
-.notice h2 { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
+.notice h2 { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); margin: 0 0 var(--gap-list); }
 .notice h2::before { content: ""; flex: none; box-sizing: border-box; width: var(--sp-3); height: var(--sp-3); border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2px, transparent 2.5px); transition: border-color var(--dur-base) var(--ease-out); }
 .notice[data-state="list"] h2::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2px, transparent 2.5px); }
-.notice h2 { margin: 0 0 var(--gap-list); }
 .notice-list { list-style: none; }
 /* お知らせの部分は本文8行分の高さまで。超えたらその中でスクロールする（ページの枠も別窓も同じ）。
    続きがあるあいだは、下の1行分を薄くして続きを見せる（スクリプトが .more を付け外し） */
@@ -499,7 +497,6 @@ html.has-menu { overflow: hidden; }
 
 /* ---------- 印（揉蔵についての3つ：手・¥・スタンプカード）。形は「共通：印」 ---------- */
 .e-hand { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Cpath d='M20.4 35.5l-.8-5.4c-1.4-1.2-3.4-3.2-4.8-5.2-.8-1.1.4-2.4 1.6-1.6l2.8 2.2V15.8a1.3 1.3 0 0 1 2.6 0V23M22 23V13.6a1.3 1.3 0 0 1 2.6 0V23M24.6 23V14.6a1.3 1.3 0 0 1 2.6 0V23.4M27.2 23.4v-6.6a1.3 1.3 0 0 1 2.6 0v10c0 3-1.2 5-2 6.2l-.2 2.5'/%3E%3C/g%3E%3C/svg%3E"); }
-.e-purse { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='24' r='10.5'/%3E%3Cpath d='M19.8 17.8l4.2 5.6 4.2-5.6M24 23.4V31M20.2 24.8h7.6M20.2 27.8h7.6'/%3E%3C/g%3E%3C/svg%3E"); }
 .e-stamp { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Crect x='12.5' y='16' width='23' height='16' rx='1.5'/%3E%3Ccircle cx='17.6' cy='21.4' r='1.8'/%3E%3Ccircle cx='24' cy='21.4' r='1.8'/%3E%3Ccircle cx='30.4' cy='21.4' r='1.8'/%3E%3Ccircle cx='17.6' cy='27.2' r='1.8'/%3E%3Ccircle cx='24' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3Ccircle cx='30.4' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== このページだけここまで ===== */
 </style>
@@ -751,8 +748,8 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
 
 /* ===== 共通：三本線のメニュー ===== */
 /* 三本線で開き、閉じる印・幕・Esc で閉じる（閉じたら三本線に戻る）。開いている間はページを動かさない（html の has-menu）。
-   data-soon のリンク（準備中のページ）は、三本線の中でも本文の中でも移動せず、「準備中です」を3秒出す
-   （三本線の中はその行の右の .menu-soon、本文の中は data-soon の値の id の要素）。
+   三本線の中の data-soon のリンク（準備中のページ）は移動せず、その行の右の .menu-soon に「準備中です」を3秒出す
+   （準備中のページを作るときは <a href="…" data-soon>名前<span class="menu-soon" aria-live="polite"></span></a> にする）。
    トップの営業状況のバー（#status）が出ている間は、三本線をバーの高さだけ下げる */
 (() => {
   const btn = document.getElementById("menu-btn");
@@ -764,8 +761,8 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
   menu.addEventListener("close", () => { root.classList.remove("has-menu"); btn.setAttribute("aria-expanded", "false"); btn.focus(); });
   menu.querySelector(".menu-close").addEventListener("click", () => menu.close());
   menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });   // 幕を押したとき
-  document.querySelectorAll("a[data-soon]").forEach((a) => {
-    const note = a.querySelector(".menu-soon") || document.getElementById(a.dataset.soon);
+  menu.querySelectorAll("a[data-soon]").forEach((a) => {
+    const note = a.querySelector(".menu-soon");
     if (!note) return;
     let timer;
     a.addEventListener("click", (e) => {
