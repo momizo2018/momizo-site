@@ -52,12 +52,12 @@
 
   /* 間隔（役割で選ぶ） */
   --gap-tight: var(--sp-1);     /*  4 名前のすぐ下の添え書き、表の項目名→内容 */
-  --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、ナビ・ページの行の項目どうしの最小、特徴の札どうし、写真どうし、コース名→施術名 */
+  --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、特徴の札どうし、写真どうし、コース名→施術名 */
   --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
-  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
-  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
-  --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、フッターの各段の間 */
-  --gap-logo: var(--sp-12);     /* 48 ヘッダーのロゴ→ページの行（ロゴを独立させる） */
+  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目の行どうし */
+  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身、ナビの項目どうし（横） */
+  --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、ナビの帯の上、フッターのロゴ→著作権表示 */
+  --gap-logo: var(--sp-12);     /* 48 （いまは使っていない） */
   --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
   --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
 
@@ -148,14 +148,12 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
 
-/* ---------- ヘッダー：ロゴ → ページの行 → 区切り線 → そのページのナビ ---------- */
+/* ---------- ヘッダー：ロゴだけ（右上に三本線のメニュー。「共通：三本線のメニュー」）。全ページで同じ形 ---------- */
 /* ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
 .head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
 /* 帯の縁は二重線（面の端の線 →2→ もう1本）。配置を動かさないよう、線は影と重ねて描く */
 .head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
-/* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
-.head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-24); }
 
 /* ロゴ：momizo（Fraunces 340・ink-2）→ relaxation salon（Fraunces イタリック 350・soft）の2段。
    Fraunces はセリフの角を丸くできるクラシックなセリフ体で、角の丸さ（SOFT）を最大にして使う。ロゴだけの書体（文中では使わない）。
@@ -170,13 +168,12 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .site-foot .brand-name { font-size: var(--fs-logo-foot); }
 .site-foot .brand-sub { font-size: var(--fs-logo-foot-sub); }
 
-/* ナビとリンクの行：左右の端までそろえて1行に。
-   ページの行はヘッダーとフッターで同じ（トップ → コースと料金 → セラピスト募集。今いるページは faint で、リンクにしない） */
-.nav, .link-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-item); }
-.nav { margin-top: var(--gap-head); }
-.nav a, .link-row a, .link-row span { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
-.link-row [aria-current] { color: var(--faint); }
-@media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover, .link-row a:hover { color: var(--ink-2); } }
+/* ページ内の目次：本文の頭（ページの題とひとことの下。トップはヒーローの下）に、上下を点線で挟んだ帯で置く。目次のないページには置かない。
+   項目は見出しと同じ言葉（省略しない）で、左から並べ、入りきらなければ折り返して左にそろえる（14px・muted。項目どうし横24・縦16）。
+   押せる範囲は上下に8ずつ広げる（縦に並んだ項目どうしで接する） */
+.nav { display: flex; flex-wrap: wrap; gap: var(--gap-head) var(--gap-block); margin-top: var(--gap-section); padding: var(--gap-head) 0; border-top: var(--bw) dashed var(--ink-24); border-bottom: var(--bw) dashed var(--ink-24); }
+.nav a { padding: var(--gap-item) 0; margin: calc(var(--gap-item) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
+@media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover { color: var(--ink-2); } }
 
 /* ---------- 見出し：日本語だけ。ページの題とセクション見出しは明朝20・500、小見出しは明朝16・600 ---------- */
 h1, h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
@@ -195,7 +192,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
    カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（card-64 → card）とぼかし。影と角丸は付けない。
    上の区切り線は中身の幅だけ。項目どうしは短い縦線で区切る。文字はボタンと同じ 16px・500・ink-2。
-   data-until の要素（トップ・メニューはフッター、求人はフォーム）が画面に入ったら、下へ引っ込める ---------- */
+   data-until の要素（求人はフォーム、ほかは著作権表示）が画面に入ったら、下へ引っ込める ---------- */
 .dock {
   position: fixed; left: 50%; bottom: 0; z-index: 10;
   width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
@@ -225,17 +222,61 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .dock a:hover { opacity: var(--dim); } }
 
-/* ---------- フッター：ロゴ → ページの行 → 区切り線 → 外部 → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる） ---------- */
+/* ---------- フッター：ロゴ → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる）。全ページで同じ形 ---------- */
 /* 上の空き96に、スクリプトが1px未満（--foot-nudge）を足して、フッターの面の上の端を画面のピクセルのちょうどにそろえる（「共通：フッターの位置」） */
 .site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
 .foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48); }
 .foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
-.foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) dashed var(--ink-24); }
-.foot-ext { margin-top: var(--gap-head); }   /* 線の上下16。押せる範囲は線のところで接する */
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ===== 共通：土台ここまで ===== */
+
+/* ===== 共通：三本線のメニュー ===== */
+/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはページの行を置かない）。
+   三本線：画面の右上に固定（カードの右上の内側にそろえる）。写真の送りボタンと同じ半透明の丸（paper-64、32）。
+   トップの営業状況のバーが出ている間は、バーの高さだけ下げる（スクリプトが --menu-bar を入れる）。お知らせの別窓を開いている間は隠す。
+   開くと、カードと同じ面の板が画面の上から下りてくる（幅は画面下のメニューと同じ）。後ろは paper-64 の幕で、ページは動かさない。
+   中身：ページ（今いるページは faint で、リンクにしない）→32→ 外のリンク。行は点線で区切り、行の上下12。閉じる印・幕・Esc で閉じる */
+.menu-btn {
+  position: fixed; z-index: 10;
+  top: calc(env(safe-area-inset-top, 0px) + var(--page-pad) + var(--card-pad-y) + var(--menu-bar, 0px));
+  right: calc(max(var(--page-pad), (100% - var(--card-w)) / 2) + var(--card-pad-x));
+  width: var(--arrow); height: var(--arrow); display: grid; place-items: center; padding: 0; cursor: pointer;
+  border: var(--bw) solid transparent; border-radius: 50%; background: var(--paper-64); color: var(--muted);
+  transition: top var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+.menu-btn svg { display: block; }
+@media (hover: hover) { .menu-btn:hover { background: var(--accent); color: var(--on-accent); } }
+.has-pop .menu-btn { visibility: hidden; }
+html.has-menu { overflow: hidden; }
+.menu {
+  position: fixed; inset: 0 0 auto; margin: 0 auto; padding: 0; border: 0;
+  width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); max-width: none; max-height: 100%;
+  overflow: auto; overscroll-behavior: contain;
+  border-radius: 0 0 var(--r-md) var(--r-md); background: var(--card); color: var(--ink-2); box-shadow: var(--shadow-card);
+}
+.menu::backdrop { background: var(--paper-64); }
+@media (prefers-reduced-motion: no-preference) { .menu[open] { animation: menu-in var(--dur-base) var(--ease-out); } }
+@keyframes menu-in { from { translate: 0 -100%; opacity: 0; } }
+.menu-body { padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad) + var(--card-pad-y)) var(--card-pad-x) var(--card-pad-y); }
+.menu-close {
+  position: relative; display: block; width: var(--arrow); height: var(--arrow); margin-left: auto; padding: 0; cursor: pointer;
+  border: var(--bw) solid transparent; border-radius: 50%; background: var(--accent-08); color: var(--muted);
+}
+.menu-close::before, .menu-close::after { content: ""; position: absolute; left: 50%; top: 50%; width: var(--sp-3); height: var(--bw); margin: calc(var(--bw) / -2) 0 0 calc(var(--sp-3) / -2); background: currentColor; rotate: 45deg; }
+.menu-close::after { rotate: -45deg; }
+@media (hover: hover) { .menu-close:hover { background: var(--accent); color: var(--on-accent); } }
+.menu-list { list-style: none; margin-top: var(--gap-head); border-top: var(--bw) dashed var(--ink-24); }
+.menu-list + .menu-list { margin-top: var(--gap-section); }
+.menu-list li { border-bottom: var(--bw) dashed var(--ink-24); }
+.menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
+.menu-list [aria-current] { color: var(--faint); }
+.menu-soon { font-size: var(--fs-sm); color: var(--soft); }   /* 準備中のページを押したときだけ「準備中です」 */
+.soon-note { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }   /* 本文の中の準備中のリンクの下。空のときは高さ0 */
+.soon-note:not(:empty) { margin-top: var(--gap-list); }
+@media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
+/* ===== 共通：三本線のメニューここまで ===== */
 
 /* ===== 共通：写真の枠 ===== */
 /* 写真は角丸の枠に入れず、カードの端から端まで広げる（はじめての方への帯と同じ広げ方）。
@@ -500,12 +541,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   <div class="wrap">
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
   </div>
-  <nav class="link-row head-pages" aria-label="ページ">
-    <span aria-current="page">トップ</span><a href="menu/">コースと料金</a><a href="recruit/">セラピスト募集</a>
-  </nav>
-  <nav class="nav" aria-label="このページの目次">
-    <a href="#benefit">はじめての方へ</a><a href="#hours">営業時間</a><a href="#access">アクセス</a>
-  </nav>
 </header>
 
 <main>
@@ -521,6 +556,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
       <div class="ph hero-ph"><img src="assets/img/hero-1.webp" alt="店の外観。レンガの建物の1階に、看板とガラス張りの入口" width="747" height="560" decoding="async"><img src="assets/img/hero-2.webp" alt="待合の一角。ランプの灯る丸テーブルと、料金表" width="420" height="560" decoding="async"><img src="assets/img/hero-3.webp" alt="店内。窓ぎわのカーテンと、施術用のベッド" width="747" height="560" loading="lazy" decoding="async"><img src="assets/img/hero-4.webp" alt="店内。カーテンで仕切って並ぶ施術用のベッド" width="747" height="560" loading="lazy" decoding="async"><img src="assets/img/hero-5.webp" alt="受付カウンターと、奥の更衣スペース" width="747" height="560" loading="lazy" decoding="async"></div>
     </div>
   </section>
+
+  <nav class="nav" aria-label="このページの目次">
+    <a href="#staff">スタッフ紹介</a><a href="#benefit">はじめての方へ</a><a href="#hours">営業時間</a><a href="#access">アクセス</a><a href="#careers">セラピスト募集</a>
+  </nav>
 
   <section class="sec" id="about">
     <div class="wrap">
@@ -547,6 +586,14 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
         </ul>
         <div class="more"><a class="btn ghost" href="menu/">コースと料金を見る</a></div>
       </div>
+    </div>
+  </section>
+
+  <section class="sec" id="staff">
+    <div class="wrap">
+      <h2>スタッフ紹介</h2>
+      <p class="sec-note">施術を担当するセラピストをご紹介します。担当者は、ご予約のときにご指名いただけます。</p>
+      <a class="btn ghost" href="staff/">スタッフ紹介を見る</a>
     </div>
   </section>
 
@@ -619,12 +666,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 <footer class="site-foot">
   <div class="foot-body">
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
-    <nav class="link-row foot-pages" aria-label="ページ">
-      <span aria-current="page">トップ</span><a href="menu/">コースと料金</a><a href="recruit/">セラピスト募集</a>
-    </nav>
-    <nav class="link-row foot-ext" aria-label="予約と連絡">
-      <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEB予約</a><a href="tel:0287339178">電話</a><a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a><a href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener">口コミを書く</a>
-    </nav>
     <p class="footer" lang="en">&copy; 2026 relaxation salon momizo</p>
   </div>
 </footer>
@@ -641,7 +682,26 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   <p id="status-text"></p>
   <button class="topbar-close" type="button" aria-label="営業状況を閉じる"></button>
 </aside>
-<nav class="dock" id="dock" data-until=".site-foot" aria-label="ご予約">
+<!-- ===== 三本線のメニュー（4ページで同じ。今いるページだけ aria-current の span にする） ===== -->
+<button class="menu-btn" id="menu-btn" type="button" aria-label="メニューを開く" aria-haspopup="dialog" aria-expanded="false" aria-controls="site-menu"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M0 .5h16M0 6h16M0 11.5h16" stroke="currentColor" stroke-width="1"/></svg></button>
+<dialog class="menu" id="site-menu" aria-label="メニュー">
+  <div class="menu-body">
+    <button class="menu-close" type="button" aria-label="メニューを閉じる"></button>
+    <nav aria-label="ページ"><ul class="menu-list">
+      <li><span aria-current="page">トップ</span></li>
+      <li><a href="menu/">コースと料金</a></li>
+      <li><a href="staff/">スタッフ紹介</a></li>
+      <li><a href="recruit/">セラピスト募集</a></li>
+    </ul></nav>
+    <nav aria-label="予約と連絡"><ul class="menu-list">
+      <li><a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEBで予約する</a></li>
+      <li><a href="tel:0287339178">電話をかける</a></li>
+      <li><a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINEを開く</a></li>
+      <li><a href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener">口コミを書く</a></li>
+    </ul></nav>
+  </div>
+</dialog>
+<nav class="dock" id="dock" data-until=".footer" aria-label="ご予約">
   <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEBで予約する</a>
   <a href="tel:0287339178">電話をかける</a>
 </nav>
@@ -689,6 +749,44 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
 })();
 /* ===== このページだけここまで ===== */
 
+/* ===== 共通：三本線のメニュー ===== */
+/* 三本線で開き、閉じる印・幕・Esc で閉じる（閉じたら三本線に戻る）。開いている間はページを動かさない（html の has-menu）。
+   data-soon のリンク（準備中のページ）は、三本線の中でも本文の中でも移動せず、「準備中です」を3秒出す
+   （三本線の中はその行の右の .menu-soon、本文の中は data-soon の値の id の要素）。
+   トップの営業状況のバー（#status）が出ている間は、三本線をバーの高さだけ下げる */
+(() => {
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("site-menu");
+  if (!btn || !menu) return;
+  const root = document.documentElement;
+  if (typeof menu.showModal !== "function") { btn.hidden = true; return; }
+  btn.addEventListener("click", () => { menu.showModal(); root.classList.add("has-menu"); btn.setAttribute("aria-expanded", "true"); });
+  menu.addEventListener("close", () => { root.classList.remove("has-menu"); btn.setAttribute("aria-expanded", "false"); btn.focus(); });
+  menu.querySelector(".menu-close").addEventListener("click", () => menu.close());
+  menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });   // 幕を押したとき
+  document.querySelectorAll("a[data-soon]").forEach((a) => {
+    const note = a.querySelector(".menu-soon") || document.getElementById(a.dataset.soon);
+    if (!note) return;
+    let timer;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      note.textContent = "準備中です";
+      clearTimeout(timer);
+      timer = setTimeout(() => { note.textContent = ""; }, 3000);
+    });
+  });
+  const bar = document.getElementById("status");
+  if (bar) {
+    const place = () => {
+      const on = bar.isConnected && bar.classList.contains("on") && !bar.classList.contains("hide");
+      root.style.setProperty("--menu-bar", on ? bar.offsetHeight + "px" : "0px");
+    };
+    new MutationObserver(place).observe(bar, { attributes: true, attributeFilter: ["class"] });
+    if (window.ResizeObserver) new ResizeObserver(place).observe(bar);
+    place();
+  }
+})();
+/* ===== 共通：三本線のメニューここまで ===== */
 /* ===== 共通：画面下のメニュー ===== */
 /* 画面下のメニュー：data-until の要素（フッターやフォーム）が画面に入ったら、下へ引っ込める */
 (() => {
@@ -734,10 +832,12 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
 <script>
 /* ===== 共通：写真の送りボタン ===== */
 /* 写真の枠：2枚以上の枠にだけ、マウス向けの送りボタン（矢印の丸）を付ける。端まで来た側は消す。
-   動きを減らす設定の人には、なめらかに送らず、すぐ動かす */
+   動きを減らす設定の人には、なめらかに送らず、すぐ動かす。
+   あとから並べた写真の枠（スタッフ紹介など）には、並べたあとに window.phButtons(並べた場所) を呼ぶ（付け済みの枠は飛ばす） */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)");
-document.querySelectorAll(".ph").forEach((ph) => {
-  if (ph.children.length < 2) return;
+const phButtons = (root) => root.querySelectorAll(".ph").forEach((ph) => {
+  if (ph.dataset.btn || ph.children.length < 2) return;
+  ph.dataset.btn = "1";
   const box = document.createElement("div");
   box.className = "ph-box";
   ph.before(box);
@@ -763,6 +863,8 @@ document.querySelectorAll(".ph").forEach((ph) => {
   ph.querySelectorAll("img").forEach((img) => img.addEventListener("load", update));
   update();
 });
+phButtons(document);
+window.phButtons = phButtons;
 /* ===== 共通：写真の送りボタンここまで ===== */
 </script>
 <script>
