@@ -55,7 +55,6 @@
   --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目の行どうし */
   --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身、ナビの項目どうし（横） */
   --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、ナビの帯の上、フッターのロゴ→著作権表示 */
-  --gap-logo: var(--sp-12);     /* 48 （いまは使っていない） */
   --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
   --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
 
@@ -89,7 +88,7 @@
   --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
   --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
   --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位、お知らせの見出し */
+  --fs-sm: 14px;     /* 補足・注意書き、ナビ、著作権表示、コースの施術名、表の単位、お知らせの見出し */
   --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
   --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
@@ -231,7 +230,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
-/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはページの行を置かない）。
+/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはリンクの行を置かない）。
    三本線：画面の右上に固定（カードの右上の内側にそろえる）。写真の送りボタンと同じ半透明の丸（paper-64、32）。
    トップの営業状況のバーが出ている間は、バーの高さだけ下げる（スクリプトが --menu-bar を入れる）。お知らせの別窓を開いている間は隠す。
    開くと、カードと同じ面の板が画面の上から下りてくる（幅は画面下のメニューと同じ）。後ろは paper-64 の幕で、ページは動かさない。
@@ -271,8 +270,6 @@ html.has-menu { overflow: hidden; }
 .menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
 .menu-list [aria-current] { color: var(--faint); }
 .menu-soon { font-size: var(--fs-sm); color: var(--soft); }   /* 準備中のページを押したときだけ「準備中です」 */
-.soon-note { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }   /* 本文の中の準備中のリンクの下。空のときは高さ0 */
-.soon-note:not(:empty) { margin-top: var(--gap-list); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
 
@@ -353,6 +350,8 @@ html.has-menu { overflow: hidden; }
 .e { --mark: var(--sp-8); display: grid; grid-template-columns: var(--mark) minmax(0, 1fr); column-gap: var(--gap-head); align-content: start; }
 .e > * { grid-column: 2; }
 .e::before { content: ""; grid-column: 1; grid-row: 1 / span 2; width: var(--mark); height: var(--mark); background: var(--accent); -webkit-mask: var(--e) center / contain no-repeat; mask: var(--e) center / contain no-repeat; }
+/* ¥の印：トップの揉蔵についてと、求人の働き方の両方で使う */
+.e-purse { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='24' r='10.5'/%3E%3Cpath d='M19.8 17.8l4.2 5.6 4.2-5.6M24 23.4V31M20.2 24.8h7.6M20.2 27.8h7.6'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== 共通：印ここまで ===== */
 
 /* ===== 共通：題と副題 ===== */
@@ -370,9 +369,15 @@ html.has-menu { overflow: hidden; }
 .notice::before, .big::before, .done::before { content: ""; position: absolute; inset: var(--sp-2); border: var(--bw) solid var(--accent-48); border-radius: calc(var(--r-md) - var(--sp-2)); pointer-events: none; }
 /* ===== 共通：飾り枠ここまで ===== */
 
+/* ===== 共通：ページの題 ===== */
+/* ページの題（トップ以外）：題の上の空き64。題 → 飾り罫 →32→ ひとこと（小見出しと同じ明朝16px・600・ink-2）→16→ 本文 */
+.page-title { padding-top: var(--page-group); }
+.lead { font-family: var(--font-heading); font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
+.lead + p { margin-top: var(--gap-head); }
+/* ===== 共通：ページの題ここまで ===== */
+
 /* ===== このページだけ：セラピスト募集 ===== */
 /* ---------- ページの題：h1 →32→ 本文 →24→ 特徴の札 →32→「65%」の箱 ---------- */
-.page-title { padding-top: var(--page-group); }
 /* 特徴の札：形は「共通：ラベル」 */
 .tags { margin-top: var(--gap-block); }
 /* 「65%」の箱：飾り枠の箱。「65」だけ固有値（72px、字間 -0.02em。字間は「%」に引き継がないよう px で持つ） */
@@ -483,7 +488,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
 .done h3 { margin-bottom: var(--gap-head); }   /* 小見出し→中身16 */
 
 /* ---------- 印（働き方の8つ：お金→時間→仕事の中身→店舗の順）。形は「共通：印」 ---------- */
-.e-purse { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='24' r='10.5'/%3E%3Cpath d='M19.8 17.8l4.2 5.6 4.2-5.6M24 23.4V31M20.2 24.8h7.6M20.2 27.8h7.6'/%3E%3C/g%3E%3C/svg%3E"); }
 .e-towels { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Cpath d='M33.5 30.5H16.2a2.6 2.6 0 0 1 0-5.2h17.3zM32 25.3H17.6a2.6 2.6 0 0 1 0-5.2H32z'/%3E%3Cpath d='M14 33.8h20'/%3E%3C/g%3E%3C/svg%3E"); }
 .e-paper { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Cpath d='M16.5 12.5h10.5l5 5V35.5H16.5z'/%3E%3Cpath d='M27 12.5v5h5M20 22.5h8.5M20 26.5h8.5M20 30.5h5.5'/%3E%3C/g%3E%3C/svg%3E"); }
 .e-watch { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='25.5' r='9.5'/%3E%3Cpath d='M24 25.5v-5.5M24 25.5l3.6 2.2M22 14.2h4M24 14.2V16'/%3E%3C/g%3E%3C/svg%3E"); }
@@ -540,7 +544,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
   <!-- ===== ページの題 ===== -->
   <div class="page-title">
     <h1>リラクゼーションセラピスト募集</h1>
-    <p>他店でのご経験をそのまま活かせます。</p>
+    <p class="lead">他店でのご経験をそのまま活かせます。</p>
   </div>
   <nav class="nav" aria-label="このページの目次">
     <a href="#reward">報酬早見表</a><a href="#workstyle">働き方</a><a href="#details">募集要項</a><a href="#salon">店舗情報</a><a href="#apply">ご応募</a>
@@ -808,8 +812,8 @@ main #form-msg { margin-top: 0; color: var(--err); }
 <script>
 /* ===== 共通：三本線のメニュー ===== */
 /* 三本線で開き、閉じる印・幕・Esc で閉じる（閉じたら三本線に戻る）。開いている間はページを動かさない（html の has-menu）。
-   data-soon のリンク（準備中のページ）は、三本線の中でも本文の中でも移動せず、「準備中です」を3秒出す
-   （三本線の中はその行の右の .menu-soon、本文の中は data-soon の値の id の要素）。
+   三本線の中の data-soon のリンク（準備中のページ）は移動せず、その行の右の .menu-soon に「準備中です」を3秒出す
+   （準備中のページを作るときは <a href="…" data-soon>名前<span class="menu-soon" aria-live="polite"></span></a> にする）。
    トップの営業状況のバー（#status）が出ている間は、三本線をバーの高さだけ下げる */
 (() => {
   const btn = document.getElementById("menu-btn");
@@ -821,8 +825,8 @@ main #form-msg { margin-top: 0; color: var(--err); }
   menu.addEventListener("close", () => { root.classList.remove("has-menu"); btn.setAttribute("aria-expanded", "false"); btn.focus(); });
   menu.querySelector(".menu-close").addEventListener("click", () => menu.close());
   menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });   // 幕を押したとき
-  document.querySelectorAll("a[data-soon]").forEach((a) => {
-    const note = a.querySelector(".menu-soon") || document.getElementById(a.dataset.soon);
+  menu.querySelectorAll("a[data-soon]").forEach((a) => {
+    const note = a.querySelector(".menu-soon");
     if (!note) return;
     let timer;
     a.addEventListener("click", (e) => {
