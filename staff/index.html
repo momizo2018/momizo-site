@@ -271,35 +271,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 @media (hover: hover) and (pointer: fine) { .ph-btn { display: grid; } .ph-btn:hover { background: var(--accent); color: var(--on-accent); } }
 /* ===== 共通：写真の枠ここまで ===== */
 
-/* ===== 共通：項目と内容の表・地図・線のボタン ===== */
-/* 項目と内容の表（.rows と組み合わせる）：項目名（soft）→4→ 内容。
-   項目名を上に置くので、画面が狭くても内容の幅を取れる */
-.info { display: grid; }
-.info > div { display: grid; gap: var(--gap-tight); }
-.info dt { color: var(--soft); }
-.hours dd { font-variant-numeric: tabular-nums; }
-
-/* 地図：3:2（固有値）。色味は少し落ち着かせる */
-.mapbox { border-radius: var(--r-md); overflow: hidden; background: var(--paper); aspect-ratio: 3 / 2; }
-.mapbox iframe { display: block; width: 100%; height: 100%; border: 0; filter: grayscale(.5) sepia(.3) brightness(.8); }
-
-/* 線のボタン（外部サイトへのリンク）：左に名前、右に矢印の丸 */
-.line {
-  display: flex; align-items: center; justify-content: space-between; gap: var(--gap-head);
-  min-height: var(--size-control); padding: var(--pad-part);
-  border: var(--bw) solid transparent; border-radius: var(--r-md); background-color: var(--accent-08); text-decoration: none;
-  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
-}
-.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-ui); }
-.line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--card); line-height: var(--lh-none); color: var(--muted); }
-.line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
-@media (hover: hover) { .line:hover { background-color: var(--ink-08); transform: translateY(var(--lift)); } }
-/* 帯の上の線のボタンは、帯と逆にカードの面。矢印の丸はいつも箱と逆の面 */
-.band .line { background-color: var(--card); }
-.band .line-arrow { background: var(--accent-16); }
-.maplink { margin-top: var(--gap-list); }   /* 地図→地図のボタン12 */
-/* ===== 共通：項目と内容の表・地図・線のボタンここまで ===== */
-
 /* ===== 共通：ラベル ===== */
 /* 特徴の札（図書館のラベルのような札）：縁 accent-48・角丸4・面 accent-08・14px・muted。札どうし8で折り返して並べる。
    求人ページの題の下の特徴の札と、トップの揉蔵についての特徴の一覧 */
@@ -320,14 +291,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .lead { font-family: var(--font-heading); font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
 
-/* ---------- 1人分：写真 →32→ 名前（副題：役職）→16→ 性別の札 →16→ 心がけていること →32→ 得意・苦手・ひとことの表 ----------
-   写真は「共通：写真の枠」（横にスクロール。2枚以上も可）。写真がない人は枠ごと出さない */
+/* ---------- 1人分：写真 →32→ 名前（副題：役職）→16→ 札（性別・担当コース）→16→ コメント →16→ 施術歴 ----------
+   写真は「共通：写真の枠」（横にスクロール。2枚以上も可）。写真がない人は枠ごと出さない。空の項目は出さない */
 .staff-list { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
 .staff .ph + .name { margin-top: var(--gap-section); }
-.staff .tags { margin-top: var(--gap-head); }
-.staff .care { margin-top: var(--gap-head); white-space: pre-line; }   /* シートのセルの中の改行はそのまま */
-.staff .info { margin-top: var(--gap-section); }
-.staff .info dd { white-space: pre-line; }
+.staff .tags, .staff .comment, .staff .career { margin-top: var(--gap-head); }
+.staff .comment { white-space: pre-line; }   /* シートのセルの中の改行はそのまま */
+.staff .career { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 
 /* ---------- 読み込みの状態：読み込み中は空きを取り、中身はふわっと出す ---------- */
 .staff-box[data-state="loading"] .staff-list { min-height: var(--ph-min, 280px); }
@@ -465,27 +435,35 @@ document.querySelectorAll(".ph").forEach((ph) => {
 </script>
 <script>
 /* セラピスト紹介：「スタッフ」シートから読み込んで並べる（作りかけ）
-   ・シートの列は位置で読む（A 写真・B 名前・C 役職・D 性別・E 心がけていること・F 得意・G 苦手・H ひとこと）。読むのは Apps Script の getStaff_
+   ・シートの列は位置で読む（A 写真・B 名前・C 役職・D 性別・E 担当コース・F コメント・G 施術歴）。読むのは Apps Script の getStaff_
    ・写真：assets/img/staff/ に置いた WebP のファイル名（拡張子なし）。2枚以上は「、」か空白で区切る。空なら写真の枠ごと出さない
+   ・担当コース：「ボディ、ヘッド」のように短く書けば、メニューの名前（ボディコースなど）の札にする。並びはメニューの順
+   ・施術歴：始めた年。今年との差を「施術歴〇年」と出す（年が明けると自動で増える）
    ・空の項目は出さない。名前が空の行は Apps Script の側で飛ばす
    ・前回読み込んだ中身（localStorage）があれば先に出し、新しい中身が届いたら差し替える
    ・Apps Script がまだスタッフに対応していない（type=staff を知らない）ときは、見本を出す
    ・課題：あとから並べた写真には、マウス向けの送りボタン（「共通：写真の送りボタン」）が付かない。統合の前に直す */
 (() => {
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=staff";
-  const KEY = "momizo-staff";
+  const KEY = "momizo-staff-2";
+  const COURSES = ["ボディ", "ヘッド", "フット", "フル"];
   const box = document.getElementById("staff");
   const list = document.getElementById("staff-list");
   const SAMPLE = [
-    { photo: [{ src: "../assets/img/course-head.webp", alt: "見本の写真" }], name: "見本 さくら", role: "店長", gender: "女性",
-      care: "お話を伺いながら、その日のお疲れに合わせて力加減を変えています。\n終わったあとに体が軽くなったと感じていただけるよう、丁寧にほぐします。",
-      good: "肩まわり、強めの力加減", weak: "とても弱い力加減", note: "休日は温泉めぐりをしています。" },
-    { photo: [], name: "見本 たろう", role: "セラピスト", gender: "男性",
-      care: "初めての方にも安心していただけるよう、施術の前にご希望をしっかり伺います。",
-      good: "足つぼ・リフレクソロジー", weak: "", note: "" },
+    { photo: [{ src: "../assets/img/course-head.webp", alt: "見本の写真" }], name: "見本 さくら", role: "店長", gender: "女性", courses: "ボディ、ヘッド",
+      comment: "お話を伺いながら、その日のお疲れに合わせて力加減を変えています。\n肩まわりのこりをほぐすのが得意です。休日は温泉めぐりをしています。", since: 2015 },
+    { photo: [], name: "見本 たろう", role: "スタッフ", gender: "男性", courses: "",
+      comment: "初めての方にも安心していただけるよう、施術の前にご希望をしっかり伺います。", since: "" },
   ];
   const txt = (v) => String(v == null ? "" : v).replace(/\r\n?/g, "\n").trim();
   const photos = (v) => Array.isArray(v) ? v : String(v || "").split(/[\s,、]+/).filter((n) => /^[\w-]+$/.test(n)).map((n) => ({ src: "../assets/img/staff/" + n + ".webp" }));
+  const courses = (v) => { const s = String(v || ""); return COURSES.filter((c) => s.includes(c)).map((c) => c + "コース"); };
+  const career = (v) => {
+    const y = parseInt(String(v || "").replace(/[０-９]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 0xFEE0)), 10);
+    const now = new Date().getFullYear();
+    if (!(y >= 1950 && y <= now)) return "";
+    return now - y < 1 ? "施術歴1年未満" : "施術歴" + (now - y) + "年";
+  };
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
   const card = (p) => {
     const name = txt(p.name);
@@ -499,14 +477,11 @@ document.querySelectorAll(".ph").forEach((ph) => {
     const h = el("h2", "name", name);
     if (txt(p.role)) h.append(el("small", null, txt(p.role)));
     a.append(h);
-    if (txt(p.gender)) { const t = el("ul", "tags"); t.append(el("li", null, txt(p.gender))); a.append(t); }
-    if (txt(p.care)) a.append(el("p", "care", txt(p.care)));
-    const rows = [["得意", p.good], ["苦手", p.weak], ["ひとこと", p.note]].filter(([, v]) => txt(v));
-    if (rows.length) {
-      const dl = el("dl", "info rows");
-      rows.forEach(([k, v]) => { const d = el("div"); d.append(el("dt", null, k), el("dd", null, txt(v))); dl.append(d); });
-      a.append(dl);
-    }
+    const tags = [txt(p.gender), ...courses(p.courses)].filter(Boolean);
+    if (tags.length) { const t = el("ul", "tags"); tags.forEach((x) => t.append(el("li", null, x))); a.append(t); }
+    if (txt(p.comment)) a.append(el("p", "comment", txt(p.comment)));
+    const c = career(p.since);
+    if (c) a.append(el("p", "career", c));
     return a;
   };
   const show = (people, state) => {
