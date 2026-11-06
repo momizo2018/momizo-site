@@ -12,6 +12,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://drive.google.com">   <!-- スタッフの写真はGoogleドライブから -->
+<link rel="preconnect" href="https://lh3.googleusercontent.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..500&family=Zen+Kaku+Gothic+New:wght@400;500&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,24,340,100,0;1,18,350,100,0&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="icon" href="../assets/icon/icon-192.png" sizes="192x192" type="image/png">
@@ -436,7 +438,8 @@ document.querySelectorAll(".ph").forEach((ph) => {
 <script>
 /* セラピスト紹介：「スタッフ」シートから読み込んで並べる（作りかけ）
    ・シートの列は位置で読む（A 写真・B 名前・C 役職・D 性別・E 担当コース・F コメント・G 施術歴）。読むのは Apps Script の getStaff_
-   ・写真：assets/img/staff/ に置いた WebP のファイル名（拡張子なし）。2枚以上は「、」か空白で区切る。空なら写真の枠ごと出さない
+   ・写真：Googleドライブの写真のID（Apps Script が共有リンクから取り出して返す）。ドライブの縮小画像（横960）を読み込む。
+     読み込めなかった写真は外し、1枚も残らなければ写真の枠ごと外す。写真がない人も枠を出さない
    ・担当コース：「ボディ、ヘッド」のように短く書けば、メニューの名前（ボディコースなど）の札にする。並びはメニューの順
    ・施術歴：始めた年。今年との差を「施術歴〇年」と出す（年が明けると自動で増える）
    ・空の項目は出さない。名前が空の行は Apps Script の側で飛ばす
@@ -456,7 +459,7 @@ document.querySelectorAll(".ph").forEach((ph) => {
       comment: "初めての方にも安心していただけるよう、施術の前にご希望をしっかり伺います。", since: "" },
   ];
   const txt = (v) => String(v == null ? "" : v).replace(/\r\n?/g, "\n").trim();
-  const photos = (v) => Array.isArray(v) ? v : String(v || "").split(/[\s,、]+/).filter((n) => /^[\w-]+$/.test(n)).map((n) => ({ src: "../assets/img/staff/" + n + ".webp" }));
+  const photos = (v) => Array.isArray(v) ? v : String(v || "").split(/[\s,、]+/).filter((id) => /^[\w-]{20,}$/.test(id)).map((id) => ({ src: "https://drive.google.com/thumbnail?id=" + id + "&sz=w960" }));
   const courses = (v) => { const s = String(v || ""); return COURSES.filter((c) => s.includes(c)).map((c) => c + "コース"); };
   const career = (v) => {
     const y = parseInt(String(v || "").replace(/[０-９]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 0xFEE0)), 10);
@@ -471,7 +474,14 @@ document.querySelectorAll(".ph").forEach((ph) => {
     const ph = photos(p.photo);
     if (ph.length) {
       const f = el("div", "ph");
-      ph.forEach((x, i) => { const img = el("img"); img.src = x.src; img.alt = x.alt || name + "の写真" + (ph.length > 1 ? "（" + (i + 1) + "）" : ""); img.loading = "lazy"; img.decoding = "async"; f.append(img); });
+      ph.forEach((x, i) => {
+        const img = el("img");
+        img.alt = x.alt || name + "の写真" + (ph.length > 1 ? "（" + (i + 1) + "）" : "");
+        img.width = 960; img.height = 560; img.loading = "lazy"; img.decoding = "async"; img.referrerPolicy = "no-referrer";
+        img.addEventListener("error", () => { img.remove(); if (!f.children.length) f.remove(); });   // 読み込めない写真は外す
+        img.src = x.src;
+        f.append(img);
+      });
       a.append(f);
     }
     const h = el("h2", "name", name);
