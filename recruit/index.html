@@ -397,11 +397,11 @@ html.has-menu { overflow: hidden; }
 /* ---------- 報酬早見表：点線で区切ったコースの一覧（線と上下16は .rows。各行が .rate） ----------
    コース名はメニューと同じ題と副題の形（小見出しと同じ明朝16・600 →8→ 短い線＋施術名。「共通：題と副題」）。
    時間ごとに、料金表と同じリーダーの縦の一覧：時間（16・ink-2）……… 報酬額（20・ink-2）、その下の右端に表示価格（14・soft）。行の上下8。
-   もみほぐしを含む時間（60〜120分）は、30分の行のあとに「もみほぐしを含む」（14・muted）を置き、左の縦の線（ink-16）で括弧のようにまとめる */
+   ボディを含む時間（60〜120分）は、30分の行のあとに「ボディを含む」（14・muted）を置き、左の縦の線（ink-16）で括弧のようにまとめる */
 .rate { display: flex; flex-direction: column; }
 .rate .name { margin-bottom: var(--gap-head); }
 .rate .unit { margin-bottom: var(--gap-tight); }   /* コース名 →16→ 単位「税込」→4→ 一覧。形は「共通：料金の単位」 */
-/* 並び：コース名 → 30分 →「もみほぐしを含む」→ 60〜120分（画面の上の並びだけ。読み上げの順はそのまま） */
+/* 並び：コース名 → 30分 →「ボディを含む」→ 60〜120分（画面の上の並びだけ。読み上げの順はそのまま） */
 .g { display: contents; }
 .g > div { order: 3; }
 .g > div:first-child { order: 1; }
@@ -582,7 +582,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
         <div class="rate">
           <h3 class="name">ヘッドコース<small>ドライヘッドスパ</small></h3>
           <p class="unit">税込</p>
-          <div class="br"><span>もみほぐしを含む</span></div>
+          <div class="br"><span>ボディを含む</span></div>
           <div class="g">
             <div><span class="leader">30分</span><b>¥1,820</b><small>¥2,800</small></div>
             <div><span class="leader">60分</span><b>¥2,795</b><small>¥4,300</small></div>
@@ -593,7 +593,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
         <div class="rate">
           <h3 class="name">フットコース<small>足つぼ・リフレクソロジー</small></h3>
           <p class="unit">税込</p>
-          <div class="br"><span>もみほぐしを含む</span></div>
+          <div class="br"><span>ボディを含む</span></div>
           <div class="g">
             <div><span class="leader">30分</span><b>¥1,950</b><small>¥3,000</small></div>
             <div><span class="leader">60分</span><b>¥3,185</b><small>¥4,900</small></div>
