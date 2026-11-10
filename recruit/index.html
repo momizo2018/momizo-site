@@ -10,7 +10,7 @@
 <meta name="description" content="大田原市のリラクゼーションサロン、揉蔵（もみぞう）のセラピスト募集です。他店でのご経験をそのまま活かせます。報酬は表示価格の65%、リクエスト料（個人指名・性別指定）は100%（いずれも税込）。業務委託、インボイス登録不要、資格不要、年齢・性別不問、履歴書不要。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..500&family=Zen+Kaku+Gothic+New:wght@400;500&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,24,340,100,0;1,18,350,100,0&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..500&family=Zen+Kaku+Gothic+New:wght@400;500&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="../assets/icon/icon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
@@ -83,7 +83,6 @@
   /* 文字 */
   --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
   --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;   /* 見出し（ページの題・セクション見出し・コース名・施術名・小見出し）。欧文のクラシックなセリフ体と並べる前提の明朝で、線の強弱が穏やか */
-  --font-logo: "Fraunces", "Zen Old Mincho", serif;   /* ロゴだけ（角の丸いクラシックなセリフ体） */
   --fw-regular: 400;
   --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
   --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
@@ -91,10 +90,8 @@
   --fs-sm: 14px;     /* 補足・注意書き、ナビ、著作権表示、コースの施術名、表の単位、お知らせの見出し */
   --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
   --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
-  --fs-logo: 36px;       /* 固有値：ロゴの momizo（ヘッダー）。文字の段階に従わない */
-  --fs-logo-sub: 13px;   /* 固有値：ロゴの relaxation salon（ヘッダー） */
-  --fs-logo-foot: 30px;       /* 固有値：フッターのロゴの momizo。締めくくりなので、ヘッダーより一段小さく */
-  --fs-logo-foot-sub: 11px;   /* 固有値：フッターのロゴの relaxation salon。36:13 とほぼ同じ比で縮める */
+  --logo-h: 50px;      /* 固有値：ヘッダーのロゴ（横型の画像）の高さ。幅は画像の比率のまま */
+  --logo-foot: 48px;   /* 固有値：フッターのマーク（画像）の高さ */
   --lh-none: 1;      /* 1行の部品 */
   --lh-ui: 1.4;      /* 見出し、ボタン */
   --lh-text: 1.8;    /* 文章 */
@@ -152,18 +149,12 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 
-/* ロゴ：momizo（Fraunces 340・ink-2）→ relaxation salon（Fraunces イタリック 350・soft）の2段。
-   Fraunces はセリフの角を丸くできるクラシックなセリフ体で、角の丸さ（SOFT）を最大にして使う。ロゴだけの書体（文中では使わない）。
-   大きさは固有値で、文字の段階に従わない。ヘッダーは momizo 36・relaxation salon 13、フッターは一段小さく 30・11（ほぼ同じ比。間と左の端は em なので一緒に縮む）。飾りは付けず、書体と組み方だけで見せる。
-   光学サイズ（opsz）：momizo 24、relaxation salon 18（小さい字用の形に寄せつつ、太くなりすぎない値）。
-   縦の間：momizo の字面の下（ベースライン）→10→ relaxation salon の字面の上（行間1から逆算して margin .242em）。
-   左の端：m の左の空き .036em、r の左の空き .06em を戻して字面でそろえる。
-   字間：momizo +0.01em、relaxation salon +0.08em（小さいイタリックを少し開けて、ゆったり見せる） */
-.brand { display: grid; justify-items: start; font-family: var(--font-logo); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { margin-left: -.036em; font-size: var(--fs-logo); font-weight: 340; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 24; line-height: var(--lh-none); letter-spacing: .01em; color: var(--ink-2); }
-.brand-sub { margin: .242em 0 0 -.06em; font-size: var(--fs-logo-sub); font-style: italic; font-weight: 350; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 18; line-height: var(--lh-none); letter-spacing: .08em; color: var(--soft); white-space: nowrap; }
-.site-foot .brand-name { font-size: var(--fs-logo-foot); }
-.site-foot .brand-sub { font-size: var(--fs-logo-foot-sub); }
+/* ロゴ：ロゴ一式の横型（生成り。マーク90%を文字の下端にそろえた組み）を、余白なしの画像（SVG）で置く。フッターはマークだけ。
+   色は画像の中に直接書いている（ink-2・soft）。CSS の色の指定とは連動しないので、ink-2・soft を変えるときは作り直す。
+   大きさは固有値で、高さで決める（幅は画像の比率のまま）。ヘッダーの高さは、幅320でも三本線のメニューと重ならない値 */
+.brand { display: block; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand img { display: block; width: auto; height: var(--logo-h); }
+.site-foot .brand img { height: var(--logo-foot); }
 
 /* ページ内の目次：本文の頭（ページの題とひとことの下。トップはヒーローの下）に、上下を点線で挟んだ帯で置く。目次のないページには置かない。
    項目は見出しと同じ言葉（省略しない）で、左から並べ、入りきらなければ折り返して左にそろえる（14px・muted。項目どうし縦横とも16）。
@@ -505,7 +496,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 <!--
   Googleしごと検索用の求人情報（JobPosting）。
   報酬・契約形態・住所などページ本文を変えたら、ここも同じように直す。
-  validThrough（募集期限）は 2027年10月までに更新する。
+  validThrough・datePosted などの決まりは、規格書の「情報の置き場所」の求人の構造化データの行。
 -->
 <script type="application/ld+json">
 {
@@ -542,7 +533,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 <div class="card">
 <header class="head">
   <div class="wrap">
-    <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+    <a class="brand" href="../" aria-label="momizo トップページ"><img src="../assets/logo/logo.svg" alt="" width="197" height="50"></a>
   </div>
 </header>
 
@@ -563,7 +554,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
     <p class="t">割引・決済手数料などは店舗が負担し、割引前の表示価格で計算します。</p>
   </div>
 
-  <!-- ===== 報酬早見表（報酬額＝表示価格×65%、リクエスト料は100%。料金を変えたら、トップ・メニューとあわせて3か所直す。リクエスト料を変えたら、メニューの料金表とあわせて2か所直す） ===== -->
+  <!-- ===== 報酬早見表（報酬額＝表示価格×65%、リクエスト料は100%。料金・リクエスト料を変えたときに直す場所は、規格書の「情報の置き場所」の料金の行） ===== -->
   <section class="sec" id="reward">
     <div class="wrap">
       <h2>報酬早見表</h2>
@@ -787,7 +778,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 <footer class="site-foot">
   <div class="foot-body">
     <div class="foot-row">
-      <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+      <a class="brand" href="../" aria-label="momizo トップページ"><img src="../assets/logo/mark.svg" alt="" width="48" height="48"></a>
       <a class="to-top" href="#top" aria-label="ページの先頭へ"><span aria-hidden="true">↑</span></a>
     </div>
     <p class="footer" lang="en">&copy; 2026 relaxation salon momizo</p>
