@@ -17,95 +17,84 @@
 <link rel="icon" href="assets/icon/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/icon/apple-touch-icon.png">
 <style>
-/* =========================================================
-   揉蔵サイト スタイル
-   - 値は「揉蔵サイト デザイン規格書」のものだけを使う。合う値がないときは、いちばん近い段階の値を使う
-   - 固有値（段階の外の値）は規格書の固有値の章にあるものだけ。足す・変えるのは人が決める
-   - CSS はページごとに書く（共通の CSS ファイルは使わない）。「共通：○○」〜「共通：○○ここまで」の塊は、
-     使うページどうしで一字一句同じにし、直したら tools/check_common.py で確かめる
-   ========================================================= */
 
 /* ===== 共通：土台 ===== */
 :root {
-  /* ===== 色 ===== */
-  /* 夜の灯りのサロン：焦げ茶の地に、生成りの文字と、ランプの灯りのような真鍮色。キービジュアルの写真のトーンに合わせる */
-  --ink-2: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #8c7b66;   /* 文字：生成り → 沈めたベージュ。カードの上でそれぞれ 12.5・9.1・6.8・3.8 : 1 */
-  --accent: #c9a46c; --accent-hover: #dcb985;   /* 真鍮色。触れたときは一段明るく（暗い地では明るくして返す） */
-  --on-accent: #211913;                          /* accent の面の上の文字（送信ボタン、選んだ選択ボタン）。7.4 : 1 */
+  /* 色 */
+  --ink-2: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #8c7b66;
+  --accent: #c9a46c; --accent-hover: #dcb985;
+  --on-accent: #211913;
   --paper: #211913; --paper-hi: #2a2018; --paper-lo: #1a130e;
-  --err: #ef9a86;                                /* 入力の誤り（求人ページのフォームだけ） */
-  /* 透明な色：もとの色 × 透明度 .08・.16・.24・.32・.48・.64・.96。名前の数字が透明度 */
-  --ink-08: rgba(241,231,214,.08);               /* カードの縁、触れたときに一段明るくする面（白抜きボタン、線のボタン） */
-  --ink-16: rgba(241,231,214,.16);               /* 機能の実線：入力欄の縁、括弧の線 */
-  --ink-24: rgba(241,231,214,.24);               /* 機能の点線（区切り）、白抜きボタンと選択ボタンの枠、リーダー、下線 */
-  --accent-08: rgba(201,164,108,.08);            /* 灯りの面 */
-  --accent-16: rgba(201,164,108,.16);            /* 仮画像、背景のにじみ、帯の上の矢印の丸 */
-  --accent-48: rgba(201,164,108,.48);            /* 飾りの線：帯の縁の二重線、飾り枠、特徴の札の縁、コース名の短い線 */
-  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 選択ボタンの面 / カードの近い影 / カードの遠い影 */
-  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);   /* カード / 画面下のメニューの面（上側） */
-  --paper-64: rgba(33,25,19,.64);                /* 写真の上の矢印の丸 */
+  --err: #ef9a86;
+  --ink-08: rgba(241,231,214,.08);
+  --ink-16: rgba(241,231,214,.16);
+  --ink-24: rgba(241,231,214,.24);
+  --accent-08: rgba(201,164,108,.08);
+  --accent-16: rgba(201,164,108,.16);
+  --accent-48: rgba(201,164,108,.48);
+  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);
+  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);
+  --paper-64: rgba(33,25,19,.64);
 
-  /* ===== 共通値（全ページ同じ） ===== */
-  /* 間隔の段階 */
+  /* 間隔 */
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px;
   --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
 
-  /* 間隔（役割で選ぶ） */
-  --gap-tight: var(--sp-1);     /*  4 名前のすぐ下の添え書き、表の項目名→内容 */
-  --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、特徴の札どうし、写真どうし、コース名→施術名 */
-  --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
-  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目どうし */
-  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
-  --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、ナビの帯の上、フッターのロゴ→著作権表示 */
-  --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
-  --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
+  --gap-tight: var(--sp-1);
+  --gap-item: var(--sp-2);
+  --gap-list: var(--sp-3);
+  --gap-head: var(--sp-4);
+  --gap-block: var(--sp-6);
+  --gap-section: var(--sp-8);
+  --page-group: var(--sp-16);
+  --page-section: var(--sp-24);
 
   /* 枠の内側 */
-  --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
-  --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
-  --pad-tag: var(--sp-1) var(--sp-3);   /* 上下4・左右12 特徴の札 */
-  --pad-choice: var(--sp-2) var(--sp-4);   /* 上下8・左右16 「できる／できない」の選択ボタン */
+  --pad-part: var(--sp-3) var(--sp-4);
+  --pad-box: var(--sp-6);
+  --pad-tag: var(--sp-1) var(--sp-3);
+  --pad-choice: var(--sp-2) var(--sp-4);
 
-  /* 横の位置（幅480px以下で変わる） */
+  /* 横の位置 */
   --page-pad: var(--sp-4);
-  --card-w: 480px;              /* 固有値 */
+  --card-w: 480px;
   --card-pad-x: var(--sp-8);
   --card-pad-y: var(--sp-12);
 
   /* 部品の大きさ */
-  --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ */
-  --day-col: var(--sp-16);      /* 64 フォームの曜日の欄の幅 */
-  --arrow: var(--sp-8);         /* 32 矢印の丸 */
+  --size-control: var(--sp-16);
+  --day-col: var(--sp-16);
+  --arrow: var(--sp-8);
+  --logo-h: 50px;
+  --logo-foot: 48px;
 
   /* 線・角丸・影 */
   --bw: 1px; --focus-w: 2px;
-  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;   /* r-sm は特徴の札だけ */
+  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;
   --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-32), 0 var(--sp-1) var(--sp-3) var(--shade-24);
 
   /* 文字 */
   --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;   /* 見出し（ページの題・セクション見出し・コース名・施術名・小見出し）。欧文のクラシックなセリフ体と並べる前提の明朝で、線の強弱が穏やか */
+  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --fw-regular: 400;
-  --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
-  --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
-  --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、著作権表示、コースの施術名、表の単位、お知らせの見出し */
-  --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
-  --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
-  --logo-h: 50px;      /* 固有値：ヘッダーのロゴ（横型の画像）の高さ。幅は画像の比率のまま */
-  --logo-foot: 48px;   /* 固有値：フッターのマーク（画像）の高さ */
-  --lh-none: 1;      /* 1行の部品 */
-  --lh-ui: 1.4;      /* 見出し、ボタン */
-  --lh-text: 1.8;    /* 文章 */
+  --fw-ui: 500;
+  --fw-heading: 500;
+  --fw-heading-sub: 600;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --lh-none: 1;
+  --lh-ui: 1.4;
+  --lh-text: 1.8;
 
   /* 動き */
   --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --lift: -2px; --press: .97; --enter-y: var(--sp-4);
-  --dim: .6;        /* 触れたときの不透明度（画面下のメニューの文字、ロゴ） */
-  --disabled: .4;   /* 使えない状態（送信中のボタン、チェックしていない曜日の時間） */
-  --dock-delay: .6s;   /* 固有値：画面下のメニュー（と営業状況のバー）が出てくるまでの間 */
-  --bar-glow: 4s;      /* 固有値：上下のバーの明滅の周期 */
+  --dim: .6;
+  --disabled: .4;
+  --dock-delay: .6s;
+  --bar-glow: 4s;
 
   /* 背景 */
   --bg-page:
@@ -127,7 +116,6 @@ body {
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
-/* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
 h1, h2, h3 { font-family: var(--font-heading); font-weight: var(--fw-heading); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
@@ -144,45 +132,34 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
 
-/* ---------- ヘッダー：ロゴだけ（右上に三本線のメニュー。「共通：三本線のメニュー」）。全ページで同じ形 ---------- */
-/* ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
+/* ---------- ヘッダー ---------- */
 .head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
-/* 帯の縁は二重線（面の端の線 →2→ もう1本）。配置を動かさないよう、線は影と重ねて描く */
 .head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 
-/* ロゴ：ロゴ一式の横型（生成り。マーク90%を文字の下端にそろえた組み）を、余白なしの画像（SVG）で置く。フッターはマークだけ。
-   色は画像の中に直接書いている（ink-2・soft）。CSS の色の指定とは連動しないので、ink-2・soft を変えるときは作り直す。
-   大きさは固有値で、高さで決める（幅は画像の比率のまま）。ヘッダーの高さは、幅320でも三本線のメニューと重ならない値 */
+/* ---------- ロゴ ---------- */
 .brand { display: block; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
 .brand img { display: block; width: auto; height: var(--logo-h); }
 .site-foot .brand img { height: var(--logo-foot); }
 
-/* ページ内の目次：本文の頭（ページの題とひとことの下。トップはヒーローの下）に、上下を点線で挟んだ帯で置く。目次のないページには置かない。
-   項目は見出しと同じ言葉（省略しない）で、左から並べ、入りきらなければ折り返して左にそろえる（14px・muted。項目どうし縦横とも16）。
-   押せる範囲は上下に8ずつ広げる（縦に並んだ項目どうしで接する） */
+/* ---------- ナビ ---------- */
 .nav { display: flex; flex-wrap: wrap; gap: var(--gap-head); margin-top: var(--gap-section); padding: var(--gap-head) 0; border-top: var(--bw) dashed var(--ink-24); border-bottom: var(--bw) dashed var(--ink-24); }
 .nav a { padding: var(--gap-item) 0; margin: calc(var(--gap-item) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover { color: var(--ink-2); } }
 
-/* ---------- 見出し：日本語だけ。ページの題とセクション見出しは明朝20・500、小見出しは明朝16・600 ---------- */
+/* ---------- 見出し ---------- */
 h1, h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
-/* 飾り罫：ページの題とセクション見出しの下に、線・菱形・線（洋書の章扉の飾り。固有値の絵）。見出し →12→ 飾り罫 →32→ 中身。コース名などの項目の見出しには付けない */
 .page-title h1::after, .sec h2:not(.name)::after, .band h2::after { content: ""; display: block; width: 56px; height: 7px; margin-top: var(--gap-list); background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%227%22 viewBox=%220 0 56 7%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M0 3.5h22M34 3.5h22%22/%3E%3Cpath d=%22M28 .5l3 3-3 3-3-3z%22/%3E%3C/svg%3E") no-repeat; }
 h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 
 /* ---------- ページの並び ---------- */
 .sec { padding-top: var(--page-section); }
 
-/* ---------- 線で区切った行（表・特徴の一覧・料金表・働き方・報酬早見表）
-   各行の下と一覧の上に区切り線。行の上下16 ---------- */
+/* ---------- 線で区切った行 ---------- */
 .rows { list-style: none; border-top: var(--bw) dashed var(--ink-24); }
 .rows > * { padding: var(--gap-head) 0; border-bottom: var(--bw) dashed var(--ink-24); }
 
-/* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
-   カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（card-64 → card）とぼかし。影と角丸は付けない。
-   上の区切り線は中身の幅だけ。項目どうしは短い縦線で区切る。文字はボタンと同じ 16px・500・ink-2。
-   data-until の要素（求人はフォーム、ほかは著作権表示）が画面に入ったら、下へ引っ込める ---------- */
+/* ---------- 画面下のメニュー ---------- */
 .dock {
   position: fixed; left: 50%; bottom: 0; z-index: 10;
   width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
@@ -191,12 +168,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   background: linear-gradient(var(--card-64), var(--card));
   -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
   transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
-  /* 開いたとき、カードが現れ終わるころに下から出てくる（1回だけ）。backwards なので、出たあとは .hide の邪魔をしない */
   animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
-/* バーの明滅：面に灯りの色（accent-16）をゆっくり重ねて、ほどいてを繰り返す（周期は固有値）。文字は点滅させない。
-   画面の上の営業状況のバー（トップ）も同じ明滅を使う。動きを減らす設定では止める */
 .dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
 @keyframes bar-glow { 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .dock::after { animation: none !important; } }
@@ -212,14 +186,12 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .dock a:hover { opacity: var(--dim); } }
 
-/* ---------- フッター：ロゴ → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる）。全ページで同じ形 ---------- */
-/* 上の空き96に、スクリプトが1px未満（--foot-nudge）を足して、フッターの面の上の端を画面のピクセルのちょうどにそろえる（「共通：フッターの位置」） */
+/* ---------- フッター ---------- */
 .site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
 .foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48); }
 .foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
-.foot-row { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-item); }   /* ロゴ ↔ ページの先頭へ */
-/* ページの先頭へ：フッターのロゴの右端に、矢印の丸（線のボタンの矢印と同じ形。帯の上なので accent-16 の面）。
-   フッターの中にあるので、見えるのはページのいちばん下まで来たときだけ。押すと先頭へ（動きを減らす設定では、すぐ） */
+.foot-row { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-item); }
+/* ---------- ページの先頭へ ---------- */
 .to-top { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--accent-16); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
@@ -228,11 +200,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
-/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはリンクの行を置かない）。
-   三本線：画面の右上に固定（カードの右上の内側にそろえる）。写真の送りボタンと同じ半透明の丸（paper-64、32）。
-   トップの営業状況のバーが出ている間は、バーの高さだけ下げる（スクリプトが --menu-bar を入れる）。お知らせの別窓を開いている間は隠す。
-   開くと、カードと同じ面の板が画面の上から下りてくる（幅は画面下のメニューと同じ）。後ろは paper-64 の幕で、ページは動かさない。
-   中身：ページ（今いるページは faint で、リンクにしない）→32→ 外のリンク。行は点線で区切り、行の上下12。閉じる印・幕・Esc で閉じる */
 .menu-btn {
   position: fixed; z-index: 10;
   top: calc(env(safe-area-inset-top, 0px) + var(--page-pad) + var(--card-pad-y) + var(--menu-bar, 0px));
@@ -267,15 +234,11 @@ html.has-menu { overflow: hidden; }
 .menu-list li { border-bottom: var(--bw) dashed var(--ink-24); }
 .menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
 .menu-list [aria-current] { color: var(--faint); }
-.menu-soon { font-size: var(--fs-sm); color: var(--soft); }   /* 準備中のページを押したときだけ「準備中です」 */
+.menu-soon { font-size: var(--fs-sm); color: var(--soft); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
 
 /* ===== 共通：写真の枠 ===== */
-/* 写真は角丸の枠に入れず、カードの端から端まで広げる（はじめての方への帯と同じ広げ方）。
-   高さは280で固定（固有値）。写真はその高さのまま横に並べ（間8）、横にスクロールして見る。
-   次の写真がのぞくように、1枚の幅は枠より48せまくする。1枚だけのときは幅いっぱいに広げる。
-   止まる位置（スナップ）は付けない。色味は少し落ち着かせ、写真どうしのトーンをそろえる（固有値） */
 .ph {
   --ph-h: 280px;
   display: flex; gap: var(--gap-item); height: var(--ph-h);
@@ -290,7 +253,6 @@ html.has-menu { overflow: hidden; }
   filter: sepia(.2) saturate(.85) brightness(.85);
 }
 .ph img:only-child { width: 100%; max-width: none; }
-/* マウスの人向けの送りボタン（矢印の丸）。スクロールできる枠にだけ、スクリプトで付ける。端まで来た側は消す */
 .ph-box { position: relative; }
 .ph-btn {
   position: absolute; top: 50%; z-index: 1; width: var(--arrow); height: var(--arrow); margin-top: calc(var(--arrow) / -2);
@@ -305,7 +267,7 @@ html.has-menu { overflow: hidden; }
 /* ===== 共通：写真の枠ここまで ===== */
 
 /* ===== 共通：ボタンと補足 ===== */
-/* ボタン：カード内では幅いっぱい。フォームの送信は accent の面、ほかのページへの移動は白抜き（.ghost） */
+/* ---------- ボタン ---------- */
 .btn {
   display: flex; width: 100%; align-items: center; justify-content: center;
   min-height: var(--size-control); padding: 0 var(--gap-list); border: var(--bw) solid var(--accent); border-radius: var(--r-pill);
@@ -319,25 +281,24 @@ html.has-menu { overflow: hidden; }
   .btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(var(--lift)); }
   .btn.ghost:hover { background: var(--ink-08); border-color: var(--accent); }
 }
-/* 補足・注意書き */
+/* ---------- 補足・注意書き ---------- */
 .note { margin-top: var(--gap-list); font-size: var(--fs-sm); color: var(--soft); }
-/* セクションの説明文（見出しの直後の1〜2文）→ 中身24 */
+/* ---------- セクションの説明文 ---------- */
 .sec-note { margin-bottom: var(--gap-block); }
 /* ===== 共通：ボタンと補足ここまで ===== */
 
 /* ===== 共通：項目と内容の表・地図・線のボタン ===== */
-/* 項目と内容の表（.rows と組み合わせる）：項目名（soft）→4→ 内容。
-   項目名を上に置くので、画面が狭くても内容の幅を取れる */
+/* ---------- 項目と内容の表 ---------- */
 .info { display: grid; }
 .info > div { display: grid; gap: var(--gap-tight); }
 .info dt { color: var(--soft); }
 .hours dd { font-variant-numeric: tabular-nums; }
 
-/* 地図：3:2（固有値）。色味は少し落ち着かせる */
+/* ---------- 地図 ---------- */
 .mapbox { border-radius: var(--r-md); overflow: hidden; background: var(--paper); aspect-ratio: 3 / 2; }
 .mapbox iframe { display: block; width: 100%; height: 100%; border: 0; filter: grayscale(.5) sepia(.3) brightness(.8); }
 
-/* 線のボタン（外部サイトへのリンク）：左に名前、右に矢印の丸 */
+/* ---------- 線のボタン ---------- */
 .line {
   display: flex; align-items: center; justify-content: space-between; gap: var(--gap-head);
   min-height: var(--size-control); padding: var(--pad-part);
@@ -348,43 +309,30 @@ html.has-menu { overflow: hidden; }
 .line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--card); line-height: var(--lh-none); color: var(--muted); }
 .line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .line:hover { background-color: var(--ink-08); transform: translateY(var(--lift)); } }
-/* 帯の上の線のボタンは、帯と逆にカードの面。矢印の丸はいつも箱と逆の面 */
 .band .line { background-color: var(--card); }
 .band .line-arrow { background: var(--accent-16); }
-.maplink { margin-top: var(--gap-list); }   /* 地図→地図のボタン12 */
+.maplink { margin-top: var(--gap-list); }
 /* ===== 共通：項目と内容の表・地図・線のボタンここまで ===== */
 
 /* ===== 共通：ラベル ===== */
-/* 特徴の札（図書館のラベルのような札）：縁 accent-48・角丸4・面 accent-08・14px・muted。札どうし8で折り返して並べる。
-   求人ページの題の下の特徴の札と、トップの揉蔵についての特徴の一覧 */
 .tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--gap-item); }
 .tags li { padding: var(--pad-tag); border: var(--bw) solid var(--accent-48); border-radius: var(--r-sm); background: var(--accent-08); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
 /* ===== 共通：ラベルここまで ===== */
 
 /* ===== 共通：印 ===== */
-/* 印：細い円の中に、1本の線で描いた単純な記号（固有値の絵。32で表示、色は accent）。
-   読み流す一覧の各項目の頭に置き、何の話かを先に伝える目印。文より目立たせない。
-   記号は .e-○○ が --e に持ち、形と色（mask と accent）はここで決める。項目の左に32の欄を取り、記号→16→文 */
 .e { --mark: var(--sp-8); display: grid; grid-template-columns: var(--mark) minmax(0, 1fr); column-gap: var(--gap-head); align-content: start; }
 .e > * { grid-column: 2; }
 .e::before { content: ""; grid-column: 1; grid-row: 1 / span 2; width: var(--mark); height: var(--mark); background: var(--accent); -webkit-mask: var(--e) center / contain no-repeat; mask: var(--e) center / contain no-repeat; }
-/* ¥の印：トップの揉蔵についてと、求人の働き方の両方で使う */
 .e-purse { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='24' r='10.5'/%3E%3Cpath d='M19.8 17.8l4.2 5.6 4.2-5.6M24 23.4V31M20.2 24.8h7.6M20.2 27.8h7.6'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== 共通：印ここまで ===== */
 
 /* ===== 共通：飾り枠 ===== */
-/* ---------- 飾り枠：読んでほしい箱だけ（お知らせ、「65%」の箱、送信完了）。スタンプカードの枠から借りた形 ----------
-   灯りの面（accent-08）の内側8に細い線（accent-48、角丸は外の16から8を引いた8）、四隅に角飾り（固有値の絵。箱の角から12）。
-   角飾りは accent の色で描いた絵 */
 .notice, .big, .done { position: relative; background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 1 12 0%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%281 0 0 -1 0 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px bottom 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 -1 12 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px bottom 12px / 12px no-repeat, var(--accent-08); }
 .notice::before, .big::before, .done::before { content: ""; position: absolute; inset: var(--sp-2); border: var(--bw) solid var(--accent-48); border-radius: calc(var(--r-md) - var(--sp-2)); pointer-events: none; }
 /* ===== 共通：飾り枠ここまで ===== */
 
 /* ===== このページだけ：トップ ===== */
-/* 営業状況のバー：画面の上に出す、画面下のメニューと対になるバー（ページの中には置かない）。
-   幅と面は画面下のメニューと同じで、面のグラデーションは上下を逆にする（card → card-64）。下に中身の幅だけの区切りの点線。
-   文は 14px・400・ink-2・行間1.4。高さは文に合わせ（上下の内側8）、折り返したら高くなる。右に閉じる印（×、12、soft。押せる範囲は36）。
-   開いたとき、画面下のメニューと同じ間のあとに上から出てくる。閉じたら上へ引っ込め、その回の訪問中は出さない */
+/* ---------- 営業状況のバー ---------- */
 .topbar {
   position: fixed; left: 50%; top: 0; z-index: 10;
   width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
@@ -410,37 +358,28 @@ html.has-menu { overflow: hidden; }
     linear-gradient(-45deg, transparent calc(50% - var(--bw) / 2), currentColor 0 calc(50% + var(--bw) / 2), transparent 0);
   transition: opacity var(--dur-base) var(--ease-out);
 }
-.topbar-close::after { content: ""; position: absolute; inset: calc(var(--sp-3) * -1); }   /* 押せる範囲 36 */
+.topbar-close::after { content: ""; position: absolute; inset: calc(var(--sp-3) * -1); }
 @media (hover: hover) { .topbar-close:hover { opacity: var(--dim); } }
 
-/* キービジュアル：ヘッダーのいちばん上に、カードの端から端まで（写真の枠と同じ広げ方）。店の写真ではなく、雰囲気を伝えるイメージ。
-   写真そのものが灯りのトーンなので、写真の色味のフィルターはかけない。下の端は、ヘッダーの面へ溶かす（下の30%を透明へ。固有値）。→32→ ロゴ */
+/* ---------- キービジュアル ---------- */
 .key { margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) var(--gap-section); }
 .key img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
 
-/* ---------- ヒーロー：本文 → お知らせ → 写真。h1 は読み上げ用に隠す ---------- */
+/* ---------- ヒーロー ---------- */
 .hero { padding-top: var(--page-group); }
-.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }   /* 画面には出さず、読み上げと検索にだけ渡す */
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .hero-ph { margin-top: var(--page-group); animation: rise var(--dur-enter) var(--ease-out) both; }
 @keyframes rise { from { opacity: 0; translate: 0 var(--enter-y); } to { opacity: 1; translate: 0 0; } }
 
-/* ---------- お知らせ：ヒーローの本文と写真の間に、いつも置く枠
-   面と縁は「飾り枠」（accent-08 の面、内側に accent-48 の線、四隅に角飾り）。
-   data-state：loading（1行分の空き）→ list（お知らせ）か empty（公式LINEへの一言） ---------- */
-.notice { margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); }   /* 面と飾り枠は「共通：飾り枠」 */
-/* お知らせの見出し：印（12の円・中の点の直径4）→8→ 文（14・400・soft・行間1.4）。
-   印は、お知らせがあるときは accent、ないときは faint */
+/* ---------- お知らせ ---------- */
+.notice { margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); }
 .notice h2 { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); margin: 0 0 var(--gap-list); }
 .notice h2::before { content: ""; flex: none; box-sizing: border-box; width: var(--sp-3); height: var(--sp-3); border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2px, transparent 2.5px); transition: border-color var(--dur-base) var(--ease-out); }
 .notice[data-state="list"] h2::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2px, transparent 2.5px); }
-.notice-list { list-style: none; }
-/* お知らせの部分は本文8行分の高さまで。超えたらその中でスクロールする（ページの枠も別窓も同じ）。
-   続きがあるあいだは、下の1行分を薄くして続きを見せる（スクリプトが .more を付け外し） */
-.notice-list { max-height: calc(var(--fs-md) * var(--lh-text) * 8); overflow-y: auto; }
-.notice-list.more { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); }
-.notice-list li { white-space: pre-line; }   /* シートのセルの中の改行は、そのまま改行する（ヒーローの枠と別窓の両方） */
-.notice-list li + li { margin-top: var(--gap-head); padding-top: var(--gap-head); border-top: var(--bw) dashed var(--ink-24); }   /* 線で区切った行の上下16（表と同じ） */
-/* お知らせの見出し（シートの見出しの列。空なら出さない）：小見出しと同じ明朝16・600・ink-2（h3）→16→ 本文 →4→ 期限。間は小見出し→中身と同じ */
+.notice-list { list-style: none; max-height: calc(var(--fs-md) * var(--lh-text) * 8); overflow-y: auto; }
+.notice-list.has-more { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); mask-image: linear-gradient(#000 calc(100% - var(--fs-md) * var(--lh-text)), transparent); }
+.notice-list li { white-space: pre-line; }
+.notice-list li + li { margin-top: var(--gap-head); padding-top: var(--gap-head); border-top: var(--bw) dashed var(--ink-24); }
 .notice-list h3 { margin-bottom: var(--gap-head); white-space: normal; }
 .notice-list small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 .notice-empty { color: var(--muted); }
@@ -448,19 +387,16 @@ html.has-menu { overflow: hidden; }
 @media (hover: hover) { .notice-empty a:hover { color: var(--ink-2); } }
 .notice:not([data-state="list"]) .notice-list, .notice:not([data-state="empty"]) .notice-empty { display: none; }
 .notice[data-state="loading"]::after { content: ""; display: block; height: calc(var(--fs-md) * var(--lh-text)); }
-.notice-list, .notice-empty { animation: fade var(--dur-base) var(--ease-out) both; }   /* 中身は出たときにふわっと */
+.notice-list, .notice-empty { animation: fade var(--dur-base) var(--ease-out) both; }
 @keyframes fade { from { opacity: 0; } }
 
-/* ---------- お知らせの別窓：お知らせがあるときだけ、開いたときに重ねて出す（ヒーローの枠はそのまま残す）
-   中身はヒーローの枠と同じ（飾り枠の箱、見出し、お知らせ）→24→「閉じる」（白抜きのボタン）。
-   幅はカードの内側と同じ。後ろは paper-64 の幕とぼかし（12）。閉じたら、その回の訪問中は出さない。
-   開いている間は、上下のバー（営業状況のバー、画面下のメニュー）を出さず、閉じてからいつもの間で出す ---------- */
+/* ---------- お知らせの別窓 ---------- */
 .pop {
   width: min(100% - (var(--page-pad) + var(--card-pad-x)) * 2, var(--card-w) - var(--card-pad-x) * 2); max-width: none;
   margin: auto; padding: 0; border: 0; border-radius: var(--r-md); background: var(--card); color: inherit; box-shadow: var(--shadow-card);
 }
 .pop .notice { margin-top: 0; }
-.pop h2:focus { outline: none; }   /* 開いたときは見出しに移る（読み上げで「お知らせ」から始まる）。ボタンに枠を出さないため */
+.pop h2:focus { outline: none; }
 .pop-close { margin-top: var(--gap-block); }
 .pop::backdrop { background: var(--paper-64); -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3)); }
 .pop[open] { animation: pop-in var(--dur-enter) var(--ease-out) both; }
@@ -469,35 +405,31 @@ html.has-menu { overflow: hidden; }
 .has-pop .dock, .has-pop .topbar.on { visibility: hidden; animation: none; }
 
 /* ---------- 揉蔵について ---------- */
-/* 大事にしている3つ（小見出し →16→ 1〜2文）を32ずつあけて並べ →32→ 特徴の一覧（ラベルを折り返して横に並べる）→24→ ボタン */
 .pillars { display: grid; gap: var(--gap-section); }
 .about h3 + p { margin-top: var(--gap-head); }
-/* 特徴の一覧：求人ページの特徴の札と同じラベルの形で、折り返して横に並べる（札どうし8） */
-.facts { margin-top: var(--gap-section); }   /* 形は「共通：ラベル」 */
+.facts { margin-top: var(--gap-section); }
 .more { margin-top: var(--gap-block); }
 
-/* ---------- はじめての方へ（帯）：カードの端から端まで。中身の左端はほかと同じ ---------- */
+/* ---------- はじめての方へ ---------- */
 .band { position: relative; margin: var(--page-section) calc(var(--card-pad-x) * -1) 0; padding: var(--page-group) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48), inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
 .band::before, .band::after { content: ""; position: absolute; left: 0; right: 0; height: var(--bw); background: var(--accent-48); }
 .band::before { top: calc(var(--bw) * -3); } .band::after { bottom: calc(var(--bw) * -3); }
 .visit { display: grid; gap: var(--page-group); }
 .visit h3 + * { margin-top: var(--gap-head); }
 .links { display: grid; gap: var(--gap-list); }
-.visit p + .links { margin-top: var(--gap-block); }   /* クーポンの説明 →24→ 線のボタン */
+.visit p + .links { margin-top: var(--gap-block); }
 .stamp-ph + p { margin-top: var(--gap-head); }
 
 /* ---------- 営業時間・アクセス ---------- */
-.access { display: grid; gap: var(--gap-section); }   /* 表→地図32 */
+.access { display: grid; gap: var(--gap-section); }
 .info .pay { display: block; margin-top: var(--gap-item); font-size: var(--fs-sm); color: var(--muted); }
 .info .pay b { display: block; font-weight: var(--fw-regular); color: var(--soft); }
 
-/* ---------- 印（揉蔵についての3つ：手・¥・スタンプカード）。形は「共通：印」 ---------- */
+/* ---------- 印 ---------- */
 .e-hand { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Cpath d='M20.4 35.5l-.8-5.4c-1.4-1.2-3.4-3.2-4.8-5.2-.8-1.1.4-2.4 1.6-1.6l2.8 2.2V15.8a1.3 1.3 0 0 1 2.6 0V23M22 23V13.6a1.3 1.3 0 0 1 2.6 0V23M24.6 23V14.6a1.3 1.3 0 0 1 2.6 0V23.4M27.2 23.4v-6.6a1.3 1.3 0 0 1 2.6 0v10c0 3-1.2 5-2 6.2l-.2 2.5'/%3E%3C/g%3E%3C/svg%3E"); }
 .e-stamp { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Crect x='12.5' y='16' width='23' height='16' rx='1.5'/%3E%3Ccircle cx='17.6' cy='21.4' r='1.8'/%3E%3Ccircle cx='24' cy='21.4' r='1.8'/%3E%3Ccircle cx='30.4' cy='21.4' r='1.8'/%3E%3Ccircle cx='17.6' cy='27.2' r='1.8'/%3E%3Ccircle cx='24' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3Ccircle cx='30.4' cy='27.2' r='1.8' stroke-dasharray='1 1.8'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== このページだけここまで ===== */
 </style>
-<!-- 検索用の店の情報。営業時間は、トップの営業時間の表・求人ページの店舗情報・トップの営業状況のバー（JS の H）とあわせて4か所。変えるときは全部直す。
-     24時閉店は "23:59" と書く（構造化データの決まり）。火・水は書かない＝定休日 -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -599,10 +531,7 @@ html.has-menu { overflow: hidden; }
           <h3>クーポン</h3>
           <p>公式LINEで、どなたでも使えるクーポンと、友だち限定のクーポンを、その時々でご用意しています。ご来店の前に、使えるクーポンがないか確かめてみてください。</p>
           <div class="links">
-            <!-- 公式LINEのアカウントページ。全員向けのクーポンが載っている。ブラウザでそのまま見られ、クーポンが替わってもリンクは切れない -->
             <a class="line" href="https://page.line.me/cvj7583f" target="_blank" rel="noopener"><span class="action-copy">公開中のクーポン</span><span class="line-arrow" aria-hidden="true">↗</span></a>
-            <!-- 公式LINEの友だち追加のリンク（LINE ID @cvj7583f。@ は %40 にする）。
-                 スマホ：友だちでなければプロフィール（友だち追加）、友だちならトークが開く。パソコン：Web版プロフィールかQRコードが出る -->
             <a class="line" href="https://line.me/R/ti/p/%40cvj7583f" target="_blank" rel="noopener"><span class="action-copy">公式LINEの友だち限定クーポン</span><span class="line-arrow" aria-hidden="true">↗</span></a>
           </div>
           <p class="note">内容は、リンク先でご確認ください。</p>
@@ -679,7 +608,7 @@ html.has-menu { overflow: hidden; }
   <p id="status-text"></p>
   <button class="topbar-close" type="button" aria-label="営業状況を閉じる"></button>
 </aside>
-<!-- ===== 三本線のメニュー（4ページで同じ。今いるページだけ aria-current の span にする） ===== -->
+<!-- 三本線のメニュー -->
 <button class="menu-btn" id="menu-btn" type="button" aria-label="メニューを開く" aria-haspopup="dialog" aria-expanded="false" aria-controls="site-menu"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M0 .5h16M0 6h16M0 11.5h16" stroke="currentColor" stroke-width="1"/></svg></button>
 <dialog class="menu" id="site-menu" aria-label="メニュー">
   <div class="menu-body">
@@ -704,15 +633,14 @@ html.has-menu { overflow: hidden; }
 </nav>
 
 <script>
-/* ===== このページだけ：営業状況のバー ===== */
-/* 日本時間の「いま」（営業状況のバーとお知らせで使う） */
+/* ---------- 日本時間のいま ---------- */
 const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
 
-/* 営業状況のバー：いまの状態と、閉まる時刻か次に開く日時を、です・ます調の文で出す。
-   営業時間（H）は、トップの営業時間の表・構造化データ、求人ページの店舗情報と同じ。変えるときは全部直す。
-   閉じる印で閉じたら、その回の訪問中（sessionStorage）は出さない */
+/* ===== このページだけ：営業状況のバー ===== */
+
+/* ---------- 営業状況のバー ---------- */
 (() => {
-  const H = { 0: [10, 22], 1: [14, 24], 2: null, 3: null, 4: [14, 24], 5: [14, 22], 6: [10, 22] };   // 日〜土。null は定休日
+  const H = { 0: [10, 22], 1: [14, 24], 2: null, 3: null, 4: [14, 24], 5: [14, 22], 6: [10, 22] };
   const DAY = ["日", "月", "火", "水", "木", "金", "土"];
   const KEY = "momizo-status-closed";
   const bar = document.getElementById("status");
@@ -737,7 +665,7 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
     }
     document.getElementById("status-text").textContent = text;
     bar.classList.add("on");
-  } catch (e) { bar.remove(); return; }   // 取れなければ出さない
+  } catch (e) { bar.remove(); return; }
   bar.querySelector(".topbar-close").addEventListener("click", () => {
     bar.classList.add("hide");
     bar.inert = true;
@@ -747,10 +675,6 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
 /* ===== このページだけここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
-/* 三本線で開き、閉じる印・幕・Esc で閉じる（閉じたら三本線に戻る）。開いている間はページを動かさない（html の has-menu）。
-   三本線の中の data-soon のリンク（準備中のページ）は移動せず、その行の右の .menu-soon に「準備中です」を3秒出す
-   （準備中のページを作るときは <a href="…" data-soon>名前<span class="menu-soon" aria-live="polite"></span></a> にする）。
-   トップの営業状況のバー（#status）が出ている間は、三本線をバーの高さだけ下げる */
 (() => {
   const btn = document.getElementById("menu-btn");
   const menu = document.getElementById("site-menu");
@@ -760,7 +684,7 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
   btn.addEventListener("click", () => { menu.showModal(); root.classList.add("has-menu"); btn.setAttribute("aria-expanded", "true"); });
   menu.addEventListener("close", () => { root.classList.remove("has-menu"); btn.setAttribute("aria-expanded", "false"); btn.focus(); });
   menu.querySelector(".menu-close").addEventListener("click", () => menu.close());
-  menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });   // 幕を押したとき
+  menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });
   menu.querySelectorAll("a[data-soon]").forEach((a) => {
     const note = a.querySelector(".menu-soon");
     if (!note) return;
@@ -785,7 +709,6 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
 })();
 /* ===== 共通：三本線のメニューここまで ===== */
 /* ===== 共通：画面下のメニュー ===== */
-/* 画面下のメニュー：data-until の要素（フッターやフォーム）が画面に入ったら、下へ引っ込める */
 (() => {
   const dock = document.getElementById("dock");
   const until = dock && document.querySelector(dock.dataset.until);
@@ -805,10 +728,6 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
 /* ===== 共通：画面下のメニューここまで ===== */
 
 /* ===== 共通：フッターの位置 ===== */
-/* 上の中身の高さには端数が出る（本文の行の高さ 28.8、写真や地図の縦横比）。そのままだとフッターの置かれる高さがページごとに1px未満ずれ、
-   1pxの線がにじんだり文字の上下が変わったりして、ページを切り替えると同じフッターが微妙に違って見える。
-   カードの上の端からフッターの面の上の端までが、画面のピクセルのちょうどになるよう、フッターの上の空きに1px未満を足す。
-   カードの高さが変わるたび（お知らせ・フォント・画面の幅）にそろえ直す。カードの現れの動き（transform）はカードと面で打ち消し合う */
 (() => {
   const card = document.querySelector(".card");
   const body = document.querySelector(".foot-body");
@@ -828,9 +747,6 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
 </script>
 <script>
 /* ===== 共通：写真の送りボタン ===== */
-/* 写真の枠：2枚以上の枠にだけ、マウス向けの送りボタン（矢印の丸）を付ける。端まで来た側は消す。
-   動きを減らす設定の人には、なめらかに送らず、すぐ動かす。
-   あとから並べた写真の枠（スタッフ紹介など）には、並べたあとに window.phButtons(並べた場所) を呼ぶ（付け済みの枠は飛ばす） */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)");
 const phButtons = (root) => root.querySelectorAll(".ph").forEach((ph) => {
   if (ph.dataset.btn || ph.children.length < 2) return;
@@ -865,39 +781,29 @@ window.phButtons = phButtons;
 /* ===== 共通：写真の送りボタンここまで ===== */
 </script>
 <script>
-/* お知らせ：スプレッドシート（応募と同じファイルの「お知らせ」シート）から読む。
-   Apps Script の doGet が、いま出すものだけを返す。編集はシートだけで、このファイルは触らない。
-   ・枠はいつも出しておく。中身は「読み込み中（1行分の空き）」→「お知らせ」か「ありません」
-   ・前回読んだ内容をブラウザに覚えておき、開いた瞬間はそれを出す（2回目からは待たずに表示）
-   ・読み込みに失敗したときは、前回の内容のまま。前回もなければ「ありません」
-   ・お知らせは、ページの枠も別窓も本文8行分の高さまで。超えたらその中でスクロールする
-   ・見出しの列があれば、本文の上に見出しを出す（空なら本文だけ）
-   ・セルの中の改行はそのまま出す。空の行は1行まで残し、それより続く空の行は1行にまとめる
-   ・お知らせがあるときだけ、同じ中身を別窓でも出す。閉じたら、その回の訪問中（sessionStorage）は出さない。
-     別窓を開いている間は、上下のバーを出さない（html の has-pop）。閉じると、バーはいつもの間で出てくる */
+/* ---------- お知らせ ---------- */
 (() => {
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=notices";
   const KEY = "momizo-notices";
   const box = document.getElementById("notice");
   const ul = document.getElementById("notices");
+  const pop = document.getElementById("notice-pop");
+  const popUl = document.getElementById("notices-pop");
   let resizing = false;
   addEventListener("resize", () => { if (!resizing) { resizing = true; requestAnimationFrame(() => { resizing = false; more(ul); if (pop && pop.open) more(popUl); }); } });
   ul.addEventListener("scroll", () => more(ul), { passive: true });
-  const pop = document.getElementById("notice-pop");
-  const popUl = document.getElementById("notices-pop");
   const POP_KEY = "momizo-notice-closed";
   let popDone = false;
-  // お知らせに続きがあるか：スクロールできるときはキーボードでも動かせるようにし、終わりまで来たら薄くするのをやめる
   const more = (list) => {
     const scrolls = list.scrollHeight > list.clientHeight + 1;
     if (scrolls) list.tabIndex = 0; else list.removeAttribute("tabindex");
-    list.classList.toggle("more", scrolls && list.scrollHeight - list.scrollTop - list.clientHeight > 1);
+    list.classList.toggle("has-more", scrolls && list.scrollHeight - list.scrollTop - list.clientHeight > 1);
   };
   try { popDone = !!sessionStorage.getItem(POP_KEY); } catch (e) {}
   if (!pop || typeof pop.showModal !== "function") popDone = true;
   if (pop) {
     pop.querySelector(".pop-close").addEventListener("click", () => pop.close());
-    pop.addEventListener("click", (e) => { if (e.target === pop) pop.close(); });   // 後ろの幕を押しても閉じる
+    pop.addEventListener("click", (e) => { if (e.target === pop) pop.close(); });
     popUl.addEventListener("scroll", () => more(popUl), { passive: true });
     pop.addEventListener("close", () => {
       popDone = true;

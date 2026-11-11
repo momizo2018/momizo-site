@@ -17,95 +17,84 @@
 <link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
 <style>
-/* =========================================================
-   揉蔵サイト スタイル
-   - 値は「揉蔵サイト デザイン規格書」のものだけを使う。合う値がないときは、いちばん近い段階の値を使う
-   - 固有値（段階の外の値）は規格書の固有値の章にあるものだけ。足す・変えるのは人が決める
-   - CSS はページごとに書く（共通の CSS ファイルは使わない）。「共通：○○」〜「共通：○○ここまで」の塊は、
-     使うページどうしで一字一句同じにし、直したら tools/check_common.py で確かめる
-   ========================================================= */
 
 /* ===== 共通：土台 ===== */
 :root {
-  /* ===== 色 ===== */
-  /* 夜の灯りのサロン：焦げ茶の地に、生成りの文字と、ランプの灯りのような真鍮色。キービジュアルの写真のトーンに合わせる */
-  --ink-2: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #8c7b66;   /* 文字：生成り → 沈めたベージュ。カードの上でそれぞれ 12.5・9.1・6.8・3.8 : 1 */
-  --accent: #c9a46c; --accent-hover: #dcb985;   /* 真鍮色。触れたときは一段明るく（暗い地では明るくして返す） */
-  --on-accent: #211913;                          /* accent の面の上の文字（送信ボタン、選んだ選択ボタン）。7.4 : 1 */
+  /* 色 */
+  --ink-2: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #8c7b66;
+  --accent: #c9a46c; --accent-hover: #dcb985;
+  --on-accent: #211913;
   --paper: #211913; --paper-hi: #2a2018; --paper-lo: #1a130e;
-  --err: #ef9a86;                                /* 入力の誤り（求人ページのフォームだけ） */
-  /* 透明な色：もとの色 × 透明度 .08・.16・.24・.32・.48・.64・.96。名前の数字が透明度 */
-  --ink-08: rgba(241,231,214,.08);               /* カードの縁、触れたときに一段明るくする面（白抜きボタン、線のボタン） */
-  --ink-16: rgba(241,231,214,.16);               /* 機能の実線：入力欄の縁、括弧の線 */
-  --ink-24: rgba(241,231,214,.24);               /* 機能の点線（区切り）、白抜きボタンと選択ボタンの枠、リーダー、下線 */
-  --accent-08: rgba(201,164,108,.08);            /* 灯りの面 */
-  --accent-16: rgba(201,164,108,.16);            /* 仮画像、背景のにじみ、帯の上の矢印の丸 */
-  --accent-48: rgba(201,164,108,.48);            /* 飾りの線：帯の縁の二重線、飾り枠、特徴の札の縁、コース名の短い線 */
-  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 選択ボタンの面 / カードの近い影 / カードの遠い影 */
-  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);   /* カード / 画面下のメニューの面（上側） */
-  --paper-64: rgba(33,25,19,.64);                /* 写真の上の矢印の丸 */
+  --err: #ef9a86;
+  --ink-08: rgba(241,231,214,.08);
+  --ink-16: rgba(241,231,214,.16);
+  --ink-24: rgba(241,231,214,.24);
+  --accent-08: rgba(201,164,108,.08);
+  --accent-16: rgba(201,164,108,.16);
+  --accent-48: rgba(201,164,108,.48);
+  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);
+  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);
+  --paper-64: rgba(33,25,19,.64);
 
-  /* ===== 共通値（全ページ同じ） ===== */
-  /* 間隔の段階 */
+  /* 間隔 */
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px;
   --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
 
-  /* 間隔（役割で選ぶ） */
-  --gap-tight: var(--sp-1);     /*  4 名前のすぐ下の添え書き、表の項目名→内容 */
-  --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、特徴の札どうし、写真どうし、コース名→施術名 */
-  --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
-  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目どうし */
-  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
-  --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、ナビの帯の上、フッターのロゴ→著作権表示 */
-  --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
-  --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
+  --gap-tight: var(--sp-1);
+  --gap-item: var(--sp-2);
+  --gap-list: var(--sp-3);
+  --gap-head: var(--sp-4);
+  --gap-block: var(--sp-6);
+  --gap-section: var(--sp-8);
+  --page-group: var(--sp-16);
+  --page-section: var(--sp-24);
 
   /* 枠の内側 */
-  --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
-  --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
-  --pad-tag: var(--sp-1) var(--sp-3);   /* 上下4・左右12 特徴の札 */
-  --pad-choice: var(--sp-2) var(--sp-4);   /* 上下8・左右16 「できる／できない」の選択ボタン */
+  --pad-part: var(--sp-3) var(--sp-4);
+  --pad-box: var(--sp-6);
+  --pad-tag: var(--sp-1) var(--sp-3);
+  --pad-choice: var(--sp-2) var(--sp-4);
 
-  /* 横の位置（幅480px以下で変わる） */
+  /* 横の位置 */
   --page-pad: var(--sp-4);
-  --card-w: 480px;              /* 固有値 */
+  --card-w: 480px;
   --card-pad-x: var(--sp-8);
   --card-pad-y: var(--sp-12);
 
   /* 部品の大きさ */
-  --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ */
-  --day-col: var(--sp-16);      /* 64 フォームの曜日の欄の幅 */
-  --arrow: var(--sp-8);         /* 32 矢印の丸 */
+  --size-control: var(--sp-16);
+  --day-col: var(--sp-16);
+  --arrow: var(--sp-8);
+  --logo-h: 50px;
+  --logo-foot: 48px;
 
   /* 線・角丸・影 */
   --bw: 1px; --focus-w: 2px;
-  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;   /* r-sm は特徴の札だけ */
+  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;
   --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-32), 0 var(--sp-1) var(--sp-3) var(--shade-24);
 
   /* 文字 */
   --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;   /* 見出し（ページの題・セクション見出し・コース名・施術名・小見出し）。欧文のクラシックなセリフ体と並べる前提の明朝で、線の強弱が穏やか */
+  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --fw-regular: 400;
-  --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
-  --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
-  --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、著作権表示、コースの施術名、表の単位、お知らせの見出し */
-  --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
-  --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
-  --logo-h: 50px;      /* 固有値：ヘッダーのロゴ（横型の画像）の高さ。幅は画像の比率のまま */
-  --logo-foot: 48px;   /* 固有値：フッターのマーク（画像）の高さ */
-  --lh-none: 1;      /* 1行の部品 */
-  --lh-ui: 1.4;      /* 見出し、ボタン */
-  --lh-text: 1.8;    /* 文章 */
+  --fw-ui: 500;
+  --fw-heading: 500;
+  --fw-heading-sub: 600;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --lh-none: 1;
+  --lh-ui: 1.4;
+  --lh-text: 1.8;
 
   /* 動き */
   --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --lift: -2px; --press: .97; --enter-y: var(--sp-4);
-  --dim: .6;        /* 触れたときの不透明度（画面下のメニューの文字、ロゴ） */
-  --disabled: .4;   /* 使えない状態（送信中のボタン、チェックしていない曜日の時間） */
-  --dock-delay: .6s;   /* 固有値：画面下のメニュー（と営業状況のバー）が出てくるまでの間 */
-  --bar-glow: 4s;      /* 固有値：上下のバーの明滅の周期 */
+  --dim: .6;
+  --disabled: .4;
+  --dock-delay: .6s;
+  --bar-glow: 4s;
 
   /* 背景 */
   --bg-page:
@@ -127,7 +116,6 @@ body {
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
-/* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
 h1, h2, h3 { font-family: var(--font-heading); font-weight: var(--fw-heading); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
@@ -144,45 +132,34 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
 
-/* ---------- ヘッダー：ロゴだけ（右上に三本線のメニュー。「共通：三本線のメニュー」）。全ページで同じ形 ---------- */
-/* ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
+/* ---------- ヘッダー ---------- */
 .head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
-/* 帯の縁は二重線（面の端の線 →2→ もう1本）。配置を動かさないよう、線は影と重ねて描く */
 .head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 
-/* ロゴ：ロゴ一式の横型（生成り。マーク90%を文字の下端にそろえた組み）を、余白なしの画像（SVG）で置く。フッターはマークだけ。
-   色は画像の中に直接書いている（ink-2・soft）。CSS の色の指定とは連動しないので、ink-2・soft を変えるときは作り直す。
-   大きさは固有値で、高さで決める（幅は画像の比率のまま）。ヘッダーの高さは、幅320でも三本線のメニューと重ならない値 */
+/* ---------- ロゴ ---------- */
 .brand { display: block; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
 .brand img { display: block; width: auto; height: var(--logo-h); }
 .site-foot .brand img { height: var(--logo-foot); }
 
-/* ページ内の目次：本文の頭（ページの題とひとことの下。トップはヒーローの下）に、上下を点線で挟んだ帯で置く。目次のないページには置かない。
-   項目は見出しと同じ言葉（省略しない）で、左から並べ、入りきらなければ折り返して左にそろえる（14px・muted。項目どうし縦横とも16）。
-   押せる範囲は上下に8ずつ広げる（縦に並んだ項目どうしで接する） */
+/* ---------- ナビ ---------- */
 .nav { display: flex; flex-wrap: wrap; gap: var(--gap-head); margin-top: var(--gap-section); padding: var(--gap-head) 0; border-top: var(--bw) dashed var(--ink-24); border-bottom: var(--bw) dashed var(--ink-24); }
 .nav a { padding: var(--gap-item) 0; margin: calc(var(--gap-item) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover { color: var(--ink-2); } }
 
-/* ---------- 見出し：日本語だけ。ページの題とセクション見出しは明朝20・500、小見出しは明朝16・600 ---------- */
+/* ---------- 見出し ---------- */
 h1, h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
-/* 飾り罫：ページの題とセクション見出しの下に、線・菱形・線（洋書の章扉の飾り。固有値の絵）。見出し →12→ 飾り罫 →32→ 中身。コース名などの項目の見出しには付けない */
 .page-title h1::after, .sec h2:not(.name)::after, .band h2::after { content: ""; display: block; width: 56px; height: 7px; margin-top: var(--gap-list); background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%227%22 viewBox=%220 0 56 7%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M0 3.5h22M34 3.5h22%22/%3E%3Cpath d=%22M28 .5l3 3-3 3-3-3z%22/%3E%3C/svg%3E") no-repeat; }
 h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 
 /* ---------- ページの並び ---------- */
 .sec { padding-top: var(--page-section); }
 
-/* ---------- 線で区切った行（表・特徴の一覧・料金表・働き方・報酬早見表）
-   各行の下と一覧の上に区切り線。行の上下16 ---------- */
+/* ---------- 線で区切った行 ---------- */
 .rows { list-style: none; border-top: var(--bw) dashed var(--ink-24); }
 .rows > * { padding: var(--gap-head) 0; border-bottom: var(--bw) dashed var(--ink-24); }
 
-/* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
-   カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（card-64 → card）とぼかし。影と角丸は付けない。
-   上の区切り線は中身の幅だけ。項目どうしは短い縦線で区切る。文字はボタンと同じ 16px・500・ink-2。
-   data-until の要素（求人はフォーム、ほかは著作権表示）が画面に入ったら、下へ引っ込める ---------- */
+/* ---------- 画面下のメニュー ---------- */
 .dock {
   position: fixed; left: 50%; bottom: 0; z-index: 10;
   width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
@@ -191,12 +168,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   background: linear-gradient(var(--card-64), var(--card));
   -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
   transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
-  /* 開いたとき、カードが現れ終わるころに下から出てくる（1回だけ）。backwards なので、出たあとは .hide の邪魔をしない */
   animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
-/* バーの明滅：面に灯りの色（accent-16）をゆっくり重ねて、ほどいてを繰り返す（周期は固有値）。文字は点滅させない。
-   画面の上の営業状況のバー（トップ）も同じ明滅を使う。動きを減らす設定では止める */
 .dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
 @keyframes bar-glow { 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .dock::after { animation: none !important; } }
@@ -212,14 +186,12 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .dock a:hover { opacity: var(--dim); } }
 
-/* ---------- フッター：ロゴ → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる）。全ページで同じ形 ---------- */
-/* 上の空き96に、スクリプトが1px未満（--foot-nudge）を足して、フッターの面の上の端を画面のピクセルのちょうどにそろえる（「共通：フッターの位置」） */
+/* ---------- フッター ---------- */
 .site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
 .foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48); }
 .foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
-.foot-row { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-item); }   /* ロゴ ↔ ページの先頭へ */
-/* ページの先頭へ：フッターのロゴの右端に、矢印の丸（線のボタンの矢印と同じ形。帯の上なので accent-16 の面）。
-   フッターの中にあるので、見えるのはページのいちばん下まで来たときだけ。押すと先頭へ（動きを減らす設定では、すぐ） */
+.foot-row { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-item); }
+/* ---------- ページの先頭へ ---------- */
 .to-top { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--accent-16); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
@@ -228,11 +200,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
-/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはリンクの行を置かない）。
-   三本線：画面の右上に固定（カードの右上の内側にそろえる）。写真の送りボタンと同じ半透明の丸（paper-64、32）。
-   トップの営業状況のバーが出ている間は、バーの高さだけ下げる（スクリプトが --menu-bar を入れる）。お知らせの別窓を開いている間は隠す。
-   開くと、カードと同じ面の板が画面の上から下りてくる（幅は画面下のメニューと同じ）。後ろは paper-64 の幕で、ページは動かさない。
-   中身：ページ（今いるページは faint で、リンクにしない）→32→ 外のリンク。行は点線で区切り、行の上下12。閉じる印・幕・Esc で閉じる */
 .menu-btn {
   position: fixed; z-index: 10;
   top: calc(env(safe-area-inset-top, 0px) + var(--page-pad) + var(--card-pad-y) + var(--menu-bar, 0px));
@@ -267,15 +234,11 @@ html.has-menu { overflow: hidden; }
 .menu-list li { border-bottom: var(--bw) dashed var(--ink-24); }
 .menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
 .menu-list [aria-current] { color: var(--faint); }
-.menu-soon { font-size: var(--fs-sm); color: var(--soft); }   /* 準備中のページを押したときだけ「準備中です」 */
+.menu-soon { font-size: var(--fs-sm); color: var(--soft); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
 
 /* ===== 共通：写真の枠 ===== */
-/* 写真は角丸の枠に入れず、カードの端から端まで広げる（はじめての方への帯と同じ広げ方）。
-   高さは280で固定（固有値）。写真はその高さのまま横に並べ（間8）、横にスクロールして見る。
-   次の写真がのぞくように、1枚の幅は枠より48せまくする。1枚だけのときは幅いっぱいに広げる。
-   止まる位置（スナップ）は付けない。色味は少し落ち着かせ、写真どうしのトーンをそろえる（固有値） */
 .ph {
   --ph-h: 280px;
   display: flex; gap: var(--gap-item); height: var(--ph-h);
@@ -290,7 +253,6 @@ html.has-menu { overflow: hidden; }
   filter: sepia(.2) saturate(.85) brightness(.85);
 }
 .ph img:only-child { width: 100%; max-width: none; }
-/* マウスの人向けの送りボタン（矢印の丸）。スクロールできる枠にだけ、スクリプトで付ける。端まで来た側は消す */
 .ph-box { position: relative; }
 .ph-btn {
   position: absolute; top: 50%; z-index: 1; width: var(--arrow); height: var(--arrow); margin-top: calc(var(--arrow) / -2);
@@ -305,31 +267,26 @@ html.has-menu { overflow: hidden; }
 /* ===== 共通：写真の枠ここまで ===== */
 
 /* ===== 共通：料金の単位 ===== */
-/* 単位「税込」：表の上に引いた点線の右端に置き、表の見出しのように表とつなげる（総額表示。金額や文章には入れない）。
-   14px・soft、点線は ink-24、線→文字8。表との間は .unit を置くページで決める */
 .unit { display: flex; align-items: center; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 .unit::before { content: ""; flex: 1; border-top: var(--bw) dashed var(--ink-24); }
 /* ===== 共通：料金の単位ここまで ===== */
 /* ===== 共通：リーダー ===== */
-/* 「時間……金額」の点線。時間に class="leader" を付ける。時間と点線を一つの箱に入れ、点線が残りの幅を埋める（広がれば伸び、狭まれば縮み、縮みきると消える。文字とは重ならない）。
-   時間は折り返さない：初めて開いたとき、Webフォントの差し替えのあとで欄の幅が測り直されず（iPhone などの WebKit）、数字と「分」の間で折れて縦に積まれるのを防ぐ */
-:root { --leader-dots: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }   /* 点線の模様（ink-24 の点、6px 間隔） */
+:root { --leader-dots: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }
 .leader { display: flex; align-items: baseline; gap: var(--gap-item); white-space: nowrap; }
 .leader::after { content: ""; flex: 1; height: var(--sp-1); background: var(--leader-dots); }
 /* ===== 共通：リーダーここまで ===== */
 /* ===== 共通：項目と内容の表・地図・線のボタン ===== */
-/* 項目と内容の表（.rows と組み合わせる）：項目名（soft）→4→ 内容。
-   項目名を上に置くので、画面が狭くても内容の幅を取れる */
+/* ---------- 項目と内容の表 ---------- */
 .info { display: grid; }
 .info > div { display: grid; gap: var(--gap-tight); }
 .info dt { color: var(--soft); }
 .hours dd { font-variant-numeric: tabular-nums; }
 
-/* 地図：3:2（固有値）。色味は少し落ち着かせる */
+/* ---------- 地図 ---------- */
 .mapbox { border-radius: var(--r-md); overflow: hidden; background: var(--paper); aspect-ratio: 3 / 2; }
 .mapbox iframe { display: block; width: 100%; height: 100%; border: 0; filter: grayscale(.5) sepia(.3) brightness(.8); }
 
-/* 線のボタン（外部サイトへのリンク）：左に名前、右に矢印の丸 */
+/* ---------- 線のボタン ---------- */
 .line {
   display: flex; align-items: center; justify-content: space-between; gap: var(--gap-head);
   min-height: var(--size-control); padding: var(--pad-part);
@@ -340,20 +297,17 @@ html.has-menu { overflow: hidden; }
 .line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--card); line-height: var(--lh-none); color: var(--muted); }
 .line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .line:hover { background-color: var(--ink-08); transform: translateY(var(--lift)); } }
-/* 帯の上の線のボタンは、帯と逆にカードの面。矢印の丸はいつも箱と逆の面 */
 .band .line { background-color: var(--card); }
 .band .line-arrow { background: var(--accent-16); }
-.maplink { margin-top: var(--gap-list); }   /* 地図→地図のボタン12 */
+.maplink { margin-top: var(--gap-list); }
 /* ===== 共通：項目と内容の表・地図・線のボタンここまで ===== */
 /* ===== 共通：題と副題 ===== */
-/* コース名：本の題と副題のように、名前 →8→ 短い線（16、accent-48）＋施術名（明朝14・400・soft） */
 .name { display: grid; gap: var(--gap-item); }
 .name small { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-heading); font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--soft); }
 .name small::before { content: ""; flex: 0 0 var(--sp-4); border-top: var(--bw) solid var(--accent-48); }
 /* ===== 共通：題と副題ここまで ===== */
 
 /* ===== 共通：ページの題 ===== */
-/* ページの題（トップ以外）：題の上の空き64。題 → 飾り罫 →32→ ひとこと（小見出しと同じ明朝16px・600・ink-2）→16→ 本文 */
 .page-title { padding-top: var(--page-group); }
 .lead { font-family: var(--font-heading); font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
@@ -361,30 +315,25 @@ html.has-menu { overflow: hidden; }
 
 /* ===== このページだけ：コースと料金 ===== */
 /* ---------- ページの並び ---------- */
-.courses { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
+.courses { display: grid; gap: var(--page-group); margin-top: var(--page-section); }
 
-/* ---------- コース名：名前（明朝20・500）。題と副題の形は「共通：題と副題」。リクエスト料も同じ形 ---------- */
-
-/* ---------- コース：写真 →32→ コース名 →16→ 説明 →32→ 料金表 ---------- */
+/* ---------- コース ---------- */
 .course .name { margin: var(--gap-section) 0 0; }
+#request .name { margin-bottom: 0; }
 .course .name + p, #request .name + p { margin-top: var(--gap-head); }
-.staff-link { margin-top: var(--gap-block); }   /* 説明→スタッフ紹介への線のボタン24 */
+.staff-link { margin-top: var(--gap-block); }
 
-/* ---------- 料金表：喫茶店のメニューのように、時間と料金を点のリーダーでつなぐ。時間 →（内訳）→ 料金。料金は最後の段の右端 ----------
-   リーダーが行を目でつなぐので、行の区切り線は付けない。行の上下8。リーダーは間4の点（直径2、ink-24）で、下の端を料金の並びの線にそろえる */
-/* 単位：表の上に1か所だけ「税込」（総額表示）。料金の数字には半角の「¥」を付ける */
-.unit { margin-top: var(--gap-section); margin-bottom: var(--gap-item); }   /* 形は「共通：料金の単位」 */
+/* ---------- 料金表 ---------- */
+.unit { margin-top: var(--gap-section); margin-bottom: var(--gap-item); }
 .prices { list-style: none; }
 .prices > * { padding: var(--gap-item) 0; }
 .prices li { display: grid; grid-template-columns: 1fr auto; gap: var(--gap-tight) var(--gap-item); align-items: baseline; }
-/* 内訳のない行は、時間に class="leader"（「共通：リーダー」）。内訳のある行は li に class="detail" を付けて見分ける */
-.prices li.detail::before { content: ""; grid-row: 2; grid-column: 1; align-self: end; height: var(--sp-1); margin-bottom: calc(var(--fs-lg) * .135); background: var(--leader-dots); }   /* 内訳のある行は、料金の段の左をリーダーで埋める（時間が上の段なので「共通：リーダー」の形は使わず、模様だけ同じ） */
+.prices li.detail::before { content: ""; grid-row: 2; grid-column: 1; align-self: end; height: var(--sp-1); margin-bottom: calc(var(--fs-lg) * .135); background: var(--leader-dots); }
 .prices .t { line-height: var(--lh-ui); }
-.prices .t small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }   /* 内訳は時間の下に */
-/* 内訳のある行は3段：時間 → 内訳（幅いっぱい）→ 料金（右端）。料金はいつも行の最後の段の右端 */
+.prices .t small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 .prices li.detail .t { grid-column: 1 / -1; }
 .prices li.detail b { grid-row: 2; grid-column: 2; }
-.prices small span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) dashed var(--ink-24); }   /* 組み合わせの区切り：画面下のメニューと同じ細い縦線 */
+.prices small span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) dashed var(--ink-24); }
 .prices b { font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* ===== このページだけここまで ===== */
 </style>
@@ -481,7 +430,7 @@ html.has-menu { overflow: hidden; }
 </footer>
 </div>
 
-<!-- ===== 三本線のメニュー（4ページで同じ。今いるページだけ aria-current の span にする） ===== -->
+<!-- 三本線のメニュー -->
 <button class="menu-btn" id="menu-btn" type="button" aria-label="メニューを開く" aria-haspopup="dialog" aria-expanded="false" aria-controls="site-menu"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M0 .5h16M0 6h16M0 11.5h16" stroke="currentColor" stroke-width="1"/></svg></button>
 <dialog class="menu" id="site-menu" aria-label="メニュー">
   <div class="menu-body">
@@ -507,10 +456,6 @@ html.has-menu { overflow: hidden; }
 
 <script>
 /* ===== 共通：三本線のメニュー ===== */
-/* 三本線で開き、閉じる印・幕・Esc で閉じる（閉じたら三本線に戻る）。開いている間はページを動かさない（html の has-menu）。
-   三本線の中の data-soon のリンク（準備中のページ）は移動せず、その行の右の .menu-soon に「準備中です」を3秒出す
-   （準備中のページを作るときは <a href="…" data-soon>名前<span class="menu-soon" aria-live="polite"></span></a> にする）。
-   トップの営業状況のバー（#status）が出ている間は、三本線をバーの高さだけ下げる */
 (() => {
   const btn = document.getElementById("menu-btn");
   const menu = document.getElementById("site-menu");
@@ -520,7 +465,7 @@ html.has-menu { overflow: hidden; }
   btn.addEventListener("click", () => { menu.showModal(); root.classList.add("has-menu"); btn.setAttribute("aria-expanded", "true"); });
   menu.addEventListener("close", () => { root.classList.remove("has-menu"); btn.setAttribute("aria-expanded", "false"); btn.focus(); });
   menu.querySelector(".menu-close").addEventListener("click", () => menu.close());
-  menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });   // 幕を押したとき
+  menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });
   menu.querySelectorAll("a[data-soon]").forEach((a) => {
     const note = a.querySelector(".menu-soon");
     if (!note) return;
@@ -545,7 +490,6 @@ html.has-menu { overflow: hidden; }
 })();
 /* ===== 共通：三本線のメニューここまで ===== */
 /* ===== 共通：画面下のメニュー ===== */
-/* 画面下のメニュー：data-until の要素（フッターやフォーム）が画面に入ったら、下へ引っ込める */
 (() => {
   const dock = document.getElementById("dock");
   const until = dock && document.querySelector(dock.dataset.until);
@@ -565,10 +509,6 @@ html.has-menu { overflow: hidden; }
 /* ===== 共通：画面下のメニューここまで ===== */
 
 /* ===== 共通：フッターの位置 ===== */
-/* 上の中身の高さには端数が出る（本文の行の高さ 28.8、写真や地図の縦横比）。そのままだとフッターの置かれる高さがページごとに1px未満ずれ、
-   1pxの線がにじんだり文字の上下が変わったりして、ページを切り替えると同じフッターが微妙に違って見える。
-   カードの上の端からフッターの面の上の端までが、画面のピクセルのちょうどになるよう、フッターの上の空きに1px未満を足す。
-   カードの高さが変わるたび（お知らせ・フォント・画面の幅）にそろえ直す。カードの現れの動き（transform）はカードと面で打ち消し合う */
 (() => {
   const card = document.querySelector(".card");
   const body = document.querySelector(".foot-body");
@@ -588,9 +528,6 @@ html.has-menu { overflow: hidden; }
 </script>
 <script>
 /* ===== 共通：写真の送りボタン ===== */
-/* 写真の枠：2枚以上の枠にだけ、マウス向けの送りボタン（矢印の丸）を付ける。端まで来た側は消す。
-   動きを減らす設定の人には、なめらかに送らず、すぐ動かす。
-   あとから並べた写真の枠（スタッフ紹介など）には、並べたあとに window.phButtons(並べた場所) を呼ぶ（付け済みの枠は飛ばす） */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)");
 const phButtons = (root) => root.querySelectorAll(".ph").forEach((ph) => {
   if (ph.dataset.btn || ph.children.length < 2) return;

@@ -15,95 +15,84 @@
 <link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
 <style>
-/* =========================================================
-   揉蔵サイト スタイル
-   - 値は「揉蔵サイト デザイン規格書」のものだけを使う。合う値がないときは、いちばん近い段階の値を使う
-   - 固有値（段階の外の値）は規格書の固有値の章にあるものだけ。足す・変えるのは人が決める
-   - CSS はページごとに書く（共通の CSS ファイルは使わない）。「共通：○○」〜「共通：○○ここまで」の塊は、
-     使うページどうしで一字一句同じにし、直したら tools/check_common.py で確かめる
-   ========================================================= */
 
 /* ===== 共通：土台 ===== */
 :root {
-  /* ===== 色 ===== */
-  /* 夜の灯りのサロン：焦げ茶の地に、生成りの文字と、ランプの灯りのような真鍮色。キービジュアルの写真のトーンに合わせる */
-  --ink-2: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #8c7b66;   /* 文字：生成り → 沈めたベージュ。カードの上でそれぞれ 12.5・9.1・6.8・3.8 : 1 */
-  --accent: #c9a46c; --accent-hover: #dcb985;   /* 真鍮色。触れたときは一段明るく（暗い地では明るくして返す） */
-  --on-accent: #211913;                          /* accent の面の上の文字（送信ボタン、選んだ選択ボタン）。7.4 : 1 */
+  /* 色 */
+  --ink-2: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #8c7b66;
+  --accent: #c9a46c; --accent-hover: #dcb985;
+  --on-accent: #211913;
   --paper: #211913; --paper-hi: #2a2018; --paper-lo: #1a130e;
-  --err: #ef9a86;                                /* 入力の誤り（求人ページのフォームだけ） */
-  /* 透明な色：もとの色 × 透明度 .08・.16・.24・.32・.48・.64・.96。名前の数字が透明度 */
-  --ink-08: rgba(241,231,214,.08);               /* カードの縁、触れたときに一段明るくする面（白抜きボタン、線のボタン） */
-  --ink-16: rgba(241,231,214,.16);               /* 機能の実線：入力欄の縁、括弧の線 */
-  --ink-24: rgba(241,231,214,.24);               /* 機能の点線（区切り）、白抜きボタンと選択ボタンの枠、リーダー、下線 */
-  --accent-08: rgba(201,164,108,.08);            /* 灯りの面 */
-  --accent-16: rgba(201,164,108,.16);            /* 仮画像、背景のにじみ、帯の上の矢印の丸 */
-  --accent-48: rgba(201,164,108,.48);            /* 飾りの線：帯の縁の二重線、飾り枠、特徴の札の縁、コース名の短い線 */
-  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);   /* 選択ボタンの面 / カードの近い影 / カードの遠い影 */
-  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);   /* カード / 画面下のメニューの面（上側） */
-  --paper-64: rgba(33,25,19,.64);                /* 写真の上の矢印の丸 */
+  --err: #ef9a86;
+  --ink-08: rgba(241,231,214,.08);
+  --ink-16: rgba(241,231,214,.16);
+  --ink-24: rgba(241,231,214,.24);
+  --accent-08: rgba(201,164,108,.08);
+  --accent-16: rgba(201,164,108,.16);
+  --accent-48: rgba(201,164,108,.48);
+  --shade-16: rgba(0,0,0,.16); --shade-24: rgba(0,0,0,.24); --shade-32: rgba(0,0,0,.32);
+  --card: rgba(46,36,28,.96); --card-64: rgba(46,36,28,.64);
+  --paper-64: rgba(33,25,19,.64);
 
-  /* ===== 共通値（全ページ同じ） ===== */
-  /* 間隔の段階 */
+  /* 間隔 */
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px;
   --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
 
-  /* 間隔（役割で選ぶ） */
-  --gap-tight: var(--sp-1);     /*  4 名前のすぐ下の添え書き、表の項目名→内容 */
-  --gap-item: var(--sp-2);      /*  8 表の中の補足、印→文、特徴の札どうし、写真どうし、コース名→施術名 */
-  --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
-  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ナビの帯の線→項目・項目どうし */
-  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
-  --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、ナビの帯の上、フッターのロゴ→著作権表示 */
-  --page-group: var(--sp-16);   /* 64 ナビ→最初の内容、大きなまとまりどうし、帯の上下の内側、コースどうし */
-  --page-section: var(--sp-24); /* 96 セクションどうし、最後の内容→フッター */
+  --gap-tight: var(--sp-1);
+  --gap-item: var(--sp-2);
+  --gap-list: var(--sp-3);
+  --gap-head: var(--sp-4);
+  --gap-block: var(--sp-6);
+  --gap-section: var(--sp-8);
+  --page-group: var(--sp-16);
+  --page-section: var(--sp-24);
 
   /* 枠の内側 */
-  --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
-  --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
-  --pad-tag: var(--sp-1) var(--sp-3);   /* 上下4・左右12 特徴の札 */
-  --pad-choice: var(--sp-2) var(--sp-4);   /* 上下8・左右16 「できる／できない」の選択ボタン */
+  --pad-part: var(--sp-3) var(--sp-4);
+  --pad-box: var(--sp-6);
+  --pad-tag: var(--sp-1) var(--sp-3);
+  --pad-choice: var(--sp-2) var(--sp-4);
 
-  /* 横の位置（幅480px以下で変わる） */
+  /* 横の位置 */
   --page-pad: var(--sp-4);
-  --card-w: 480px;              /* 固有値 */
+  --card-w: 480px;
   --card-pad-x: var(--sp-8);
   --card-pad-y: var(--sp-12);
 
   /* 部品の大きさ */
-  --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ */
-  --day-col: var(--sp-16);      /* 64 フォームの曜日の欄の幅 */
-  --arrow: var(--sp-8);         /* 32 矢印の丸 */
+  --size-control: var(--sp-16);
+  --day-col: var(--sp-16);
+  --arrow: var(--sp-8);
+  --logo-h: 50px;
+  --logo-foot: 48px;
 
   /* 線・角丸・影 */
   --bw: 1px; --focus-w: 2px;
-  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;   /* r-sm は特徴の札だけ */
+  --r-sm: 4px; --r-md: 16px; --r-xl: 24px; --r-pill: 999px;
   --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-32), 0 var(--sp-1) var(--sp-3) var(--shade-24);
 
   /* 文字 */
   --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;   /* 見出し（ページの題・セクション見出し・コース名・施術名・小見出し）。欧文のクラシックなセリフ体と並べる前提の明朝で、線の強弱が穏やか */
+  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --fw-regular: 400;
-  --fw-ui: 500;        /* ボタン・画面下のメニュー・フォームの項目名（ゴシック）。600だと強く、落ち着いた印象から外れる */
-  --fw-heading: 500;   /* 見出し（明朝）。400は画面で細く弱く、600は大きな見出しで重い */
-  --fw-heading-sub: 600;   /* 小見出し（明朝16）。本文と同じ大きさなので、一段太くして見出しと分ける */
-  --fs-sm: 14px;     /* 補足・注意書き、ナビ、著作権表示、コースの施術名、表の単位、お知らせの見出し */
-  --fs-md: 16px;     /* 本文、表、ボタン、小見出し */
-  --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
-  --logo-h: 50px;      /* 固有値：ヘッダーのロゴ（横型の画像）の高さ。幅は画像の比率のまま */
-  --logo-foot: 48px;   /* 固有値：フッターのマーク（画像）の高さ */
-  --lh-none: 1;      /* 1行の部品 */
-  --lh-ui: 1.4;      /* 見出し、ボタン */
-  --lh-text: 1.8;    /* 文章 */
+  --fw-ui: 500;
+  --fw-heading: 500;
+  --fw-heading-sub: 600;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --lh-none: 1;
+  --lh-ui: 1.4;
+  --lh-text: 1.8;
 
   /* 動き */
   --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --lift: -2px; --press: .97; --enter-y: var(--sp-4);
-  --dim: .6;        /* 触れたときの不透明度（画面下のメニューの文字、ロゴ） */
-  --disabled: .4;   /* 使えない状態（送信中のボタン、チェックしていない曜日の時間） */
-  --dock-delay: .6s;   /* 固有値：画面下のメニュー（と営業状況のバー）が出てくるまでの間 */
-  --bar-glow: 4s;      /* 固有値：上下のバーの明滅の周期 */
+  --dim: .6;
+  --disabled: .4;
+  --dock-delay: .6s;
+  --bar-glow: 4s;
 
   /* 背景 */
   --bg-page:
@@ -125,7 +114,6 @@ body {
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
-/* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
 h1, h2, h3 { font-family: var(--font-heading); font-weight: var(--fw-heading); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
@@ -142,45 +130,34 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
 
-/* ---------- ヘッダー：ロゴだけ（右上に三本線のメニュー。「共通：三本線のメニュー」）。全ページで同じ形 ---------- */
-/* ヘッダー全体を、はじめての方への帯と同じ accent-08 の面にする（カードの端から端まで。内側はカードの内側と同じ） */
+/* ---------- ヘッダー ---------- */
 .head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
-/* 帯の縁は二重線（面の端の線 →2→ もう1本）。配置を動かさないよう、線は影と重ねて描く */
 .head::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 
-/* ロゴ：ロゴ一式の横型（生成り。マーク90%を文字の下端にそろえた組み）を、余白なしの画像（SVG）で置く。フッターはマークだけ。
-   色は画像の中に直接書いている（ink-2・soft）。CSS の色の指定とは連動しないので、ink-2・soft を変えるときは作り直す。
-   大きさは固有値で、高さで決める（幅は画像の比率のまま）。ヘッダーの高さは、幅320でも三本線のメニューと重ならない値 */
+/* ---------- ロゴ ---------- */
 .brand { display: block; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
 .brand img { display: block; width: auto; height: var(--logo-h); }
 .site-foot .brand img { height: var(--logo-foot); }
 
-/* ページ内の目次：本文の頭（ページの題とひとことの下。トップはヒーローの下）に、上下を点線で挟んだ帯で置く。目次のないページには置かない。
-   項目は見出しと同じ言葉（省略しない）で、左から並べ、入りきらなければ折り返して左にそろえる（14px・muted。項目どうし縦横とも16）。
-   押せる範囲は上下に8ずつ広げる（縦に並んだ項目どうしで接する） */
+/* ---------- ナビ ---------- */
 .nav { display: flex; flex-wrap: wrap; gap: var(--gap-head); margin-top: var(--gap-section); padding: var(--gap-head) 0; border-top: var(--bw) dashed var(--ink-24); border-bottom: var(--bw) dashed var(--ink-24); }
 .nav a { padding: var(--gap-item) 0; margin: calc(var(--gap-item) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover { color: var(--ink-2); } }
 
-/* ---------- 見出し：日本語だけ。ページの題とセクション見出しは明朝20・500、小見出しは明朝16・600 ---------- */
+/* ---------- 見出し ---------- */
 h1, h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
-/* 飾り罫：ページの題とセクション見出しの下に、線・菱形・線（洋書の章扉の飾り。固有値の絵）。見出し →12→ 飾り罫 →32→ 中身。コース名などの項目の見出しには付けない */
 .page-title h1::after, .sec h2:not(.name)::after, .band h2::after { content: ""; display: block; width: 56px; height: 7px; margin-top: var(--gap-list); background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%227%22 viewBox=%220 0 56 7%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M0 3.5h22M34 3.5h22%22/%3E%3Cpath d=%22M28 .5l3 3-3 3-3-3z%22/%3E%3C/svg%3E") no-repeat; }
 h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 
 /* ---------- ページの並び ---------- */
 .sec { padding-top: var(--page-section); }
 
-/* ---------- 線で区切った行（表・特徴の一覧・料金表・働き方・報酬早見表）
-   各行の下と一覧の上に区切り線。行の上下16 ---------- */
+/* ---------- 線で区切った行 ---------- */
 .rows { list-style: none; border-top: var(--bw) dashed var(--ink-24); }
 .rows > * { padding: var(--gap-head) 0; border-bottom: var(--bw) dashed var(--ink-24); }
 
-/* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
-   カードの中に溶け込む形：カードの幅の内側に、焦げ茶の透ける面（card-64 → card）とぼかし。影と角丸は付けない。
-   上の区切り線は中身の幅だけ。項目どうしは短い縦線で区切る。文字はボタンと同じ 16px・500・ink-2。
-   data-until の要素（求人はフォーム、ほかは著作権表示）が画面に入ったら、下へ引っ込める ---------- */
+/* ---------- 画面下のメニュー ---------- */
 .dock {
   position: fixed; left: 50%; bottom: 0; z-index: 10;
   width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
@@ -189,12 +166,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   background: linear-gradient(var(--card-64), var(--card));
   -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
   transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
-  /* 開いたとき、カードが現れ終わるころに下から出てくる（1回だけ）。backwards なので、出たあとは .hide の邪魔をしない */
   animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
-/* バーの明滅：面に灯りの色（accent-16）をゆっくり重ねて、ほどいてを繰り返す（周期は固有値）。文字は点滅させない。
-   画面の上の営業状況のバー（トップ）も同じ明滅を使う。動きを減らす設定では止める */
 .dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
 @keyframes bar-glow { 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .dock::after { animation: none !important; } }
@@ -210,14 +184,12 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 .dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .dock a:hover { opacity: var(--dim); } }
 
-/* ---------- フッター：ロゴ → 著作権表示。ヘッダーと同じ accent-08 の面（面の端が上の区切りになる）。全ページで同じ形 ---------- */
-/* 上の空き96に、スクリプトが1px未満（--foot-nudge）を足して、フッターの面の上の端を画面のピクセルのちょうどにそろえる（「共通：フッターの位置」） */
+/* ---------- フッター ---------- */
 .site-foot { margin-top: auto; padding-top: calc(var(--page-section) + var(--foot-nudge, 0px)); }
 .foot-body { position: relative; margin: 0 calc(var(--card-pad-x) * -1) calc(var(--card-pad-y) * -1); padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 var(--bw) 0 var(--accent-48); }
 .foot-body::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--bw) * -3); height: var(--bw); background: var(--accent-48); }
-.foot-row { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-item); }   /* ロゴ ↔ ページの先頭へ */
-/* ページの先頭へ：フッターのロゴの右端に、矢印の丸（線のボタンの矢印と同じ形。帯の上なので accent-16 の面）。
-   フッターの中にあるので、見えるのはページのいちばん下まで来たときだけ。押すと先頭へ（動きを減らす設定では、すぐ） */
+.foot-row { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-item); }
+/* ---------- ページの先頭へ ---------- */
 .to-top { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--accent-16); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
@@ -226,11 +198,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
-/* ページの移動と外のリンクは、右上の三本線にまとめる（ヘッダーとフッターにはリンクの行を置かない）。
-   三本線：画面の右上に固定（カードの右上の内側にそろえる）。写真の送りボタンと同じ半透明の丸（paper-64、32）。
-   トップの営業状況のバーが出ている間は、バーの高さだけ下げる（スクリプトが --menu-bar を入れる）。お知らせの別窓を開いている間は隠す。
-   開くと、カードと同じ面の板が画面の上から下りてくる（幅は画面下のメニューと同じ）。後ろは paper-64 の幕で、ページは動かさない。
-   中身：ページ（今いるページは faint で、リンクにしない）→32→ 外のリンク。行は点線で区切り、行の上下12。閉じる印・幕・Esc で閉じる */
 .menu-btn {
   position: fixed; z-index: 10;
   top: calc(env(safe-area-inset-top, 0px) + var(--page-pad) + var(--card-pad-y) + var(--menu-bar, 0px));
@@ -265,12 +232,12 @@ html.has-menu { overflow: hidden; }
 .menu-list li { border-bottom: var(--bw) dashed var(--ink-24); }
 .menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
 .menu-list [aria-current] { color: var(--faint); }
-.menu-soon { font-size: var(--fs-sm); color: var(--soft); }   /* 準備中のページを押したときだけ「準備中です」 */
+.menu-soon { font-size: var(--fs-sm); color: var(--soft); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
 
 /* ===== 共通：ボタンと補足 ===== */
-/* ボタン：カード内では幅いっぱい。フォームの送信は accent の面、ほかのページへの移動は白抜き（.ghost） */
+/* ---------- ボタン ---------- */
 .btn {
   display: flex; width: 100%; align-items: center; justify-content: center;
   min-height: var(--size-control); padding: 0 var(--gap-list); border: var(--bw) solid var(--accent); border-radius: var(--r-pill);
@@ -284,25 +251,24 @@ html.has-menu { overflow: hidden; }
   .btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(var(--lift)); }
   .btn.ghost:hover { background: var(--ink-08); border-color: var(--accent); }
 }
-/* 補足・注意書き */
+/* ---------- 補足・注意書き ---------- */
 .note { margin-top: var(--gap-list); font-size: var(--fs-sm); color: var(--soft); }
-/* セクションの説明文（見出しの直後の1〜2文）→ 中身24 */
+/* ---------- セクションの説明文 ---------- */
 .sec-note { margin-bottom: var(--gap-block); }
 /* ===== 共通：ボタンと補足ここまで ===== */
 
 /* ===== 共通：項目と内容の表・地図・線のボタン ===== */
-/* 項目と内容の表（.rows と組み合わせる）：項目名（soft）→4→ 内容。
-   項目名を上に置くので、画面が狭くても内容の幅を取れる */
+/* ---------- 項目と内容の表 ---------- */
 .info { display: grid; }
 .info > div { display: grid; gap: var(--gap-tight); }
 .info dt { color: var(--soft); }
 .hours dd { font-variant-numeric: tabular-nums; }
 
-/* 地図：3:2（固有値）。色味は少し落ち着かせる */
+/* ---------- 地図 ---------- */
 .mapbox { border-radius: var(--r-md); overflow: hidden; background: var(--paper); aspect-ratio: 3 / 2; }
 .mapbox iframe { display: block; width: 100%; height: 100%; border: 0; filter: grayscale(.5) sepia(.3) brightness(.8); }
 
-/* 線のボタン（外部サイトへのリンク）：左に名前、右に矢印の丸 */
+/* ---------- 線のボタン ---------- */
 .line {
   display: flex; align-items: center; justify-content: space-between; gap: var(--gap-head);
   min-height: var(--size-control); padding: var(--pad-part);
@@ -313,99 +279,76 @@ html.has-menu { overflow: hidden; }
 .line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid transparent; border-radius: 50%; background: var(--card); line-height: var(--lh-none); color: var(--muted); }
 .line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .line:hover { background-color: var(--ink-08); transform: translateY(var(--lift)); } }
-/* 帯の上の線のボタンは、帯と逆にカードの面。矢印の丸はいつも箱と逆の面 */
 .band .line { background-color: var(--card); }
 .band .line-arrow { background: var(--accent-16); }
-.maplink { margin-top: var(--gap-list); }   /* 地図→地図のボタン12 */
+.maplink { margin-top: var(--gap-list); }
 /* ===== 共通：項目と内容の表・地図・線のボタンここまで ===== */
 
 /* ===== 共通：料金の単位 ===== */
-/* 単位「税込」：表の上に引いた点線の右端に置き、表の見出しのように表とつなげる（総額表示。金額や文章には入れない）。
-   14px・soft、点線は ink-24、線→文字8。表との間は .unit を置くページで決める */
 .unit { display: flex; align-items: center; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 .unit::before { content: ""; flex: 1; border-top: var(--bw) dashed var(--ink-24); }
 /* ===== 共通：料金の単位ここまで ===== */
 /* ===== 共通：リーダー ===== */
-/* 「時間……金額」の点線。時間に class="leader" を付ける。時間と点線を一つの箱に入れ、点線が残りの幅を埋める（広がれば伸び、狭まれば縮み、縮みきると消える。文字とは重ならない）。
-   時間は折り返さない：初めて開いたとき、Webフォントの差し替えのあとで欄の幅が測り直されず（iPhone などの WebKit）、数字と「分」の間で折れて縦に積まれるのを防ぐ */
-:root { --leader-dots: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }   /* 点線の模様（ink-24 の点、6px 間隔） */
+:root { --leader-dots: radial-gradient(circle, var(--ink-24) 1px, transparent 1.5px) left bottom / 6px 4px repeat-x; }
 .leader { display: flex; align-items: baseline; gap: var(--gap-item); white-space: nowrap; }
 .leader::after { content: ""; flex: 1; height: var(--sp-1); background: var(--leader-dots); }
 /* ===== 共通：リーダーここまで ===== */
 /* ===== 共通：ラベル ===== */
-/* 特徴の札（図書館のラベルのような札）：縁 accent-48・角丸4・面 accent-08・14px・muted。札どうし8で折り返して並べる。
-   求人ページの題の下の特徴の札と、トップの揉蔵についての特徴の一覧 */
 .tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--gap-item); }
 .tags li { padding: var(--pad-tag); border: var(--bw) solid var(--accent-48); border-radius: var(--r-sm); background: var(--accent-08); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
 /* ===== 共通：ラベルここまで ===== */
 
 /* ===== 共通：印 ===== */
-/* 印：細い円の中に、1本の線で描いた単純な記号（固有値の絵。32で表示、色は accent）。
-   読み流す一覧の各項目の頭に置き、何の話かを先に伝える目印。文より目立たせない。
-   記号は .e-○○ が --e に持ち、形と色（mask と accent）はここで決める。項目の左に32の欄を取り、記号→16→文 */
 .e { --mark: var(--sp-8); display: grid; grid-template-columns: var(--mark) minmax(0, 1fr); column-gap: var(--gap-head); align-content: start; }
 .e > * { grid-column: 2; }
 .e::before { content: ""; grid-column: 1; grid-row: 1 / span 2; width: var(--mark); height: var(--mark); background: var(--accent); -webkit-mask: var(--e) center / contain no-repeat; mask: var(--e) center / contain no-repeat; }
-/* ¥の印：トップの揉蔵についてと、求人の働き方の両方で使う */
 .e-purse { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='24' r='10.5'/%3E%3Cpath d='M19.8 17.8l4.2 5.6 4.2-5.6M24 23.4V31M20.2 24.8h7.6M20.2 27.8h7.6'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== 共通：印ここまで ===== */
 
 /* ===== 共通：題と副題 ===== */
-/* コース名：本の題と副題のように、名前 →8→ 短い線（16、accent-48）＋施術名（明朝14・400・soft） */
 .name { display: grid; gap: var(--gap-item); }
 .name small { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-heading); font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--soft); }
 .name small::before { content: ""; flex: 0 0 var(--sp-4); border-top: var(--bw) solid var(--accent-48); }
 /* ===== 共通：題と副題ここまで ===== */
 
 /* ===== 共通：飾り枠 ===== */
-/* ---------- 飾り枠：読んでほしい箱だけ（お知らせ、「65%」の箱、送信完了）。スタンプカードの枠から借りた形 ----------
-   灯りの面（accent-08）の内側8に細い線（accent-48、角丸は外の16から8を引いた8）、四隅に角飾り（固有値の絵。箱の角から12）。
-   角飾りは accent の色で描いた絵 */
 .notice, .big, .done { position: relative; background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 1 12 0%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px top 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%281 0 0 -1 0 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") left 12px bottom 12px / 12px no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22%3E%3Cg transform=%22matrix%28-1 0 0 -1 12 12%29%22 fill=%22none%22 stroke=%22%23c9a46c%22%3E%3Cpath d=%22M1 11V5.5C1 3 3 1 5.5 1H11%22/%3E%3Ccircle cx=%224.6%22 cy=%224.6%22 r=%221%22 fill=%22%23c9a46c%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E") right 12px bottom 12px / 12px no-repeat, var(--accent-08); }
 .notice::before, .big::before, .done::before { content: ""; position: absolute; inset: var(--sp-2); border: var(--bw) solid var(--accent-48); border-radius: calc(var(--r-md) - var(--sp-2)); pointer-events: none; }
 /* ===== 共通：飾り枠ここまで ===== */
 
 /* ===== 共通：ページの題 ===== */
-/* ページの題（トップ以外）：題の上の空き64。題 → 飾り罫 →32→ ひとこと（小見出しと同じ明朝16px・600・ink-2）→16→ 本文 */
 .page-title { padding-top: var(--page-group); }
 .lead { font-family: var(--font-heading); font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
 /* ===== 共通：ページの題ここまで ===== */
 
 /* ===== このページだけ：セラピスト募集 ===== */
-/* ---------- ページの題：h1 →32→ 本文 →24→ 特徴の札 →32→「65%」の箱 ---------- */
-/* 特徴の札：形は「共通：ラベル」 */
+/* ---------- ページの題 ---------- */
 .tags { margin-top: var(--gap-block); }
-/* 「65%」の箱：飾り枠の箱。「65」だけ固有値（72px、字間 -0.02em。字間は「%」に引き継がないよう px で持つ） */
-.big { --fs-display: 72px; --track-display: calc(var(--fs-display) * -.02); margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); }   /* 面と飾り枠は「共通：飾り枠」 */
+/* ---------- 「65%」の箱 ---------- */
+.big { --fs-display: 72px; --track-display: calc(var(--fs-display) * -.02); margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); } /* 固有値 */
 .big .l, .big .t { font-size: var(--fs-sm); color: var(--soft); }
 .big .n { margin-top: var(--gap-item); font-size: var(--fs-display); line-height: var(--lh-none); letter-spacing: var(--track-display); font-variant-numeric: tabular-nums; color: var(--ink-2); }
 .big .n small { margin-left: calc(var(--gap-tight) - var(--track-display)); letter-spacing: 0; font-size: var(--fs-lg); color: var(--soft); }
-/* 「%」は20px・soft・字間0。「5」のあとにも字間が付いて詰まるので、その分を足して「65」→「%」を4のままにする */
 .big .extra { margin-top: var(--gap-head); color: var(--ink-2); }
 .big .t { margin-top: var(--gap-tight); }
 
-/* ---------- 報酬早見表：点線で区切ったコースの一覧（線と上下16は .rows。各行が .rate） ----------
-   コース名はメニューと同じ題と副題の形（小見出しと同じ明朝16・600 →8→ 短い線＋施術名。「共通：題と副題」）。
-   時間ごとに、料金表と同じリーダーの縦の一覧：時間（16・ink-2）……… 報酬額（20・ink-2）、その下の右端に表示価格（14・soft）。行の上下8。
-   ボディを含む時間（60〜120分）は、30分の行のあとに「ボディを含む」（14・muted）を置き、左の縦の線（ink-16）で括弧のようにまとめる */
+/* ---------- 報酬早見表 ---------- */
 .rate { display: flex; flex-direction: column; }
 .rate .name { margin-bottom: var(--gap-head); }
-.rate .unit { margin-bottom: var(--gap-tight); }   /* コース名 →16→ 単位「税込」→4→ 一覧。形は「共通：料金の単位」 */
-/* 並び：コース名 → 30分 →「ボディを含む」→ 60〜120分（画面の上の並びだけ。読み上げの順はそのまま） */
+.rate .unit { margin-bottom: var(--gap-tight); }
 .g { display: contents; }
 .g > div { order: 3; }
 .g > div:first-child { order: 1; }
-.br { order: 2; padding: var(--gap-item) 0 var(--gap-tight) var(--gap-list); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--muted); }
+.br { order: 2; padding: var(--gap-item) 0 var(--gap-tight); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--muted); }
 .br, .br ~ .g > div:not(:first-child) { border-left: var(--bw) solid var(--ink-16); padding-left: var(--gap-list); }
-/* 1行（span＝時間、b＝報酬額、small＝表示価格）：時間 ……… 報酬額、その下の右端に表示価格 */
 .g > div { display: grid; grid-template-columns: 1fr auto; column-gap: var(--gap-item); align-items: baseline; padding: var(--gap-item) 0; line-height: var(--lh-ui); font-variant-numeric: tabular-nums; }
-.g span { grid-row: 1; grid-column: 1; color: var(--ink-2); }   /* 時間と点線：「共通：リーダー」（class="leader"） */
+.g span { grid-row: 1; grid-column: 1; color: var(--ink-2); }
 .g b { grid-row: 1; grid-column: 2; font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); color: var(--ink-2); }
 .g small { grid-row: 2; grid-column: 1 / -1; justify-self: end; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 
-/* ---------- 働き方：特徴の一覧と同じ線の一覧（.rows）。1文（16・ink-2）→4→ 説明（14・muted） ---------- */
-.points li { display: grid; row-gap: var(--gap-tight); }   /* 横の間は印の .e が決める */
+/* ---------- 働き方 ---------- */
+.points li { display: grid; row-gap: var(--gap-tight); }
 .points b { font-weight: var(--fw-regular); line-height: var(--lh-ui); }
 .points span { font-size: var(--fs-sm); color: var(--muted); }
 
@@ -413,49 +356,48 @@ html.has-menu { overflow: hidden; }
 .info dd ul { margin-top: var(--gap-item); padding-left: var(--gap-head); }
 .info dd small { display: block; margin-top: var(--gap-item); font-size: var(--fs-sm); color: var(--soft); }
 .salon h3 { margin: var(--gap-section) 0 var(--gap-head); }
-.info .mapbox { margin-top: var(--gap-list); }   /* アクセスの欄：一言→地図12→地図のボタン12 */
-/* 強調の文：お知らせと同じ ink-2 の本文を、accent-08 の面に */
+.info .mapbox { margin-top: var(--gap-list); }
+/* ---------- 強調の文 ---------- */
 .hl { margin-top: var(--gap-list); padding: var(--pad-part); border: var(--bw) solid transparent; border-radius: var(--r-md); background: var(--accent-08); color: var(--ink-2); }
 .info + .hl { margin-top: var(--gap-head); }
 
 /* ---------- 応募フォーム ---------- */
 .form { display: grid; gap: var(--gap-block); }
 .f { display: grid; gap: var(--gap-item); min-width: 0; border: 0; }
-.f > legend { margin-bottom: var(--gap-item); }   /* legend は並びの外なので、間隔を自分で持つ */
-.f > label:not(.sub, .chk), .f > legend { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-ui); line-height: var(--lh-ui); }   /* 項目名は16px・500（ゴシック） */
-.req, .opt { font-size: var(--fs-sm); font-weight: var(--fw-regular); }   /* 必須・任意は札にせず、14pxの文字だけ */
+.f > legend { margin-bottom: var(--gap-item); }
+.f > label:not(.sub, .chk), .f > legend { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-ui); line-height: var(--lh-ui); }
+.req, .opt { font-size: var(--fs-sm); font-weight: var(--fw-regular); }
 .req { color: var(--accent-hover); }
 .opt { color: var(--soft); }
 main .hint, main .err { font-size: var(--fs-sm); color: var(--soft); }
 main .err { color: var(--err); }
-main .f-err { font-size: var(--fs-sm); color: var(--err); }   /* 項目ごとの誤り：その欄のすぐ下に、14px・err */
+main .f-err { font-size: var(--fs-sm); color: var(--err); }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-item); }
 .sub { display: grid; gap: var(--gap-tight); min-width: 0; }
-.hint + .sub { margin-top: var(--gap-item); }   /* 項目の中の2つ目のまとまり：前とあわせて16あく */
+.hint + .sub { margin-top: var(--gap-item); }
 .sub > span { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 main .age { font-size: var(--fs-sm); color: var(--muted); }
 .age b { font-size: var(--fs-md); font-weight: var(--fw-regular); color: var(--ink-2); }
-/* 入力欄：本文と同じ16px（16px未満だと iPhone で拡大されるので、下げない）。明るい面（ink-2）に焦げ茶の文字（paper）、縁 ink-16、角丸16、内側 pad-part。入力中は縁を accent */
+/* ---------- 入力欄 ---------- */
 .form input[type=text], .form input[type=tel], .form input[type=email], .form select, .form textarea {
   width: 100%; padding: var(--pad-part); border: var(--bw) solid var(--ink-16); border-radius: var(--r-md); background: var(--ink-2);
   color: var(--paper); font: inherit; font-size: var(--fs-md); line-height: var(--lh-ui);
   -webkit-appearance: none; appearance: none; transition: border-color var(--dur-base) var(--ease-out);
 }
-/* セレクトの▼（8px・faint）。▼の左右にも、文字の左と同じ余白 */
+/* ---------- セレクト ---------- */
 .form select {
-  --pad-x: var(--gap-head);
+  --pad-x: var(--gap-item);
   background-image: linear-gradient(45deg, transparent 50%, var(--faint) 50%), linear-gradient(135deg, var(--faint) 50%, transparent 50%);
   padding-right: calc(var(--pad-x) * 2 + var(--sp-2));
   background-position: calc(100% - var(--pad-x) - var(--sp-1)) 50%, calc(100% - var(--pad-x)) 50%; background-size: var(--sp-1) var(--sp-1); background-repeat: no-repeat;
 }
-/* 記入欄：どれも同じ5行分の高さ。縦にだけ伸ばせる。いちばん長い記入例（ご経験の4行）が、余白1行を残して収まる */
+/* ---------- 記入欄 ---------- */
 .form textarea { min-height: calc(var(--fs-md) * var(--lh-ui) * 5 + var(--sp-3) * 2 + var(--bw) * 2); resize: vertical; }
 .form ::placeholder { color: var(--faint); opacity: 1; }
 .form input:focus, .form select:focus, .form textarea:focus { border-color: var(--accent); outline: none; }
 .form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
-/* 住所（自動入力）は入力できないので、明るい面を付けず、カードの上の文字（ink-2）のまま */
 .form input[readonly], .form input[readonly]:focus { background: transparent; border-color: var(--ink-16); color: var(--ink-2); cursor: default; }
-/* 対応できる施術：囲みの欄に、施術名と「できる／できない」の選択ボタン */
+/* ---------- 対応できる施術 ---------- */
 .skill { display: grid; justify-items: start; gap: var(--gap-item); padding: var(--pad-part); border: var(--bw) solid transparent; border-radius: var(--r-md); background: var(--accent-08); }
 .seg { display: flex; gap: var(--gap-item); }
 .seg label { position: relative; display: block; cursor: pointer; }
@@ -463,27 +405,26 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
 .seg span { display: block; min-width: var(--sp-16); padding: var(--pad-choice); border: var(--bw) solid var(--ink-24); border-radius: var(--r-pill); background: var(--shade-16); color: var(--muted); line-height: var(--lh-ui); text-align: center; transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out); }
 .seg input:checked + span { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 .seg input:focus-visible + span { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
-/* ご希望の業務枠（曜日の行はスクリプトで作る）。曜日の欄は64 */
+/* ---------- ご希望の業務枠 ---------- */
 .days { display: grid; gap: var(--gap-item); }
 .day { display: grid; grid-template-columns: var(--day-col) minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--gap-item); }
 .day-check { display: flex; align-items: center; gap: var(--gap-item); cursor: pointer; }
 .day-check input, .chk input { flex: 0 0 var(--sp-4); width: var(--sp-4); height: var(--sp-4); accent-color: var(--accent); }
 .day .to { color: var(--soft); }
-.form .day select { --pad-x: var(--gap-item); }   /* 曜日の行は2つ並ぶので、左右と▼の余白を8に。320px幅でも「00:00」が収まる */
 .form .day select:disabled { opacity: var(--disabled); cursor: default; }
-/* 同意・送信（送信は .btn） */
+/* ---------- 同意・送信 ---------- */
 .chk { display: flex; align-items: flex-start; gap: var(--gap-list); padding: var(--pad-part); border: var(--bw) solid transparent; border-radius: var(--r-md); background: var(--accent-08); line-height: var(--lh-ui); cursor: pointer; }
-.chk input { margin-top: calc((var(--fs-md) * var(--lh-ui) - var(--sp-4)) / 2); }   /* 1行目の高さの中央 */
+.chk input { margin-top: calc((var(--fs-md) * var(--lh-ui) - var(--sp-4)) / 2); }
 .chk .req { margin-left: var(--gap-item); }
 .send { font-family: inherit; cursor: pointer; }
 .send:disabled { opacity: var(--disabled); cursor: default; transform: none; }
 main #form-msg { margin-top: 0; color: var(--err); }
-#form-msg:not(:empty) { margin-top: var(--gap-list); }   /* 部品の下の補足と同じ12 */
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }   /* スパム対策の隠し欄 */
-.done { padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); text-align: center; }   /* 面と飾り枠は「共通：飾り枠」 */
-.done h3 { margin-bottom: var(--gap-head); }   /* 小見出し→中身16 */
+#form-msg:not(:empty) { margin-top: var(--gap-list); }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.done { padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); text-align: center; }
+.done h3 { margin-bottom: var(--gap-head); }
 
-/* ---------- 印（働き方の8つ：お金→時間→仕事の中身→店舗の順）。形は「共通：印」 ---------- */
+/* ---------- 印 ---------- */
 .e-towels { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Cpath d='M33.5 30.5H16.2a2.6 2.6 0 0 1 0-5.2h17.3zM32 25.3H17.6a2.6 2.6 0 0 1 0-5.2H32z'/%3E%3Cpath d='M14 33.8h20'/%3E%3C/g%3E%3C/svg%3E"); }
 .e-paper { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Cpath d='M16.5 12.5h10.5l5 5V35.5H16.5z'/%3E%3Cpath d='M27 12.5v5h5M20 22.5h8.5M20 26.5h8.5M20 30.5h5.5'/%3E%3C/g%3E%3C/svg%3E"); }
 .e-watch { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Ccircle cx='24' cy='25.5' r='9.5'/%3E%3Cpath d='M24 25.5v-5.5M24 25.5l3.6 2.2M22 14.2h4M24 14.2V16'/%3E%3C/g%3E%3C/svg%3E"); }
@@ -493,11 +434,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
 .e-door { --e: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='22.2'/%3E%3Cpath d='M16.5 35.5v-13a7.5 7.5 0 0 1 15 0v13M13.5 35.5h21M24 15v20.5M22 27.5h0M26 27.5h0'/%3E%3C/g%3E%3C/svg%3E"); }
 /* ===== このページだけここまで ===== */
 </style>
-<!--
-  Googleしごと検索用の求人情報（JobPosting）。
-  報酬・契約形態・住所などページ本文を変えたら、ここも同じように直す。
-  validThrough・datePosted などの決まりは、規格書の「情報の置き場所」の求人の構造化データの行。
--->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org/",
@@ -538,14 +474,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
 </header>
 
 <main>
-  <!-- ===== ページの題 ===== -->
   <div class="page-title">
     <h1>リラクゼーションセラピスト募集</h1>
     <p class="lead">他店でのご経験をそのまま活かせます。</p>
   </div>
-  <nav class="nav" aria-label="このページの目次">
-    <a href="#reward">報酬早見表</a><a href="#workstyle">働き方</a><a href="#details">募集要項</a><a href="#salon">店舗情報</a><a href="#apply">ご応募</a>
-  </nav>
   <ul class="tags"><li>業務委託</li><li>インボイス登録不要</li><li>経験者</li><li>資格不要</li><li>年齢・性別不問</li><li>履歴書不要</li></ul>
   <div class="big">
     <p class="l">表示価格の</p>
@@ -553,8 +485,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
     <p class="extra">リクエスト料（個人指名・性別指定）は100%お支払いします</p>
     <p class="t">割引・決済手数料などは店舗が負担し、割引前の表示価格で計算します。</p>
   </div>
+  <nav class="nav" aria-label="このページの目次">
+    <a href="#reward">報酬早見表</a><a href="#workstyle">働き方</a><a href="#details">募集要項</a><a href="#salon">店舗情報</a><a href="#apply">ご応募</a>
+  </nav>
 
-  <!-- ===== 報酬早見表（報酬額＝表示価格×65%、リクエスト料は100%。料金・リクエスト料を変えたときに直す場所は、規格書の「情報の置き場所」の料金の行） ===== -->
   <section class="sec" id="reward">
     <div class="wrap">
       <h2>報酬早見表</h2>
@@ -596,7 +530,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
         <div class="rate">
           <h3 class="name">フルコース<small>3つの組み合わせ</small></h3>
           <p class="unit">税込</p>
-          <div class="g g-from-90">
+          <div class="g">
             <div><span class="leader">90分</span><b>¥4,680</b><small>¥7,200</small></div>
             <div><span class="leader">120分</span><b>¥5,915</b><small>¥9,100</small></div>
           </div>
@@ -613,7 +547,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     </div>
   </section>
 
-  <!-- ===== 働き方 ===== -->
   <section class="sec" id="workstyle">
     <div class="wrap">
       <h2>働き方</h2>
@@ -630,7 +563,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     </div>
   </section>
 
-  <!-- ===== 募集要項 ===== -->
   <section class="sec" id="details">
     <div class="wrap">
       <h2>募集要項</h2>
@@ -647,7 +579,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     </div>
   </section>
 
-  <!-- ===== 店舗情報（トップのアクセスと同じ形） ===== -->
   <section class="sec" id="salon">
     <div class="wrap">
       <h2>店舗情報</h2>
@@ -677,7 +608,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     </div>
   </section>
 
-  <!-- ===== ご応募（name属性は Apps Script の FIELDS と対応。変えるときは両方直す） ===== -->
   <section class="sec" id="apply">
     <div class="wrap">
       <h2>ご応募</h2>
@@ -701,7 +631,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
         <fieldset class="f"><legend>電話番号<span class="req">必須</span></legend>
           <label class="sub"><span>電話番号</span><input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="numeric" placeholder="例）09012345678" required></label>
           <p class="hint">数字のみご入力ください（ハイフンは自動で入ります）。</p>
-          <label class="sub"><span>連絡しやすい時間帯</span><textarea id="f-time" name="time" maxlength="200" placeholder="例）平日 18:00 – 21:00&#10;土・日 終日OK" required></textarea></label>
+          <label class="sub"><span>連絡しやすい時間帯</span><textarea id="f-time" name="time" maxlength="300" placeholder="例）平日 18:00 – 21:00&#10;土・日 終日OK" required></textarea></label>
           <p class="hint">お電話でご連絡しやすい曜日と時間帯をご記入ください<span data-maxlen="f-time"></span>。</p>
         </fieldset>
 
@@ -733,19 +663,19 @@ main #form-msg { margin-top: 0; color: var(--err); }
 
         <fieldset class="f"><legend>対応できる施術<span class="req">必須</span></legend>
           <p class="hint">それぞれ「できる」「できない」をお選びください。「できる」は1つ以上必要です。</p>
-          <div class="skill"><span class="skill-name">もみほぐし</span><div class="seg"><label><input type="radio" name="skill_body" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_body" value="できない"><span>できない</span></label></div></div>
-          <div class="skill"><span class="skill-name">ドライヘッドスパ</span><div class="seg"><label><input type="radio" name="skill_head" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_head" value="できない"><span>できない</span></label></div></div>
-          <div class="skill"><span class="skill-name">足つぼ・リフレクソロジー</span><div class="seg"><label><input type="radio" name="skill_foot" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_foot" value="できない"><span>できない</span></label></div></div>
+          <div class="skill"><span>もみほぐし</span><div class="seg"><label><input type="radio" name="skill_body" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_body" value="できない"><span>できない</span></label></div></div>
+          <div class="skill"><span>ドライヘッドスパ</span><div class="seg"><label><input type="radio" name="skill_head" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_head" value="できない"><span>できない</span></label></div></div>
+          <div class="skill"><span>足つぼ・リフレクソロジー</span><div class="seg"><label><input type="radio" name="skill_foot" value="できる" required><span>できる</span></label><label><input type="radio" name="skill_foot" value="できない"><span>できない</span></label></div></div>
         </fieldset>
 
         <fieldset class="f" id="f-sched"><legend>ご希望の業務枠<span class="req">必須</span></legend>
           <p class="hint">働きたい曜日にチェックを入れ、開始・終了の時間をお選びください。選考の目安にします（この内容で業務枠が決まるわけではありません）。</p>
-          <div class="days" id="days"></div><!-- 月〜日の行はJSで作る -->
+          <div class="days" id="days"></div>
         </fieldset>
 
         <div class="f">
           <label for="f-qual">保有資格<span class="opt">任意</span></label>
-          <textarea id="f-qual" name="qual" maxlength="200" placeholder="例）リラクゼーションセラピスト2級&#10;リフレクソロジー認定資格"></textarea>
+          <textarea id="f-qual" name="qual" maxlength="300" placeholder="例）リラクゼーションセラピスト2級&#10;リフレクソロジー認定資格"></textarea>
           <p class="hint">お持ちの資格があればご記入ください<span data-maxlen="f-qual"></span>。</p>
         </div>
 
@@ -786,7 +716,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 </footer>
 </div>
 
-<!-- ===== 三本線のメニュー（4ページで同じ。今いるページだけ aria-current の span にする） ===== -->
+<!-- 三本線のメニュー -->
 <button class="menu-btn" id="menu-btn" type="button" aria-label="メニューを開く" aria-haspopup="dialog" aria-expanded="false" aria-controls="site-menu"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M0 .5h16M0 6h16M0 11.5h16" stroke="currentColor" stroke-width="1"/></svg></button>
 <dialog class="menu" id="site-menu" aria-label="メニュー">
   <div class="menu-body">
@@ -811,10 +741,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
 
 <script>
 /* ===== 共通：三本線のメニュー ===== */
-/* 三本線で開き、閉じる印・幕・Esc で閉じる（閉じたら三本線に戻る）。開いている間はページを動かさない（html の has-menu）。
-   三本線の中の data-soon のリンク（準備中のページ）は移動せず、その行の右の .menu-soon に「準備中です」を3秒出す
-   （準備中のページを作るときは <a href="…" data-soon>名前<span class="menu-soon" aria-live="polite"></span></a> にする）。
-   トップの営業状況のバー（#status）が出ている間は、三本線をバーの高さだけ下げる */
 (() => {
   const btn = document.getElementById("menu-btn");
   const menu = document.getElementById("site-menu");
@@ -824,7 +750,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
   btn.addEventListener("click", () => { menu.showModal(); root.classList.add("has-menu"); btn.setAttribute("aria-expanded", "true"); });
   menu.addEventListener("close", () => { root.classList.remove("has-menu"); btn.setAttribute("aria-expanded", "false"); btn.focus(); });
   menu.querySelector(".menu-close").addEventListener("click", () => menu.close());
-  menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });   // 幕を押したとき
+  menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });
   menu.querySelectorAll("a[data-soon]").forEach((a) => {
     const note = a.querySelector(".menu-soon");
     if (!note) return;
@@ -849,7 +775,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
 })();
 /* ===== 共通：三本線のメニューここまで ===== */
 /* ===== 共通：画面下のメニュー ===== */
-/* 画面下のメニュー：data-until の要素（フッターやフォーム）が画面に入ったら、下へ引っ込める */
 (() => {
   const dock = document.getElementById("dock");
   const until = dock && document.querySelector(dock.dataset.until);
@@ -869,10 +794,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
 /* ===== 共通：画面下のメニューここまで ===== */
 
 /* ===== 共通：フッターの位置 ===== */
-/* 上の中身の高さには端数が出る（本文の行の高さ 28.8、写真や地図の縦横比）。そのままだとフッターの置かれる高さがページごとに1px未満ずれ、
-   1pxの線がにじんだり文字の上下が変わったりして、ページを切り替えると同じフッターが微妙に違って見える。
-   カードの上の端からフッターの面の上の端までが、画面のピクセルのちょうどになるよう、フッターの上の空きに1px未満を足す。
-   カードの高さが変わるたび（お知らせ・フォント・画面の幅）にそろえ直す。カードの現れの動き（transform）はカードと面で打ち消し合う */
 (() => {
   const card = document.querySelector(".card");
   const body = document.querySelector(".foot-body");
@@ -891,18 +812,13 @@ main #form-msg { margin-top: 0; color: var(--err); }
 /* ===== 共通：フッターの位置ここまで ===== */
 </script>
 <script>
-/* =========================================================
-   応募フォーム
-   ========================================================= */
+/* ---------- 応募フォーム ---------- */
 (() => {
   "use strict";
 
   /* ---------- 設定 ---------- */
-  // 応募データの送信先（Google Apps Script のウェブアプリURL）
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec";
-  // 郵便番号から住所を調べるAPI（zipcloud）
   const ZIP_API = "https://zipcloud.ibsnet.co.jp/api/search?zipcode=";
-  // 「空白だけ」を未入力として扱う必須欄
   const TRIM_REQUIRED = ["sei", "mei", "sei_kana", "mei_kana", "time", "exp"];
   const DAYS = ["月", "火", "水", "木", "金", "土", "日"];
   const BLANK = "（未記入）";
@@ -912,46 +828,40 @@ main #form-msg { margin-top: 0; color: var(--err); }
   const msg = $("form-msg");
   const field = (name) => form.elements[name];
 
-  /* ---------- 共通 ---------- */
-  // 全角数字を半角にして、数字以外を取り除く（max があればその桁数まで）
+  /* ---------- 数字だけの欄 ---------- */
   function digits(s, max) {
     s = s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\D/g, "");
     return max ? s.slice(0, max) : s;
   }
 
-  // 数字だけの欄の共通動作：入力中は数字のみ、フォーカス中は数字のみ、離れたら整形して表示
   function bindNumericField(el, max, format, onChange) {
     el.addEventListener("input", () => { el.value = digits(el.value, max); onChange(); });
     el.addEventListener("focus", () => { el.value = digits(el.value, max); });
     el.addEventListener("blur", () => { el.value = format(digits(el.value, max)); onChange(); });
   }
 
-  /* ---------- 記入欄の文字数の上限を、注意書きに表示（上限は maxlength の1か所で管理） ---------- */
+  /* ---------- 記入欄の文字数 ---------- */
   document.querySelectorAll("[data-maxlen]").forEach((el) => {
     el.textContent = "（" + $(el.dataset.maxlen).maxLength + "字まで）";
   });
 
   /* ---------- 電話番号 ---------- */
-  // 市外局番が3桁の地域
   const AREA3 = new Set(("011 017 018 019 022 023 024 025 026 027 028 029 042 043 044 045 046 047 048 049 " +
     "052 053 054 055 058 059 072 075 076 077 078 079 082 083 084 086 087 088 089 092 093 095 096 097 098 099").split(" "));
-  // 上の3桁のうち、4桁目がこの数字なら別の4桁の市外局番（例：028-xxx は宇都宮、0287-xx は大田原）
   const AREA3X = { "022": "0345689", "024": "01234678", "025": "0456789", "027": "046789",
                    "028": "2345789", "029": "1345679", "019": "1234578", "023": "34578" };
-  // 市外局番が5桁の地域
   const AREA5 = new Set(("01267 01372 01374 01457 01466 01547 01558 01564 01586 01587 01632 01634 01648 01654 01656 01658 " +
     "04992 04994 04996 04998 05769 05979 07468 08387 08396 08477 08512 08514 09496 09802 09912 09913").split(" "));
 
-  // 区切り方（各ブロックの桁数）を決める
   function telGroups(d) {
-    if (d.length === 11) return /^0800/.test(d) ? [4, 3, 4] : [3, 4, 4];   // 0800-123-4567 ／ 090-1234-5678
+    if (d.length === 11) return /^0800/.test(d) ? [4, 3, 4] : [3, 4, 4];
     if (d.length !== 10) return null;
-    if (/^0(120|570)/.test(d)) return [4, 3, 3];                           // 0120-123-456
-    if (/^0[36]/.test(d)) return [2, 4, 4];                                // 03・06
+    if (/^0(120|570)/.test(d)) return [4, 3, 3];
+    if (/^0[36]/.test(d)) return [2, 4, 4];
     if (AREA5.has(d.slice(0, 5))) return [5, 1, 4];
     const a3 = d.slice(0, 3);
     if (AREA3.has(a3) && (AREA3X[a3] || "").indexOf(d.charAt(3)) < 0) return [3, 3, 4];
-    return [4, 2, 4];                                                      // 0287-23-1234 など
+    return [4, 2, 4];
   }
   function fmtTel(d) {
     const g = telGroups(d);
@@ -965,11 +875,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
   }
   bindNumericField(tel, 11, fmtTel, checkTel);
 
-  /* ---------- 生年月日 → 年齢 ---------- */
+  /* ---------- 生年月日・年齢 ---------- */
   const birth = $("f-birth");
   const ageOut = $("age-out");
 
-  // "19900415" → {y, mo, d}。存在しない日付や未来の日付は null
   function parseBirth(d) {
     const m = /^(\d{4})(\d{2})(\d{2})$/.exec(d);
     if (!m) return null;
@@ -985,8 +894,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     if (t.getMonth() + 1 < b.mo || (t.getMonth() + 1 === b.mo && t.getDate() < b.d)) age--;
     return age;
   }
-  // 満15歳に達した日（誕生日の前日）以後の最初の3月31日が終わるまでは、
-  // 労働基準法により働けない（中学校卒業前）
   function beforeGraduation(d) {
     const b = parseBirth(d);
     if (!b) return false;
@@ -1010,19 +917,18 @@ main #form-msg { margin-top: 0; color: var(--err); }
   const fmtBirth = (d) => d.length === 8 ? d.slice(0, 4) + "/" + d.slice(4, 6) + "/" + d.slice(6) : d;
   bindNumericField(birth, 8, fmtBirth, updateAge);
 
-  /* ---------- 郵便番号 → 住所（住所欄は編集不可） ---------- */
+  /* ---------- 郵便番号・住所 ---------- */
   const zip = $("f-zip");
   const addr = $("f-addr");
   const zipMsg = $("zip-msg");
   const ZIP_HINT = zipMsg.textContent;
-  let found = "";    // 住所を取得済みの郵便番号
-  let pending = "";  // 検索中の郵便番号
+  let found = "";
+  let pending = "";
 
   function setZipMsg(text, isErr) { zipMsg.textContent = text; zipMsg.className = isErr ? "err" : "hint"; }
   function checkZip() { zip.setCustomValidity(digits(zip.value).length === 7 ? "" : "郵便番号を数字7桁でご入力ください。"); }
   function resetAddr() { addr.value = ""; found = ""; }
 
-  // fetch が使えない環境向けの予備（JSONP）
   function jsonp(z) {
     return new Promise((ok, ng) => {
       const cb = "zc" + Date.now(), sc = document.createElement("script");
@@ -1043,7 +949,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
     setZipMsg("住所を検索しています…", false);
     fetchZip(z)
       .then((j) => {
-        if (digits(zip.value) !== z) return; // 検索中に入力が変わっていたら破棄
+        if (digits(zip.value) !== z) return;
         pending = "";
         const r = j && j.results && j.results[0];
         if (r) {
@@ -1072,7 +978,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
   bindNumericField(zip, 7, fmtZip, onZipChange);
   checkZip();
 
-  /* ---------- ご希望の業務枠（目安）。00:00〜24:00、1時間刻み ---------- */
+  /* ---------- ご希望の業務枠 ---------- */
   const hh = (h) => String(+h).padStart(2, "0") + ":00";
 
   function fillTimes(sel, from, to, label) {
@@ -1092,14 +998,12 @@ main #form-msg { margin-top: 0; color: var(--err); }
     const [from, to] = row.querySelectorAll("select");
     fillTimes(from, 0, 23, "開始");
     fillTimes(to, 1, 24, "終了");
-    // チェックのない曜日は時間を選べないようにして、選択も消す
     const sync = () => [from, to].forEach((s) => { s.disabled = !cb.checked; if (!cb.checked) s.value = ""; });
     cb.addEventListener("change", sync);
     sync();
     return { day, cb, from, to };
   });
 
-  // 問題があれば {msg, el}、なければ {text}（送信用の文字列）を返す
   function checkSchedule() {
     const on = dayRows.filter((x) => x.cb.checked);
     if (!on.length) return { msg: "ご希望の曜日を1つ以上お選びください。", el: dayRows[0].cb };
@@ -1107,23 +1011,15 @@ main #form-msg { margin-top: 0; color: var(--err); }
       if (!x.from.value || !x.to.value) return { msg: "チェックした曜日の開始・終了時間をお選びください。", el: x.from.value ? x.to : x.from };
       if (+x.from.value === +x.to.value) return { msg: "開始と終了は、違う時間をお選びください。", el: x.to };
     }
-    // 終了が開始より前なら、24時をまたいだ翌日の時間として扱う
     const text = on.map((x) => x.day + " " + hh(x.from.value) + "〜" + (+x.to.value < +x.from.value ? "翌" : "") + hh(x.to.value));
     return { text: text.join("\n") };
   }
 
-  /* ---------- 送信前のチェック ----------
-     ・誤りはすべて集め、フォームの上から順に、それぞれの欄のすぐ下に出す（何が違うのかを、その場で示す）
-     ・送信ボタンの下には、件数だけをまとめて出す
-     ・いちばん上の誤りの欄へ移動する。スマホ（指で操作）では欄にフォーカスしない。
-       フォーカスするとキーボードが開いて画面が大きく跳び、誤りの文が隠れるので
-     ・一度送信したあとは、直したそばから誤りの文を消す */
+  /* ---------- 送信前のチェック ---------- */
   const motion = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
   const finePointer = matchMedia("(pointer: fine)");
 
-  // 誤りの文を出す場所：「電話番号」「郵便番号」などの小さなまとまりはその下、ほかは項目の最後
   const slotOf = (el) => (!el.closest(".row2") && el.closest("label.sub")) || el.closest(".f");
-  // 項目名：小さなまとまりの名前か、項目名（「必須」「任意」は除く）
   const nameOf = (el) => {
     const sub = !el.closest(".row2") && el.closest("label.sub");
     if (sub) return sub.querySelector("span").textContent;
@@ -1139,7 +1035,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     return nameOf(el) + "をご確認ください。";
   }
 
-  // いまの誤りを、フォームの上から順に [{slot, el, text}] で返す（1か所につき1つ）
   function collectErrors() {
     checkTel();
     updateAge();
@@ -1162,7 +1057,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     return { list, sch };
   }
 
-  // 誤りの文を出し直す。onlyShown のときは、いま出ている欄だけを更新する（入力中に新しい誤りを出さない）
   let shownSlots = new Set();
   function showErrors(list, onlyShown) {
     if (onlyShown) list = list.filter((x) => shownSlots.has(x.slot));
@@ -1182,7 +1076,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
       : "入力内容に確認が必要な項目が" + list.length + "か所あります。";
   }
 
-  // 送信時：問題があれば誤りを出していちばん上の欄へ移動し、null を返す
   function validate() {
     const { list, sch } = collectErrors();
     showErrors(list, false);
@@ -1193,22 +1086,22 @@ main #form-msg { margin-top: 0; color: var(--err); }
     return null;
   }
 
-  // 一度誤りを出したあとは、直したそばから消す
   const recheck = () => { if (shownSlots.size) showErrors(collectErrors().list, true); };
   form.addEventListener("input", recheck);
   form.addEventListener("change", recheck);
 
-  /* ---------- 送信データ（キー名は Apps Script の FIELDS と対応） ---------- */
+  /* ---------- 送信データ ---------- */
   function buildData(sch) {
     const text = (n) => field(n).value.trim() || BLANK;
     const choice = (n) => field(n).value || BLANK;
     const pair = (a, b) => field(a).value.trim() + " " + field(b).value.trim();
     const bd = digits(birth.value);
     return {
-      website: field("website").value, // スパム対策の隠し欄
+      website: field("website").value,
       name: pair("sei", "mei"),
       kana: pair("sei_kana", "mei_kana"),
       tel: tel.value,
+      time: text("time"),
       mail: text("mail"),
       birth: bd.replace(/^(\d{4})(\d{2})(\d{2})$/, "$1年$2月$3日"),
       age: calcAge(bd) + "歳",
@@ -1220,21 +1113,13 @@ main #form-msg { margin-top: 0; color: var(--err); }
       skill_foot: choice("skill_foot"),
       schedule: sch.text,
       qual: text("qual"),
-      time: text("time"),
       pr: text("pr"),
       note: text("note"),
     };
   }
 
-  /* ---------- 送信 ----------
-     Apps Script の返事（JSON）を読んで、出す画面を決める
-     ・{ok:true}  … 保存できた → 完了画面
-     ・{ok:false} … 保存できなかった（確定）→ 入力はそのまま、もう一度送れる
-     ・それ以外（時間切れ・通信エラー・JSON以外の返事）… 保存されたか分からない
-       → 入力欄を固定し、送信ボタンを「送信結果を確認する」に。押すと同じ受付IDで送り直す
-     受付IDは応募ごとに1つ。Apps Script は同じIDを2回保存しないので、送り直しても行は増えない。
-     内容を直して送るときは、新しいIDにする（直した内容が「保存済み」として捨てられないように） */
-  const TIMEOUT_MS = 35000;   // Apps Script のロック待ち（最大20秒）＋保存＋メールより長く
+  /* ---------- 送信 ---------- */
+  const TIMEOUT_MS = 35000;
   const TEL = '<a href="tel:0287339178">0287-33-9178</a>';
   const DONE_HTML =
     '<div class="done" role="status"><h3>ご応募ありがとうございました</h3>' +
@@ -1252,10 +1137,9 @@ main #form-msg { margin-top: 0; color: var(--err); }
   const btn = form.querySelector(".send");
   const LABEL = btn.textContent;
   const RECHECK_LABEL = "送信結果を確認する";
-  // ボタンの欄以外（入力欄すべて）。結果が分からないあいだは、書き換えられないようにする
   const inputs = [...form.children].filter((el) => !el.contains(btn));
-  let sent = null;      // 最後に送った応募 {key: 内容, body: 送信する文字列}
-  let unsure = false;   // 保存されたか分からない状態
+  let sent = null;
+  let unsure = false;
 
   function newId() {
     const b = new Uint8Array(16);
@@ -1264,7 +1148,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
     return Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
   }
 
-  // 送って、"ok" / "ng" / "unknown" を返す
   async function post(body) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
@@ -1298,7 +1181,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
       const sch = validate();
       if (!sch) return;
       const data = buildData(sch);
-      if (!ENDPOINT) { msg.textContent = "送信先が未設定です。管理者にご連絡ください。"; return; }
       const key = new URLSearchParams(data).toString();
       if (!sent || sent.key !== key) sent = { key, body: key + "&id=" + newId() };
     }
