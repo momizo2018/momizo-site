@@ -11,7 +11,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..500&family=Zen+Kaku+Gothic+New:wght@400;500&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 
 <link rel="icon" href="assets/icon/icon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="assets/icon/icon-32.png" sizes="32x32" type="image/png">
@@ -75,11 +75,10 @@
 
   /* 文字 */
   --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --fw-regular: 400;
   --fw-ui: 500;
   --fw-heading: 500;
-  --fw-heading-sub: 600;
+  --fw-heading-sub: 700;
   --fs-sm: 14px;
   --fs-md: 16px;
   --fs-lg: 20px;
@@ -116,7 +115,7 @@ body {
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
-h1, h2, h3 { font-family: var(--font-heading); font-weight: var(--fw-heading); line-height: var(--lh-ui); }
+h1, h2, h3 { font-weight: var(--fw-heading); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible, button:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
@@ -373,7 +372,7 @@ html.has-menu { overflow: hidden; }
 
 /* ---------- お知らせ ---------- */
 .notice { margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid transparent; border-radius: var(--r-md); }
-.notice h2 { display: flex; align-items: center; gap: var(--gap-item); font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); margin: 0 0 var(--gap-list); }
+.notice h2 { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); margin: 0 0 var(--gap-list); }
 .notice h2::before { content: ""; flex: none; box-sizing: border-box; width: var(--sp-3); height: var(--sp-3); border: var(--bw) solid var(--faint); border-radius: 50%; background: radial-gradient(circle, var(--faint) 2px, transparent 2.5px); transition: border-color var(--dur-base) var(--ease-out); }
 .notice[data-state="list"] h2::before { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 2px, transparent 2.5px); }
 .notice-list { list-style: none; max-height: calc(var(--fs-md) * var(--lh-text) * 8); overflow-y: auto; }
