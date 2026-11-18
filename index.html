@@ -195,7 +195,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after, ::backdrop { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
@@ -206,12 +206,12 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   width: var(--arrow); height: var(--arrow); display: grid; place-items: center; padding: 0; cursor: pointer;
   border: var(--bw) solid transparent; border-radius: 50%; background: var(--paper-64); color: var(--muted);
   transition: top var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  animation: enter var(--dur-enter) var(--ease-reveal) var(--dur-enter) backwards;
 }
 .menu-btn svg { display: block; }
 .menu-btn::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 50%; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .menu-btn::after { animation: none !important; } }
 @media (hover: hover) { .menu-btn:hover { background: var(--accent); color: var(--on-accent); } }
-.has-pop .menu-btn { visibility: hidden; }
 html.has-menu { overflow: hidden; }
 .menu {
   position: fixed; inset: 0 0 auto; margin: 0 auto; padding: 0; border: 0;
@@ -391,21 +391,6 @@ html.has-menu { overflow: hidden; }
 .notice:not([data-state="list"]) .notice-list, .notice:not([data-state="empty"]) .notice-empty { display: none; }
 .notice[data-state="loading"]::after { content: ""; display: block; height: calc(var(--fs-md) * var(--lh-text)); }
 .notice-list, .notice-empty { animation: fade var(--dur-base) var(--ease-out) both; }
-
-/* ---------- お知らせの別窓 ---------- */
-.pop {
-  width: min(100% - (var(--page-pad) + var(--card-pad-x)) * 2, var(--card-w) - var(--card-pad-x) * 2); max-width: none;
-  margin: auto; padding: 0; border: 0; border-radius: var(--r-md); background: var(--card); color: inherit; box-shadow: var(--shadow-card);
-}
-.pop .notice { margin-top: 0; }
-.pop h2:focus { outline: none; }
-.pop-close { margin-top: var(--gap-block); }
-.pop::backdrop { background: var(--paper-64); -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3)); }
-.pop[open] { animation: enter var(--dur-enter) var(--ease-reveal) both; }
-.pop[open]::backdrop { animation: enter var(--dur-enter) var(--ease-reveal) both; }
-.pop.closing, .pop.closing::backdrop { animation: leave var(--dur-enter) var(--ease-reveal) both; }
-@keyframes leave { to { opacity: 0; } }
-.has-pop .dock, .has-pop .topbar.on, .pop-wait .dock, .pop-wait .topbar.on { visibility: hidden; animation: none; }
 
 /* ---------- 揉蔵について ---------- */
 .pillars { display: grid; gap: var(--gap-section); }
@@ -600,13 +585,6 @@ html.has-menu { overflow: hidden; }
 </footer>
 </div>
 
-<dialog class="pop" id="notice-pop" aria-labelledby="notice-pop-h">
-  <section class="notice" data-state="list">
-    <h2 id="notice-pop-h" tabindex="-1" autofocus>お知らせ</h2>
-    <ul class="notice-list" id="notices-pop" aria-label="お知らせの一覧"></ul>
-    <button class="btn ghost pop-close" type="button">閉じる</button>
-  </section>
-</dialog>
 <aside class="topbar" id="status" aria-label="営業状況">
   <p id="status-text"></p>
   <button class="topbar-close" type="button" aria-label="営業状況を閉じる"></button>
@@ -804,56 +782,14 @@ const loadSheet = (type, key, show, fail) => {
   const KEY = "momizo-notices";
   const box = document.getElementById("notice");
   const ul = document.getElementById("notices");
-  const pop = document.getElementById("notice-pop");
-  const popUl = document.getElementById("notices-pop");
   let resizing = false;
-  addEventListener("resize", () => { if (!resizing) { resizing = true; requestAnimationFrame(() => { resizing = false; more(ul); if (pop && pop.open) more(popUl); }); } });
+  addEventListener("resize", () => { if (!resizing) { resizing = true; requestAnimationFrame(() => { resizing = false; more(ul); }); } });
   ul.addEventListener("scroll", () => more(ul), { passive: true });
-  const POP_KEY = "momizo-notice-closed";
-  let popDone = false;
   const more = (list) => {
     const scrolls = list.scrollHeight > list.clientHeight + 1;
     if (scrolls) list.tabIndex = 0; else list.removeAttribute("tabindex");
     list.classList.toggle("has-more", scrolls && list.scrollHeight - list.scrollTop - list.clientHeight > 1);
   };
-  try { popDone = !!sessionStorage.getItem(POP_KEY); } catch (e) {}
-  if (!pop || typeof pop.showModal !== "function") popDone = true;
-  const root = document.documentElement;
-  const still = matchMedia("(prefers-reduced-motion: reduce)");
-  const secs = (name) => parseFloat(getComputedStyle(root).getPropertyValue(name)) || 0;
-  let popTimer = 0;
-  let closing = false;
-  // 別窓は、開いてから dur-enter のあとに出す。待つ間も上下のバーは出さない
-  const menu = document.getElementById("site-menu");
-  const openPop = () => {
-    popTimer = 0;
-    if (popDone || pop.open || !popUl.children.length) { root.classList.remove("pop-wait"); return; }
-    // 三本線のメニューを開いている間は、閉じてから出す
-    if (menu && menu.open) { menu.addEventListener("close", openPop, { once: true }); return; }
-    root.classList.remove("pop-wait");
-    root.classList.add("has-pop");
-    pop.showModal();
-    more(popUl);
-  };
-  // 閉じるときは、別窓と幕を dur-enter でその場で薄くしてから閉じる
-  const closePop = () => {
-    if (!pop.open || closing) return;
-    if (still.matches) { pop.close(); return; }
-    closing = true;
-    pop.classList.add("closing");
-    setTimeout(() => { closing = false; pop.classList.remove("closing"); pop.close(); }, secs("--dur-enter") * 1000);
-  };
-  if (pop) {
-    pop.querySelector(".pop-close").addEventListener("click", closePop);
-    pop.addEventListener("click", (e) => { if (e.target === pop) closePop(); });
-    pop.addEventListener("cancel", (e) => { e.preventDefault(); closePop(); });
-    popUl.addEventListener("scroll", () => more(popUl), { passive: true });
-    pop.addEventListener("close", () => {
-      popDone = true;
-      try { sessionStorage.setItem(POP_KEY, "1"); } catch (e) {}
-      root.classList.remove("has-pop");
-    });
-  }
   const now = jstNow();
   const today = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
   const alive = (list) => (Array.isArray(list) ? list : []).filter((n) => n && n.text && (!n.until || today <= n.until) && (!n.from || n.from <= today));
@@ -868,7 +804,7 @@ const loadSheet = (type, key, show, fail) => {
     const sig = JSON.stringify(list.map((n) => [n.title, n.text, n.until]));
     if (sig === shown) return;
     shown = sig;
-    const items = () => list.map((n) => {
+    ul.replaceChildren(...list.map((n) => {
       const li = document.createElement("li");
       const t = String(n.title || "").trim();
       if (t) { const h = document.createElement("h3"); h.textContent = t; li.append(h); }
@@ -876,22 +812,9 @@ const loadSheet = (type, key, show, fail) => {
       const u = untilText(n.until);
       if (u) { const sm = document.createElement("small"); sm.textContent = u; li.append(sm); }
       return li;
-    });
-    ul.replaceChildren(...items());
+    }));
     box.dataset.state = list.length ? "list" : "empty";
     more(ul);
-    if (!pop) return;
-    popUl.replaceChildren(...items());
-    if (!list.length) {
-      clearTimeout(popTimer); popTimer = 0; root.classList.remove("pop-wait");
-      if (pop.open) pop.close();
-      return;
-    }
-    if (!popDone && !pop.open && !popTimer) {
-      const wait = still.matches ? 0 : Math.max(0, secs("--dur-enter") * 1000 - performance.now());
-      if (wait) { root.classList.add("pop-wait"); popTimer = setTimeout(openPop, wait); } else openPop();
-    }
-    if (pop.open) more(popUl);
   };
   loadSheet("notices", KEY, render, () => render([]));
 })();
