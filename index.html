@@ -401,8 +401,8 @@ html.has-menu { overflow: hidden; }
 .pop h2:focus { outline: none; }
 .pop-close { margin-top: var(--gap-block); }
 .pop::backdrop { background: var(--paper-64); -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3)); }
-.pop[open] { animation: enter var(--dur-reveal) var(--ease-reveal) both; }
-.pop[open]::backdrop { animation: enter var(--dur-reveal) var(--ease-reveal) both; }
+.pop[open] { animation: enter var(--dur-enter) var(--ease-reveal) both; }
+.pop[open]::backdrop { animation: enter var(--dur-enter) var(--ease-reveal) both; }
 .pop.closing, .pop.closing::backdrop { animation: leave var(--dur-enter) var(--ease-reveal) both; }
 @keyframes leave { to { opacity: 0; } }
 .has-pop .dock, .has-pop .topbar.on, .pop-wait .dock, .pop-wait .topbar.on { visibility: hidden; animation: none; }
@@ -823,7 +823,7 @@ const loadSheet = (type, key, show, fail) => {
   const secs = (name) => parseFloat(getComputedStyle(root).getPropertyValue(name)) || 0;
   let popTimer = 0;
   let closing = false;
-  // 別窓は、カードが出そろってから（dur-reveal のあと）出す。待つ間も上下のバーは出さない
+  // 別窓は、開いてから dur-enter のあとに出す。待つ間も上下のバーは出さない
   const menu = document.getElementById("site-menu");
   const openPop = () => {
     popTimer = 0;
@@ -888,7 +888,7 @@ const loadSheet = (type, key, show, fail) => {
       return;
     }
     if (!popDone && !pop.open && !popTimer) {
-      const wait = still.matches ? 0 : Math.max(0, secs("--dur-reveal") * 1000 - performance.now());
+      const wait = still.matches ? 0 : Math.max(0, secs("--dur-enter") * 1000 - performance.now());
       if (wait) { root.classList.add("pop-wait"); popTimer = setTimeout(openPop, wait); } else openPop();
     }
     if (pop.open) more(popUl);
