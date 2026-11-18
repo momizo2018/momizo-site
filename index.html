@@ -87,13 +87,13 @@
   --lh-text: 1.8;
 
   /* 動き */
-  --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s; --dur-reveal: 2.4s;
+  --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s; --dur-reveal: 1.6s;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --ease-reveal: cubic-bezier(.61, 1, .88, 1);
   --lift: -2px; --press: .97;
   --dim: .6;
   --disabled: .4;
-  --bar-glow: 4s;
+  --bar-glow: 3.2s;
 
   /* 背景 */
   --bg-page:
@@ -208,6 +208,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   transition: top var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
 }
 .menu-btn svg { display: block; }
+.menu-btn::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 50%; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .menu-btn::after { animation: none !important; } }
 @media (hover: hover) { .menu-btn:hover { background: var(--accent); color: var(--on-accent); } }
 .has-pop .menu-btn { visibility: hidden; }
 html.has-menu { overflow: hidden; }
