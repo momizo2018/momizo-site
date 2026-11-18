@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://drive.google.com">   <!-- スタッフの写真はGoogleドライブから -->
 <link rel="preconnect" href="https://lh3.googleusercontent.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&family=M+PLUS+1:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="icon" href="../assets/icon/icon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
@@ -76,11 +76,11 @@
   --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-32), 0 var(--sp-1) var(--sp-3) var(--shade-24);
 
   /* 文字 */
-  --font-sans: "Inter", "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-sans: "Inter", "M PLUS 1", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
   --fw-regular: 400;
   --fw-ui: 500;
   --fw-heading: 500;
-  --fw-heading-sub: 700;
+  --fw-heading-sub: 600;
   --fs-sm: 14px;
   --fs-md: 16px;
   --fs-lg: 20px;
@@ -89,12 +89,12 @@
   --lh-text: 1.8;
 
   /* 動き */
-  --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
+  --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s; --dur-reveal: 2.4s;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
-  --lift: -2px; --press: .97; --enter-y: var(--sp-4);
+  --ease-reveal: cubic-bezier(.61, 1, .88, 1);
+  --lift: -2px; --press: .97;
   --dim: .6;
   --disabled: .4;
-  --dock-delay: .6s;
   --bar-glow: 4s;
 
   /* 背景 */
@@ -129,9 +129,9 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
   min-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--page-pad) * 2);
   display: flex; flex-direction: column; padding: var(--card-pad-y) var(--card-pad-x); overflow: hidden;
   border: var(--bw) solid var(--ink-08); border-radius: var(--r-xl); background: var(--card); box-shadow: var(--shadow-card);
-  animation: enter var(--dur-enter) var(--ease-out) both;
+  animation: enter var(--dur-reveal) var(--ease-reveal) both;
 }
-@keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)); } to { opacity: 1; transform: none; } }
+@keyframes enter { from { opacity: 0; } }
 
 /* ---------- ヘッダー ---------- */
 .head { position: relative; margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0; padding: var(--card-pad-y) var(--card-pad-x); background: var(--accent-08); box-shadow: inset 0 calc(var(--bw) * -1) 0 var(--accent-48); }
@@ -169,7 +169,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   background: linear-gradient(var(--card-64), var(--card));
   -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
   transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
-  animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards;
+  animation: dock-in var(--dur-enter) var(--ease-out) var(--dur-enter) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
 .dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
@@ -197,7 +197,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after, ::backdrop { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
@@ -235,7 +235,6 @@ html.has-menu { overflow: hidden; }
 .menu-list li { border-bottom: var(--bw) dashed var(--ink-24); }
 .menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
 .menu-list [aria-current] { color: var(--faint); }
-.menu-soon { font-size: var(--fs-sm); color: var(--soft); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
 
@@ -283,6 +282,10 @@ html.has-menu { overflow: hidden; }
 .lead + p { margin-top: var(--gap-head); }
 /* ===== 共通：ページの題ここまで ===== */
 
+/* ===== 共通：ふわっと出す ===== */
+@keyframes fade { from { opacity: 0; } }
+/* ===== 共通：ふわっと出すここまで ===== */
+
 /* ===== このページだけ：スタッフ紹介 ===== */
 /* ---------- ページの並び ---------- */
 
@@ -292,7 +295,7 @@ html.has-menu { overflow: hidden; }
 .staff .ph img { height: var(--ph-h); }
 .staff .ph img:only-child { width: 100%; height: auto; max-height: calc(100cqi * 4 / 3); }
 .staff .name { margin-bottom: 0; }
-.staff .ph + .name { margin-top: var(--gap-section); }
+.staff > .name:not(:first-child) { margin-top: var(--gap-section); }
 .staff .tags, .staff .comment { margin-top: var(--gap-head); }
 .staff .comment { white-space: pre-line; }
 .staff .profile { margin-top: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
@@ -300,11 +303,9 @@ html.has-menu { overflow: hidden; }
 
 /* ---------- 読み込みの状態 ---------- */
 .staff-box[data-state="loading"] .staff-list { min-height: 280px; }
-.staff-note { margin-top: var(--page-group); color: var(--muted); }
-.staff-note a { text-decoration-color: var(--ink-24); text-underline-offset: var(--sp-1); }
+.staff-note { color: var(--muted); }
 .staff-box:not([data-state="error"]) .staff-error, .staff-box:not([data-state="empty"]) .staff-empty { display: none; }
 .staff-list > *, .staff-note { animation: fade var(--dur-base) var(--ease-out) both; }
-@keyframes fade { from { opacity: 0; } }
 /* ===== このページだけここまで ===== */
 </style>
 </head>
@@ -378,17 +379,6 @@ html.has-menu { overflow: hidden; }
   menu.addEventListener("close", () => { root.classList.remove("has-menu"); btn.setAttribute("aria-expanded", "false"); btn.focus(); });
   menu.querySelector(".menu-close").addEventListener("click", () => menu.close());
   menu.addEventListener("click", (e) => { if (e.target === menu) menu.close(); });
-  menu.querySelectorAll("a[data-soon]").forEach((a) => {
-    const note = a.querySelector(".menu-soon");
-    if (!note) return;
-    let timer;
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      note.textContent = "準備中です";
-      clearTimeout(timer);
-      timer = setTimeout(() => { note.textContent = ""; }, 3000);
-    });
-  });
   const bar = document.getElementById("status");
   if (bar) {
     const place = () => {
@@ -474,15 +464,40 @@ window.phButtons = phButtons;
 /* ===== 共通：写真の送りボタンここまで ===== */
 </script>
 <script>
+/* ===== 共通：シートの読み込み ===== */
+const loadSheet = (type, key, show, fail) => {
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=" + type;
+  let shown = null;
+  const draw = (list) => {
+    const sig = JSON.stringify(list);
+    if (sig === shown) return;
+    shown = sig;
+    show(list);
+  };
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+  if (Array.isArray(cached)) draw(cached);
+  const ctrl = new AbortController();
+  setTimeout(() => ctrl.abort(), 8000);
+  fetch(ENDPOINT, { signal: ctrl.signal })
+    .then((r) => r.json())
+    .then((d) => {
+      if (!d || !d.ok || !Array.isArray(d[type])) throw new Error("bad response");
+      try { localStorage.setItem(key, JSON.stringify(d[type])); } catch (e) {}
+      draw(d[type]);
+    })
+    .catch(() => { if (shown === null) fail(); });
+};
+/* ===== 共通：シートの読み込みここまで ===== */
+
 /* ---------- スタッフ紹介 ---------- */
 (() => {
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=staff";
   const KEY = "momizo-staff-2";
   const COURSES = ["ボディ", "ヘッド", "フット", "フル"];
   const box = document.getElementById("staff");
   const list = document.getElementById("staff-list");
   const txt = (v) => String(v == null ? "" : v).replace(/\r\n?/g, "\n").trim();
-  const photos = (v) => Array.isArray(v) ? v : String(v || "").split(/[\s,、]+/).filter((id) => /^[\w-]{20,}$/.test(id)).map((id) => ({ src: "https://drive.google.com/thumbnail?id=" + id + "&sz=w960" }));
+  const photos = (v) => String(v || "").split(/[\s,、]+/).filter((id) => /^[\w-]{20,}$/.test(id)).map((id) => ({ src: "https://drive.google.com/thumbnail?id=" + id + "&sz=w960" }));
   const courses = (v) => { const s = String(v || ""); return COURSES.filter((c) => s.includes(c)).map((c) => c + "コース"); };
   const career = (v) => {
     const y = parseInt(String(v || "").replace(/[０-９]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 0xFEE0)), 10);
@@ -499,9 +514,9 @@ window.phButtons = phButtons;
       const f = el("div", "ph");
       ph.forEach((x, i) => {
         const img = el("img");
-        img.alt = x.alt || name + "の写真" + (ph.length > 1 ? "（" + (i + 1) + "）" : "");
+        img.alt = name + "の写真" + (ph.length > 1 ? "（" + (i + 1) + "）" : "");
         img.width = 960; img.height = 560; img.loading = "lazy"; img.decoding = "async"; img.referrerPolicy = "no-referrer";
-        img.addEventListener("error", () => { img.remove(); if (!f.children.length) f.remove(); });
+        img.addEventListener("error", () => { img.remove(); if (!f.children.length) (f.closest(".ph-box") || f).remove(); });
         img.src = x.src;
         f.append(img);
       });
@@ -523,20 +538,7 @@ window.phButtons = phButtons;
     box.dataset.state = ok.length ? state : "empty";
     if (window.phButtons) window.phButtons(list);
   };
-  let cached = null;
-  try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
-  if (Array.isArray(cached) && cached.length) show(cached, "list");
-  const ctrl = new AbortController();
-  setTimeout(() => ctrl.abort(), 8000);
-  fetch(ENDPOINT, { signal: ctrl.signal })
-    .then((r) => r.json())
-    .then((d) => {
-      if (d && d.ok && Array.isArray(d.staff)) {
-        try { localStorage.setItem(KEY, JSON.stringify(d.staff)); } catch (e) {}
-        show(d.staff, "list");
-      } else throw new Error("bad response");
-    })
-    .catch(() => { if (box.dataset.state === "loading") { list.replaceChildren(); box.dataset.state = "error"; } });
+  loadSheet("staff", KEY, (people) => show(people, "list"), () => { list.replaceChildren(); box.dataset.state = "error"; });
 })();
 </script>
 </body>
