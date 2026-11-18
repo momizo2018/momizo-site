@@ -193,7 +193,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after, ::backdrop { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ===== 共通：土台ここまで ===== */
 
 /* ===== 共通：三本線のメニュー ===== */
@@ -204,12 +204,12 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   width: var(--arrow); height: var(--arrow); display: grid; place-items: center; padding: 0; cursor: pointer;
   border: var(--bw) solid transparent; border-radius: 50%; background: var(--paper-64); color: var(--muted);
   transition: top var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  animation: enter var(--dur-enter) var(--ease-reveal) var(--dur-enter) backwards;
 }
 .menu-btn svg { display: block; }
 .menu-btn::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 50%; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .menu-btn::after { animation: none !important; } }
 @media (hover: hover) { .menu-btn:hover { background: var(--accent); color: var(--on-accent); } }
-.has-pop .menu-btn { visibility: hidden; }
 html.has-menu { overflow: hidden; }
 .menu {
   position: fixed; inset: 0 0 auto; margin: 0 auto; padding: 0; border: 0;
