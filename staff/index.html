@@ -69,6 +69,7 @@
   --arrow: var(--sp-8);
   --logo-h: 50px;
   --logo-foot: 48px;
+  --ph-h: 280px;
 
   /* 線・角丸・影 */
   --bw: 1px; --focus-w: 2px;
@@ -154,7 +155,7 @@ h1, h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
 h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
 
 /* ---------- ページの並び ---------- */
-.sec { padding-top: var(--page-section); }
+.sec { margin-top: var(--page-section); }
 
 /* ---------- 線で区切った行 ---------- */
 .rows { list-style: none; border-top: var(--bw) dashed var(--ink-24); }
@@ -172,9 +173,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   animation: dock-in var(--dur-enter) var(--ease-out) var(--dur-enter) backwards;
 }
 @keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
-.dock::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
+/* 上下のバーと三本線の明滅（面に accent-16 を重ねてほどく。角丸は部品に合わせる） */
+.dock::after, .topbar::after, .menu-btn::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
 @keyframes bar-glow { 50% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .dock::after { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .dock::after, .topbar::after, .menu-btn::after { animation: none !important; } }
 .dock::before { content: ""; position: absolute; top: 0; left: var(--card-pad-x); right: var(--card-pad-x); border-top: var(--bw) dashed var(--ink-24); }
 .dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
 .dock a {
@@ -211,8 +213,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); }
   animation: enter var(--dur-enter) var(--ease-reveal) var(--dur-enter) backwards;
 }
 .menu-btn svg { display: block; }
-.menu-btn::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 50%; background: var(--accent-16); opacity: 0; pointer-events: none; animation: bar-glow var(--bar-glow) ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce) { .menu-btn::after { animation: none !important; } }
 @media (hover: hover) { .menu-btn:hover { background: var(--accent); color: var(--on-accent); } }
 html.has-menu { overflow: hidden; }
 .menu {
@@ -235,14 +235,13 @@ html.has-menu { overflow: hidden; }
 .menu-list { list-style: none; margin-top: var(--gap-head); border-top: var(--bw) dashed var(--ink-24); }
 .menu-list + .menu-list { margin-top: var(--gap-section); }
 .menu-list li { border-bottom: var(--bw) dashed var(--ink-24); }
-.menu-list a, .menu-list li > span { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-item); padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
+.menu-list a, .menu-list li > span { display: block; padding: var(--gap-list) 0; line-height: var(--lh-ui); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
 .menu-list [aria-current] { color: var(--faint); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
 
 /* ===== 共通：写真の枠 ===== */
 .ph {
-  --ph-h: 280px;
   display: flex; gap: var(--gap-item); height: var(--ph-h);
   margin-inline: calc(var(--card-pad-x) * -1);
   overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; contain: inline-size;
@@ -279,7 +278,7 @@ html.has-menu { overflow: hidden; }
 /* ===== 共通：題と副題ここまで ===== */
 
 /* ===== 共通：ページの題 ===== */
-.page-title { padding-top: var(--page-group); }
+.page-title { margin-top: var(--page-group); }
 .lead { font-size: var(--fs-md); font-weight: var(--fw-heading-sub); line-height: var(--lh-ui); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
 /* ===== 共通：ページの題ここまで ===== */
@@ -304,7 +303,7 @@ html.has-menu { overflow: hidden; }
 .staff .profile span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) dashed var(--ink-24); }
 
 /* ---------- 読み込みの状態 ---------- */
-.staff-box[data-state="loading"] .staff-list { min-height: 280px; }
+.staff-box[data-state="loading"] .staff-list { min-height: var(--ph-h); }
 .staff-note { color: var(--muted); }
 .staff-box:not([data-state="error"]) .staff-error, .staff-box:not([data-state="empty"]) .staff-empty { display: none; }
 .staff-list > *, .staff-note { animation: fade var(--dur-base) var(--ease-out) both; }
@@ -462,7 +461,6 @@ const phButtons = (root) => root.querySelectorAll(".ph").forEach((ph) => {
   update();
 });
 phButtons(document);
-window.phButtons = phButtons;
 /* ===== 共通：写真の送りボタンここまで ===== */
 </script>
 <script>
@@ -538,7 +536,7 @@ const loadSheet = (type, key, show, fail) => {
     const ok = (people || []).filter((p) => p && txt(p.name));
     list.replaceChildren(...ok.map(card));
     box.dataset.state = ok.length ? state : "empty";
-    if (window.phButtons) window.phButtons(list);
+    phButtons(list);
   };
   loadSheet("staff", KEY, (people) => show(people, "list"), () => { list.replaceChildren(); box.dataset.state = "error"; });
 })();
