@@ -191,7 +191,8 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   margin-bottom: env(safe-area-inset-bottom, 0px);
   border-radius: var(--r-pill); background: var(--glass-hi);
-  transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
+  /* 出し入れも、最初に出るときと同じく灯りが点く・消える（透明度だけ） */
+  transition: opacity var(--dur-light) var(--ease-light);
   animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards;
 }
 .dock.hide { opacity: 0; pointer-events: none; }
@@ -389,7 +390,7 @@ html.has-menu { overflow: hidden; }
   min-height: var(--sp-12); padding: var(--sp-2) var(--sp-6); border-radius: var(--r-pill);
   font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--ink-2);
   visibility: hidden;
-  transition: opacity var(--dur-base) var(--ease-out), visibility 0s var(--dur-base);
+  transition: opacity var(--dur-light) var(--ease-light), visibility 0s var(--dur-light);
 }
 .topbar.on { visibility: visible; transition-delay: 0s; animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards; }
 .topbar.hide { opacity: 0; pointer-events: none; }

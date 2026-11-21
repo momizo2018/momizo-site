@@ -192,7 +192,8 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   margin-bottom: env(safe-area-inset-bottom, 0px);
   border-radius: var(--r-pill); background: var(--glass-hi);
-  transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
+  /* 出し入れも、最初に出るときと同じく灯りが点く・消える（透明度だけ） */
+  transition: opacity var(--dur-light) var(--ease-light);
   animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards;
 }
 .dock.hide { opacity: 0; pointer-events: none; }
