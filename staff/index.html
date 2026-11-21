@@ -321,7 +321,7 @@ html.has-menu { overflow: hidden; }
 @media (max-width: 640px) { .key { height: auto; aspect-ratio: 4 / 5; } }
 .key-sub { height: 400px; }
 .key-sub img { object-position: 50% 50%; }
-@media (max-width: 640px) { .key-sub { height: 320px; } }
+@media (max-width: 640px) { .key-sub { height: 320px; aspect-ratio: auto; } }
 /* ===== 共通：頭の写真ここまで ===== */
 
 /* ===== 共通：寄せ ===== */
@@ -469,10 +469,12 @@ html.has-menu { overflow: hidden; }
   const dock = document.getElementById("dock");
   const until = dock && document.querySelector(dock.dataset.until);
   if (!until) return;
+  /* 目印が画面の下の端より page-section 手前に来たら消す（ページの終わりでブラウザのバーが出入りしても、切り替わらないように） */
+  const early = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--page-section")) || 0;
   let ticking = false;
   const update = () => {
     ticking = false;
-    const hide = until.getBoundingClientRect().top < innerHeight;
+    const hide = until.getBoundingClientRect().top < innerHeight + early;
     dock.classList.toggle("hide", hide);
     dock.inert = hide;
   };
