@@ -319,7 +319,8 @@ html.has-menu { overflow: hidden; }
 /* ===== 共通：頭の写真 ===== */
 /* 奥の層 */
 /* トップは看板と同じ写真。ほかのページは低めにする */
-.key { position: relative; height: max(35vw, min(72svh, 640px)); overflow: hidden; }
+/* 高さは画面の幅だけで決める（画面の高さを使うと、LINEの中などでバーの出入りのたびに写真の大きさが変わる） */
+.key { position: relative; height: clamp(320px, 45vw, 640px); overflow: hidden; }
 .key picture, .key img { display: block; width: 100%; height: 100%; }
 .key img { object-fit: cover; object-position: 47% 50%; animation: lamp-on var(--dur-light) var(--ease-light) both; }
 /* 灯りの届く先が闇に溶ける（下へ暗く：法則1） */
@@ -327,14 +328,14 @@ html.has-menu { overflow: hidden; }
 /* 奥の層の視差（スクロールに連動するアニメーション。スクロールと同じ仕組みで動くのでずれない。使えないブラウザは動かさない） */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .key img { animation: lamp-on var(--dur-light) var(--ease-light) both, key-drift linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0 100vh; }
+    .key img { animation: lamp-on var(--dur-light) var(--ease-light) both, key-drift linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0 640px; }
   }
 }
-@keyframes key-drift { to { transform: translateY(calc(var(--parallax) * 100vh)); } }
-@media (min-aspect-ratio: 2/1) { .key { height: 35vw; } }
-.key-sub { height: min(48svh, 400px); }
+@keyframes key-drift { to { transform: translateY(calc(var(--parallax) * 640px)); } }
+@media (max-width: 640px) { .key { height: auto; aspect-ratio: 4 / 5; } }
+.key-sub { height: 400px; }
 .key-sub img { object-position: 50% 50%; }
-@media (min-aspect-ratio: 2/1) { .key-sub { height: min(48svh, 400px); } }
+@media (max-width: 640px) { .key-sub { height: 320px; } }
 /* ===== 共通：頭の写真ここまで ===== */
 
 /* ===== 共通：寄せ ===== */
@@ -612,7 +613,7 @@ phButtons(document);
   img.style.willChange = "transform";
   const k = parseFloat(getComputedStyle(root).getPropertyValue("--parallax")) || 0;
   let ticking = false;
-  const move = () => { ticking = false; const y = Math.min(scrollY, innerHeight); img.style.transform = "translate3d(0," + (y * k).toFixed(1) + "px,0)"; };
+  const move = () => { ticking = false; const y = Math.min(scrollY, 640); img.style.transform = "translate3d(0," + (y * k).toFixed(1) + "px,0)"; };
   addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(move); } }, { passive: true });
   move();
 })();
