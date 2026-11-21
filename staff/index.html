@@ -66,7 +66,7 @@
   --shade-16: rgba(0,0,0,.16); --shade-48: rgba(0,0,0,.48);
   /* 手前の層：ガラスの面 */
   --surface: #2e241c;          /* ガラスの面の色（透明度を掛けて使う） */
-  --surface-48: rgba(46,36,28,.48); --surface-64: rgba(46,36,28,.64); --surface-96: rgba(46,36,28,.96);
+  --surface-48: rgba(46,36,28,.48); --surface-64: rgba(46,36,28,.64);
   --night-64: rgba(20,15,11,.64);
   --glass: var(--surface-48);
   --glass-hi: var(--surface-64);
@@ -184,9 +184,8 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
   background: var(--glass);
   box-shadow: var(--edge-light), var(--glass-shadow);
 }
-/* ぼかしは画面に固定された面だけ（下を文や写真が流れるところ）。重い処理なので数を絞る。
-   画面下のメニューには付けない（ブラウザのバーが伸び縮みするたびに描き直しになり、LINEの中などでガクつくため。代わりに面を濃くする） */
-.topbar, .menu { -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur)); }
+/* ぼかしは画面に固定された面だけ（下を文や写真が流れるところ）。重い処理なので数を絞る */
+.dock, .topbar, .menu { -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur)); }
 
 /* ---------- 画面下のメニュー ---------- */
 .dock {
@@ -194,7 +193,7 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
   width: min(100% - var(--page-pad) * 2, var(--bar-w)); translate: -50% 0;
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   margin-bottom: env(safe-area-inset-bottom, 0px);
-  border-radius: var(--r-pill); background: var(--surface-96);
+  border-radius: var(--r-pill); background: var(--glass-hi);
   /* 出し入れも、最初に出るときと同じく灯りが点く・消える（透明度だけ） */
   transition: opacity var(--dur-light) var(--ease-light);
   animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards;
@@ -471,12 +470,10 @@ html.has-menu { overflow: hidden; }
   const dock = document.getElementById("dock");
   const until = dock && document.querySelector(dock.dataset.until);
   if (!until) return;
-  /* 目印が画面の下の端より page-section 手前に来たら消す（ページの終わりでブラウザのバーが出入りしても、切り替わらないように） */
-  const early = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--page-section")) || 0;
   let ticking = false;
   const update = () => {
     ticking = false;
-    const hide = until.getBoundingClientRect().top < innerHeight + early;
+    const hide = until.getBoundingClientRect().top < innerHeight;
     dock.classList.toggle("hide", hide);
     dock.inert = hide;
   };
