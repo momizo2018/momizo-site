@@ -29,22 +29,18 @@
 <link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
 <style>
-
-/* =====================================================================
-   揉蔵サイト — 光の法則（規格書「光の法則」の章と同じ）
-   1. 光源は1つ：上方のランプだけ。明るさ・にじみ・縁の光は上から。下へ行くほど暗くなる。
-   2. 近いほど光を受ける：層は 奥（下地・頭の写真）→ 中（写真・文）→ 手前（ガラスの面・上下のバー）。
-      手前ほど明るく、透ける。面の明るさと透明度は透明度の段階から選ぶ。
-   3. 区切りは光と余白：線や枠で囲まない。まとまりは余白で分ける。
-   4. 線は機能だけ：入力欄の縁、リーダー、括弧の線、値の区切り、見出しの下の光の線。飾りの線は描かない。
-   5. 動きは灯りが点くこと：画面に入ったとき1回だけ、透明から見える状態へ（変えるのは透明度だけ）。
-      奥の層（頭の写真）だけ、スクロールより遅れて動く。
-   6. 写真も同じランプで照らす：くすませず、黒を締める。地図は反転して灯りの色をうっすら乗せる。
-   7. 飾りは光でできるものだけ。
-   8. 寄せ：見出し（主）に付くもの（ひとこと・本文・説明文・特徴の札・小さな文）は、主と同じ寄せにする。
-      主の寄せ：ページの題・区画の見出し・大きな数字は中央。小見出し・コース名（題と副題）は左。
-      主を持たないもの：ページ内の目次・ボタン・フッターは中央、それ以外は左。画面の幅で寄せを変えない。
-   ===================================================================== */
+/* ===== 共通：光の法則 ===== */
+/* 揉蔵サイト — 光の法則（規格書 2.2 と同じ文）
+   1. 光源は1つ：上方のランプだけ。明るさ・にじみ・縁の光は上から。下へ行くほど暗くなる
+   2. 近いほど光を受ける：層は 奥（下地・頭の写真）→ 中（写真・文）→ 手前（ガラスの面・上下のバー）。手前ほど明るく、透ける。面の明るさと透明度は透明度の段階から選ぶ
+   3. 区切りは光と余白：線や枠で囲まない。まとまりは余白で分ける
+   4. 線は機能だけ：入力欄の縁、数値をつなぐリーダー、まとまりを示す括弧の線、値の区切り、見出しの下の光の線。飾りの線は描かない
+   5. 動きは灯りが点くこと：画面に入ったとき1回だけ、透明から見える状態へ変わる（変えるのは透明度だけ。位置は動かさない）。奥の層（頭の写真）だけ、スクロールより遅れて動く
+   6. 写真も同じランプで照らす：写真はセピアでくすませず、黒を締める。地図は写真ではないので、明暗を反転して暗い部屋になじませ、灯りの色をうっすら乗せる
+   7. 飾りは光でできるものだけ：にじみ・光の線・光の粒・灯る点・印のほのかな光。絵の飾り（罫・角飾り・飾り枠）は使わない
+   8. 寄せ：見出し（主）に付くもの（ひとこと・本文・説明文・特徴の札・小さな文）は、主と同じ寄せにする。主の寄せ：ページの題・区画の見出し・大きな数字は中央、小見出し・コース名（題と副題）は左。主を持たないもの：ページ内の目次・ボタン・フッターは中央、それ以外は左。画面の幅で寄せを変えない。トップは題を見せない（見えている頭はロゴで左）ので、最初の文章は主を持たない本文として左
+*/
+/* ===== 共通：光の法則ここまで ===== */
 
 /* ===== 共通：土台 ===== */
 :root {
@@ -55,7 +51,7 @@
   --night: #140f0b;           /* 奥の層：灯りの届かない暗さ */
   --paper: #1a130e;
   --err: #ef9a86;
-  /* 光の段階（透明度 .08 / .16 / .24 / .48） */
+  /* 光の段階（透明度 .08 / .16 / .24 / .48 / .64） */
   --ink-08: rgba(241,231,214,.08);
   --ink-16: rgba(241,231,214,.16);
   --ink-24: rgba(241,231,214,.24);
@@ -68,14 +64,12 @@
   --surface: #2e241c;          /* ガラスの面の色（透明度を掛けて使う） */
   --surface-48: rgba(46,36,28,.48); --surface-64: rgba(46,36,28,.64);
   --night-64: rgba(20,15,11,.64);
-  --glass: var(--surface-48);
-  --glass-hi: var(--surface-64);
   --blur: 16px;
   --edge-light: inset 0 var(--bw) 0 var(--ink-16);      /* 縁の光は上側だけ（法則1） */
   --glass-shadow: 0 var(--sp-6) var(--sp-16) var(--shade-48);
 
-  /* 間隔（余白を贅沢に：96 の上に 128・160 を足す） */
-  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-10: 40px; --sp-8: 32px;
+  /* 間隔 */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
   --sp-12: 48px; --sp-16: 64px; --sp-24: 96px; --sp-32: 128px; --sp-40: 160px;
   --gap-tight: var(--sp-1);
   --gap-item: var(--sp-2);
@@ -89,18 +83,17 @@
   /* 横の位置 */
   --page-pad: var(--sp-6);
   --col: 640px;               /* 文を読む幅 */
-  --wide: 1120px;             /* 写真を見せる幅 */
+  --wide: 1120px;             /* 2列・3列に並べるまとまりの幅 */
   --bar-w: 560px;             /* 上下のバー・メニューの幅 */
   --pad-glass: var(--sp-8);
   --btn-w: 400px;
   --pad-part: var(--sp-3) var(--sp-4);
-  --pad-box: var(--pad-glass);
-  --pad-choice: var(--sp-2) var(--sp-4);
+  --pad-chip: var(--sp-2) var(--sp-4);
   --day-col: var(--sp-16);
 
   /* 部品の大きさ */
   --size-control: var(--sp-16);
-  --arrow: var(--sp-8);
+  --to-top: var(--sp-8);
   --logo-h: 50px;
   --logo-foot: 48px;
   --ph-h: 360px;
@@ -111,7 +104,7 @@
 
   /* 文字（見出しを一段大きくして、文との差で強さを出す） */
   --font-sans: "Inter", "M PLUS 1", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --fw-regular: 400; --fw-ui: 500; --fw-heading: 500;
+  --fw-regular: 400; --fw-medium: 500;
   --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 28px;
   --ls-heading: .08em;
   --lh-none: 1; --lh-ui: 1.4; --lh-text: 1.9;
@@ -121,9 +114,9 @@
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --ease-light: cubic-bezier(.61, 1, .88, 1);
   --press: .97; --dim: .6; --disabled: .4;
-  --parallax: .24;            /* 奥の層の遅れ（キービジュアル） */
+  --parallax: .24;            /* 奥の層の遅れ（頭の写真） */
 
-  /* 奥の層：ランプのにじみ（上方の1つの光源） */
+  /* 奥の層：光の粒・天井のにじみ・下地 */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .93 0 0 0 0 .85 .03 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --bg-page:
     var(--grain),
@@ -143,17 +136,16 @@ body {
   -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100svh;
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-h1, h2, h3 { font-weight: var(--fw-heading); line-height: var(--lh-ui); }
+h1, h2, h3 { font-weight: var(--fw-medium); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible, button:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
 section[id] { scroll-margin-top: var(--page-group); }
 
-/* ---------- 並び：文を読む幅と、写真を見せる幅 ---------- */
+/* ---------- 並び：文を読む幅と、まとまりの幅 ---------- */
 .card { position: relative; }
 .wrap, main > :not(:has(> .wrap)) { width: min(100% - var(--page-pad) * 2, var(--col)); margin-inline: auto; }
-/* ヘッダー：ロゴは三本線と同じ高さ。キービジュアルがあるときはその下に */
-.head .wrap { padding-top: var(--sp-4); }
+/* ヘッダー：頭の写真の下にロゴ */
 .key + .wrap { padding-top: var(--gap-section); }
 
 /* ---------- 見出し（光の線：法則4・7） ---------- */
@@ -163,25 +155,28 @@ h1, h2 { font-size: var(--fs-xl); letter-spacing: var(--ls-heading); margin-bott
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
   box-shadow: 0 0 var(--sp-3) var(--accent-48);
 }
-h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: var(--ls-heading); }
+h3 { font-size: var(--fs-lg); font-weight: var(--fw-medium); letter-spacing: var(--ls-heading); }
 
 /* ---------- ページの並び（区切りは余白：法則3） ---------- */
 .sec { margin-top: var(--page-section); }
 .rows { list-style: none; display: grid; gap: var(--gap-section); }
+
+/* ---------- 新しいタブで開くリンク（線のボタンは矢印の丸を持つ） ---------- */
+a[target="_blank"]:not(.line)::after { content: "\a0↗"; display: inline-block; color: var(--faint); }
 
 /* ---------- ロゴ ---------- */
 .brand { display: block; width: fit-content; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
 .brand img { display: block; width: auto; height: var(--logo-h); }
 .site-foot .brand img { height: var(--logo-foot); }
 
-/* ---------- ナビ（ページ内の目次。線なし） ---------- */
+/* ---------- ページ内の目次（線なし） ---------- */
 .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap-head) var(--gap-section); width: min(100% - var(--page-pad) * 2, var(--col)); margin: var(--page-group) auto 0; }
 .nav a { padding: var(--gap-item) 0; font-size: var(--fs-sm); line-height: var(--lh-none); letter-spacing: var(--ls-heading); text-decoration: none; white-space: nowrap; color: var(--soft); transition: color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover { color: var(--ink-2); } }
 
 /* ---------- ガラスの面（手前の層：法則2） ---------- */
-.glass, .notice, .big, .done, .line, .dock, .topbar, .menu {
-  background: var(--glass);
+.notice, .big, .done, .line, .dock, .topbar, .menu {
+  background: var(--surface-48);
   box-shadow: var(--edge-light), var(--glass-shadow);
 }
 /* ぼかしは画面に固定された面だけ（下を文や写真が流れるところ）。重い処理なので数を絞る */
@@ -193,7 +188,7 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
   width: min(100% - var(--page-pad) * 2, var(--bar-w)); translate: -50% 0;
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   margin-bottom: env(safe-area-inset-bottom, 0px);
-  border-radius: var(--r-pill); background: var(--glass-hi);
+  border-radius: var(--r-pill); background: var(--surface-64);
   /* 出し入れも、最初に出るときと同じく灯りが点く・消える（透明度だけ） */
   transition: opacity var(--dur-light) var(--ease-light);
   animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards;
@@ -201,7 +196,7 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
 .dock.hide { opacity: 0; pointer-events: none; }
 .dock a {
   position: relative; display: grid; place-content: center;
-  min-height: var(--size-control); font-weight: var(--fw-ui); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap;
+  min-height: var(--size-control); font-weight: var(--fw-medium); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); text-decoration: none; white-space: nowrap;
   border-radius: var(--r-pill);
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
 }
@@ -217,9 +212,8 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
 .foot-row .to-top { grid-column: 3; justify-self: end; }
 .foot-links { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap-list) var(--gap-section); margin-top: var(--gap-section); }
 .foot-links a { display: inline-block; padding: var(--gap-item) 0; font-size: var(--fs-sm); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); text-decoration: none; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
-.foot-links a[target="_blank"]::after { content: " ↗"; color: var(--faint); }
 @media (hover: hover) { .foot-links a:hover { color: var(--accent); } }
-.to-top { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border-radius: 50%; background: var(--glass); box-shadow: var(--edge-light); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
+.to-top { flex: 0 0 var(--to-top); width: var(--to-top); height: var(--to-top); display: grid; place-items: center; border-radius: 50%; background: var(--surface-48); box-shadow: var(--edge-light); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
@@ -239,7 +233,7 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-heading); letter-spacing: va
   position: fixed; z-index: 10;
   top: calc(env(safe-area-inset-top, 0px) + var(--sp-4)); right: var(--page-pad);
   width: var(--sp-12); height: var(--sp-12); display: grid; place-items: center; padding: 0; cursor: pointer;
-  border: 0; border-radius: 50%; background: var(--glass); color: var(--ink-2);
+  border: 0; border-radius: 50%; background: var(--surface-48); color: var(--ink-2);
   -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur)); box-shadow: var(--edge-light);
   transition: top var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
   animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards;
@@ -251,7 +245,7 @@ html.has-menu { overflow: hidden; }
   position: fixed; inset: 0 0 auto; margin: 0 auto; padding: 0; border: 0;
   width: min(100% - var(--page-pad) * 2, var(--bar-w)); max-width: none; max-height: 100%;
   overflow: auto; overscroll-behavior: contain;
-  border-radius: 0 0 var(--r-xl) var(--r-xl); background: var(--glass-hi); color: var(--ink-2);
+  border-radius: 0 0 var(--r-xl) var(--r-xl); background: var(--surface-64); color: var(--ink-2);
 }
 .menu::backdrop { background: var(--night-64); -webkit-backdrop-filter: blur(var(--sp-2)); backdrop-filter: blur(var(--sp-2)); }
 @media (prefers-reduced-motion: no-preference) { .menu[open] { animation: lamp-on var(--dur-enter) var(--ease-light); } }
@@ -288,7 +282,7 @@ html.has-menu { overflow: hidden; }
 .ph-btn {
   position: absolute; top: 50%; z-index: 1; width: var(--sp-12); height: var(--sp-12); margin-top: calc(var(--sp-12) / -2);
   display: none; place-items: center; padding: 0; cursor: pointer;
-  border: 0; border-radius: 50%; background: var(--glass); box-shadow: var(--edge-light);
+  border: 0; border-radius: 50%; background: var(--surface-48); box-shadow: var(--edge-light);
   -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur));
   font: inherit; line-height: var(--lh-none); color: var(--ink-2);
   transition: opacity var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
@@ -298,10 +292,10 @@ html.has-menu { overflow: hidden; }
 @media (hover: hover) and (pointer: fine) { .ph-btn { display: grid; } .ph-btn:hover { background: var(--accent); color: var(--on-accent); } }
 /* ===== 共通：写真の枠ここまで ===== */
 
-/* ===== 共通：ラベル ===== */
+/* ===== 共通：特徴の札 ===== */
 .tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--gap-item); }
-.tags li { padding: var(--sp-2) var(--sp-4); border-radius: var(--r-pill); background: var(--ink-08); box-shadow: var(--edge-light); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
-/* ===== 共通：ラベルここまで ===== */
+.tags li { padding: var(--pad-chip); border-radius: var(--r-pill); background: var(--ink-08); box-shadow: var(--edge-light); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
+/* ===== 共通：特徴の札ここまで ===== */
 
 /* ===== 共通：頭の写真 ===== */
 /* 奥の層 */
@@ -339,13 +333,17 @@ html.has-menu { overflow: hidden; }
 /* ===== 共通：題と副題ここまで ===== */
 /* ===== 共通：ページの題 ===== */
 .page-title { margin-top: var(--page-group); }
-.lead { font-size: var(--fs-lg); font-weight: var(--fw-heading); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); color: var(--ink-2); }
+.lead { font-size: var(--fs-lg); font-weight: var(--fw-medium); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
 /* ===== 共通：ページの題ここまで ===== */
 /* ===== 共通：ふわっと出す ===== */
 @keyframes fade { from { opacity: 0; } }
 /* ===== 共通：ふわっと出すここまで ===== */
 
+/* ===== 共通：値の区切り ===== */
+/* 値どうしを機能の線で区切る（法則4） */
+.sep span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) solid var(--ink-16); }
+/* ===== 共通：値の区切りここまで ===== */
 /* ===== このページだけ：スタッフ紹介 ===== */
 /* ---------- ページの並び ---------- */
 
@@ -359,7 +357,6 @@ html.has-menu { overflow: hidden; }
 .staff .tags, .staff .comment { margin-top: var(--gap-head); }
 .staff .comment { white-space: pre-line; }
 .staff .profile { margin-top: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
-.staff .profile span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) solid var(--ink-16); }
 
 /* ---------- 読み込みの状態 ---------- */
 .staff-box[data-state="loading"] .staff-list { min-height: var(--ph-h); }
@@ -581,7 +578,7 @@ const loadSheet = (type, key, show, fail) => {
     if (txt(p.role)) h.append(el("small", null, txt(p.role)));
     a.append(h);
     const prof = [txt(p.gender), career(p.since)].filter(Boolean);
-    if (prof.length) { const r = el("p", "profile"); prof.forEach((x) => r.append(el("span", null, x))); a.append(r); }
+    if (prof.length) { const r = el("p", "profile sep"); prof.forEach((x) => r.append(el("span", null, x))); a.append(r); }
     const tags = courses(p.courses);
     if (tags.length) { const t = el("ul", "tags"); tags.forEach((x) => t.append(el("li", null, x))); a.append(t); }
     if (txt(p.comment)) a.append(el("p", "comment", txt(p.comment)));
