@@ -35,7 +35,7 @@
    2. 近いほど光を受ける：層は 奥（下地・頭の写真）→ 中（写真・文）→ 手前（ガラスの面・上下のバー）。手前ほど明るく、透ける。面の明るさと透明度は透明度の段階から選ぶ
    3. 区切りは光と余白：線や枠で囲まない。まとまりは余白で分ける
    4. 線は機能だけ：入力欄の縁、数値をつなぐリーダー、まとまりを示す括弧の線、値の区切り、見出しの下の光の線。飾りの線は描かない
-   5. 動きは灯りが点くこと：画面に入ったとき1回だけ、透明から見える状態へ変わる（変えるのは透明度だけ。位置は動かさない）。奥の層（頭の写真）だけ、スクロールより遅れて動く
+   5. 動きは灯りとスイッチ：ページが見せるもの（開いたとき・画面に入ったとき）は、灯りが点くように透明から見える状態へ変わる（dur-light。消えるときも同じ）。光源は1つなので、開いたときに見えているものは一斉に点く。点くのは場所（まとまり）に1回だけで、後から届いた中身はすぐ置く（dur-base）。触れた・押したものは、スイッチのようにすぐ応える（dur-base。押した瞬間は dur-press）。位置や大きさが変わるのは、奥の層（頭の写真）の視差・押した瞬間の縮み・場所を譲るとき（どいたものが消えきってから動く）だけ
    6. 写真も同じランプで照らす：写真はセピアでくすませず、黒を締める。地図は写真ではないので、明暗を反転して暗い部屋になじませ、灯りの色をうっすら乗せる
    7. 飾りは光でできるものだけ：にじみ・光の線・光の粒・灯る点・印のほのかな光。絵の飾り（罫・角飾り・飾り枠）は使わない
    8. 寄せ：見出し（主）に付くもの（ひとこと・本文・説明文・特徴の札・小さな文）は、主と同じ寄せにする。主の寄せ：ページの題・区画の見出し・大きな数字は中央、小見出し・コース名（題と副題）は左。主を持たないもの：ページ内の目次・ボタン・フッターは中央、それ以外は左。画面の幅で寄せを変えない。トップは題を見せない（見えている頭はロゴで左）ので、最初の文章は主を持たない本文として左
@@ -110,9 +110,8 @@
   --lh-none: 1; --lh-ui: 1.4; --lh-text: 1.9;
 
   /* 動き */
-  --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s; --dur-light: 1.6s;
-  --ease-out: cubic-bezier(.16, 1, .3, 1);
-  --ease-light: cubic-bezier(.61, 1, .88, 1);
+  --dur-press: .1s; --dur-base: .2s; --dur-light: .8s;
+  --ease: cubic-bezier(.61, 1, .88, 1);
   --press: .97; --dim: .6; --disabled: .4;
   --parallax: .24;            /* 奥の層の遅れ（頭の写真） */
 
@@ -165,13 +164,13 @@ h3 { font-size: var(--fs-lg); font-weight: var(--fw-medium); letter-spacing: var
 a[target="_blank"]:not(.line)::after { content: "\a0↗"; display: inline-block; color: var(--faint); }
 
 /* ---------- ロゴ ---------- */
-.brand { display: block; width: fit-content; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand { display: block; width: fit-content; text-decoration: none; transition: opacity var(--dur-base) var(--ease); }
 .brand img { display: block; width: auto; height: var(--logo-h); }
 .site-foot .brand img { height: var(--logo-foot); }
 
 /* ---------- ページ内の目次（線なし） ---------- */
 .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap-head) var(--gap-section); width: min(100% - var(--page-pad) * 2, var(--col)); margin: var(--page-group) auto 0; }
-.nav a { padding: var(--gap-item) 0; font-size: var(--fs-sm); line-height: var(--lh-none); letter-spacing: var(--ls-heading); text-decoration: none; white-space: nowrap; color: var(--soft); transition: color var(--dur-base) var(--ease-out); }
+.nav a { padding: var(--gap-item) 0; font-size: var(--fs-sm); line-height: var(--lh-none); letter-spacing: var(--ls-heading); text-decoration: none; white-space: nowrap; color: var(--soft); transition: color var(--dur-base) var(--ease); }
 @media (hover: hover) { .brand:hover { opacity: var(--dim); } .nav a:hover { color: var(--ink-2); } }
 
 /* ---------- ガラスの面（手前の層：法則2） ---------- */
@@ -190,15 +189,15 @@ a[target="_blank"]:not(.line)::after { content: "\a0↗"; display: inline-block;
   margin-bottom: env(safe-area-inset-bottom, 0px);
   border-radius: var(--r-pill); background: var(--surface-64);
   /* 出し入れも、最初に出るときと同じく灯りが点く・消える（透明度だけ） */
-  transition: opacity var(--dur-light) var(--ease-light);
-  animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards;
+  transition: opacity var(--dur-light) var(--ease);
+  animation: lamp-on var(--dur-light) var(--ease);
 }
 .dock.hide { opacity: 0; pointer-events: none; }
 .dock a {
   position: relative; display: grid; place-content: center;
   min-height: var(--size-control); font-weight: var(--fw-medium); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); text-decoration: none; white-space: nowrap;
   border-radius: var(--r-pill);
-  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease), background-color var(--dur-base) var(--ease);
 }
 .dock a:first-child { background: var(--accent); color: var(--on-accent); }
 .dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
@@ -211,15 +210,15 @@ a[target="_blank"]:not(.line)::after { content: "\a0↗"; display: inline-block;
 .foot-row .brand { grid-column: 2; }
 .foot-row .to-top { grid-column: 3; justify-self: end; }
 .foot-links { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap-list) var(--gap-section); margin-top: var(--gap-section); }
-.foot-links a { display: inline-block; padding: var(--gap-item) 0; font-size: var(--fs-sm); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); text-decoration: none; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
+.foot-links a { display: inline-block; padding: var(--gap-item) 0; font-size: var(--fs-sm); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); text-decoration: none; color: var(--muted); transition: color var(--dur-base) var(--ease); }
 @media (hover: hover) { .foot-links a:hover { color: var(--accent); } }
-.to-top { flex: 0 0 var(--to-top); width: var(--to-top); height: var(--to-top); display: grid; place-items: center; border-radius: 50%; background: var(--surface-48); box-shadow: var(--edge-light); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
+.to-top { flex: 0 0 var(--to-top); width: var(--to-top); height: var(--to-top); display: grid; place-items: center; border-radius: 50%; background: var(--surface-48); box-shadow: var(--edge-light); line-height: var(--lh-none); text-decoration: none; color: var(--muted); transition: background-color var(--dur-base) var(--ease), color var(--dur-base) var(--ease); }
 @media (hover: hover) { .to-top:hover { background: var(--accent); color: var(--on-accent); } }
 .footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 /* ---------- 灯りが点く（法則5：透明度だけ。位置は動かない） ---------- */
 @keyframes lamp-on { from { opacity: 0; } }
-.js .lit { opacity: 0; transition: opacity var(--dur-light) var(--ease-light); }
+.js .lit { opacity: 0; transition: opacity var(--dur-light) var(--ease); }
 .js .lit.on { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -235,8 +234,8 @@ a[target="_blank"]:not(.line)::after { content: "\a0↗"; display: inline-block;
   width: var(--sp-12); height: var(--sp-12); display: grid; place-items: center; padding: 0; cursor: pointer;
   border: 0; border-radius: 50%; background: var(--surface-48); color: var(--ink-2);
   -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur)); box-shadow: var(--edge-light);
-  transition: top var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
-  animation: lamp-on var(--dur-light) var(--ease-light) var(--dur-enter) backwards;
+  transition: background-color var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+  animation: lamp-on var(--dur-light) var(--ease);
 }
 .menu-btn svg { display: block; }
 @media (hover: hover) { .menu-btn:hover { background: var(--accent); color: var(--on-accent); } }
@@ -248,7 +247,9 @@ html.has-menu { overflow: hidden; }
   border-radius: 0 0 var(--r-xl) var(--r-xl); background: var(--surface-64); color: var(--ink-2);
 }
 .menu::backdrop { background: var(--night-64); -webkit-backdrop-filter: blur(var(--sp-2)); backdrop-filter: blur(var(--sp-2)); }
-@media (prefers-reduced-motion: no-preference) { .menu[open] { animation: lamp-on var(--dur-enter) var(--ease-light); } }
+.menu, .menu::backdrop { opacity: 0; transition: opacity var(--dur-base) var(--ease), overlay var(--dur-base) allow-discrete, display var(--dur-base) allow-discrete; }
+.menu[open], .menu[open]::backdrop { opacity: 1; }
+@starting-style { .menu[open], .menu[open]::backdrop { opacity: 0; } }
 .menu-body { padding: calc(env(safe-area-inset-top, 0px) + var(--sp-4)) var(--pad-glass) var(--pad-glass); }
 .menu-close {
   position: relative; display: block; width: var(--sp-12); height: var(--sp-12); margin-left: auto; padding: 0; cursor: pointer;
@@ -259,7 +260,7 @@ html.has-menu { overflow: hidden; }
 @media (hover: hover) { .menu-close:hover { background: var(--accent); color: var(--on-accent); } }
 .menu-list { list-style: none; margin-top: var(--gap-section); }
 .menu-list + .menu-list { margin-top: var(--gap-section); }
-.menu-list a, .menu-list li > span { display: block; padding: var(--gap-list) 0; line-height: var(--lh-ui); letter-spacing: var(--ls-heading); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease-out); }
+.menu-list a, .menu-list li > span { display: block; padding: var(--gap-list) 0; line-height: var(--lh-ui); letter-spacing: var(--ls-heading); text-decoration: none; color: var(--ink-2); transition: color var(--dur-base) var(--ease); }
 .menu-list [aria-current] { color: var(--faint); }
 @media (hover: hover) { .menu-list a:hover { color: var(--accent); } }
 /* ===== 共通：三本線のメニューここまで ===== */
@@ -285,7 +286,7 @@ html.has-menu { overflow: hidden; }
   border: 0; border-radius: 50%; background: var(--surface-48); box-shadow: var(--edge-light);
   -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur));
   font: inherit; line-height: var(--lh-none); color: var(--ink-2);
-  transition: opacity var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+  transition: opacity var(--dur-base) var(--ease), background-color var(--dur-base) var(--ease);
 }
 .ph-btn.prev { left: var(--sp-4); } .ph-btn.next { right: var(--sp-4); }
 .ph-btn[disabled] { opacity: 0; pointer-events: none; }
@@ -303,13 +304,13 @@ html.has-menu { overflow: hidden; }
 /* 高さは画面の幅だけで決める（画面の高さを使うと、LINEの中などでバーの出入りのたびに写真の大きさが変わる） */
 .key { position: relative; height: clamp(320px, 45vw, 640px); overflow: hidden; }
 .key picture, .key img { display: block; width: 100%; height: 100%; }
-.key img { object-fit: cover; object-position: 47% 50%; animation: lamp-on var(--dur-light) var(--ease-light) both; }
+.key img { object-fit: cover; object-position: 47% 50%; animation: lamp-on var(--dur-light) var(--ease) both; }
 /* 灯りの届く先が闇に溶ける（下へ暗く：法則1） */
 .key { -webkit-mask-image: linear-gradient(#000 56%, transparent); mask-image: linear-gradient(#000 56%, transparent); }
 /* 奥の層の視差（スクロールに連動するアニメーション。スクロールと同じ仕組みで動くのでずれない。使えないブラウザは動かさない） */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .key img { animation: lamp-on var(--dur-light) var(--ease-light) both, key-drift linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0 640px; }
+    .key img { animation: lamp-on var(--dur-light) var(--ease) both, key-drift linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0 640px; }
   }
 }
 @keyframes key-drift { to { transform: translateY(calc(var(--parallax) * 640px)); } }
@@ -337,7 +338,6 @@ html.has-menu { overflow: hidden; }
 .lead + p { margin-top: var(--gap-head); }
 /* ===== 共通：ページの題ここまで ===== */
 /* ===== 共通：ふわっと出す ===== */
-@keyframes fade { from { opacity: 0; } }
 /* ===== 共通：ふわっと出すここまで ===== */
 
 /* ===== 共通：値の区切り ===== */
@@ -363,7 +363,7 @@ html.has-menu { overflow: hidden; }
 .staff-box[data-state="loading"] .staff-list { min-height: var(--ph-h); }
 .staff-note { color: var(--muted); }
 .staff-box:not([data-state="error"]) .staff-error, .staff-box:not([data-state="empty"]) .staff-empty { display: none; }
-.staff-list > *, .staff-note { animation: fade var(--dur-base) var(--ease-out) both; }
+.staff-list > *, .staff-note { animation: lamp-on var(--dur-base) var(--ease) both; }
 /* ---------- パソコン：スタッフを2列に ---------- */
 @media (min-width: 960px) {
   main > .staff-box { width: min(100% - var(--page-pad) * 2, var(--wide)); }
