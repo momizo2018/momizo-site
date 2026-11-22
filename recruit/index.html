@@ -671,9 +671,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
 
         <fieldset class="f"><legend>フリガナ<span class="req">必須</span></legend>
           <div class="row2">
-            <label class="sub"><span>セイ</span><input type="text" id="f-sei-k" name="sei_kana" autocomplete="off" placeholder="例）ヤマダ" required></label>
-            <label class="sub"><span>メイ</span><input type="text" id="f-mei-k" name="mei_kana" autocomplete="off" placeholder="例）タロウ" required></label>
+            <label class="sub"><span>セイ</span><input type="text" id="f-sei-k" name="sei_kana" autocomplete="family-name" placeholder="例）ヤマダ" required></label>
+            <label class="sub"><span>メイ</span><input type="text" id="f-mei-k" name="mei_kana" autocomplete="given-name" placeholder="例）タロウ" required></label>
           </div>
+          <p class="hint">カタカナでご入力ください（ひらがなは自動でカタカナになります）。</p>
         </fieldset>
 
         <fieldset class="f"><legend>電話番号<span class="req">必須</span></legend>
@@ -691,7 +692,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 
         <div class="f">
           <label for="f-birth">生年月日<span class="req">必須</span></label>
-          <input type="tel" id="f-birth" name="birth" autocomplete="off" inputmode="numeric" placeholder="例）19900415" required>
+          <input type="tel" id="f-birth" name="birth" autocomplete="bday" inputmode="numeric" placeholder="例）19900415" required>
           <p class="hint">数字8桁でご入力ください（スラッシュは自動で入ります）。</p>
           <p class="age" aria-live="polite">年齢：<b id="age-out">―</b></p>
         </div>
@@ -846,7 +847,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
   /* ---------- 設定 ---------- */
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec";
   const ZIP_API = "https://zipcloud.ibsnet.co.jp/api/search?zipcode=";
-  const TRIM_REQUIRED = ["sei", "mei", "sei_kana", "mei_kana", "time", "exp"];
+  const TRIM_REQUIRED = ["sei", "mei", "time", "exp"];
   const DAYS = ["月", "火", "水", "木", "金", "土", "日"];
   const BLANK = "（未記入）";
 
@@ -867,17 +868,20 @@ main #form-msg { margin-top: 0; color: var(--err); }
     el.addEventListener("blur", () => { el.value = format(digits(el.value, max)); onChange(); });
   }
 
-  /* ---------- フリガナ ---------- */
-  const toKatakana = (s) => s.replace(/[\u3041-\u3096\u309D\u309E]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
-  ["sei_kana", "mei_kana"].forEach((n) => {
-    const el = field(n);
-    el.addEventListener("blur", () => { el.value = toKatakana(el.value); });
-  });
-
   /* ---------- 記入欄の文字数 ---------- */
   document.querySelectorAll("[data-maxlen]").forEach((el) => {
     el.textContent = "（" + $(el.dataset.maxlen).maxLength + "字まで）";
   });
+
+  /* ---------- フリガナ ---------- */
+  const kana = [$("f-sei-k"), $("f-mei-k")];
+  const toKatakana = (s) => s.normalize("NFKC").replace(/[\u3041-\u3096\u309D\u309E]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
+  function checkKana() {
+    kana.forEach((el) => {
+      el.setCustomValidity(/^[\u30A1-\u30FE ]+$/.test(toKatakana(el.value.trim())) ? "" : "フリガナをカタカナでご入力ください。");
+    });
+  }
+  kana.forEach((el) => el.addEventListener("blur", () => { el.value = toKatakana(el.value); }));
 
   /* ---------- 電話番号 ---------- */
   const AREA3 = new Set(("011 017 018 019 022 023 024 025 026 027 028 029 042 043 044 045 046 047 048 049 " +
@@ -1064,7 +1068,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
     if (el.type === "radio") return "それぞれ「できる」「できない」をお選びください。";
     if (el.type === "checkbox") return "同意のチェックが必要です。";
     if (!el.value.trim()) return nameOf(el) + "をご入力ください。";
-    if ([tel, birth, zip].includes(el)) return el.validationMessage;
+    if ([tel, birth, zip, ...kana].includes(el)) return el.validationMessage;
     if (el.validity.typeMismatch) return nameOf(el) + "を正しくご入力ください。";
     return nameOf(el) + "をご確認ください。";
   }
@@ -1072,6 +1076,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
   function collectErrors() {
     checkTel();
     updateAge();
+    checkKana();
     TRIM_REQUIRED.forEach((n) => {
       const el = field(n);
       el.setCustomValidity(el.value.trim() ? "" : "ご入力ください");
@@ -1101,8 +1106,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
       p.className = "f-err";
       p.id = "f-err-" + i;
       p.textContent = x.text;
+      const row = x.el.closest(".row2");
       if (!x.slot.matches(".f")) x.slot.after(p);
       else if (x.el.parentElement === x.slot) x.el.after(p);
+      else if (row) row.after(p);
       else x.slot.append(p);
       x.el.setAttribute("aria-invalid", "true");
       x.el.setAttribute("aria-describedby", p.id);
