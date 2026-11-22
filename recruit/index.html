@@ -680,7 +680,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
         <fieldset class="f"><legend>電話番号<span class="req">必須</span></legend>
           <label class="sub"><span>電話番号</span><input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="numeric" placeholder="例）09012345678" required></label>
           <p class="hint">数字のみご入力ください（ハイフンは自動で入ります）。</p>
-          <label class="sub"><span>連絡しやすい時間帯</span><textarea id="f-time" name="time" maxlength="300" placeholder="例）平日 18:00～21:00&#10;土・日 終日OK" required></textarea></label>
+          <label class="sub"><span>連絡しやすい時間帯</span><textarea id="f-time" name="call_time" maxlength="300" placeholder="例）平日 18:00～21:00&#10;土・日 終日OK" required></textarea></label>
           <p class="hint">お電話でご連絡しやすい曜日と時間帯をご記入ください<span data-maxlen="f-time"></span>。</p>
         </fieldset>
 
@@ -847,7 +847,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
   /* ---------- 設定 ---------- */
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec";
   const ZIP_API = "https://zipcloud.ibsnet.co.jp/api/search?zipcode=";
-  const TRIM_REQUIRED = ["sei", "mei", "time", "exp"];
+  const TRIM_REQUIRED = ["sei", "mei", "call_time", "exp"];
   const DAYS = ["月", "火", "水", "木", "金", "土", "日"];
   const BLANK = "（未記入）";
 
@@ -1144,7 +1144,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
       name: pair("sei", "mei"),
       kana: toKatakana(pair("sei_kana", "mei_kana")),
       tel: fmtTel(digits(tel.value, 11)),
-      time: text("time"),
+      call_time: text("call_time"),
       mail: text("mail"),
       birth: bd.replace(/^(\d{4})(\d{2})(\d{2})$/, "$1年$2月$3日"),
       age: calcAge(bd) + "歳",
