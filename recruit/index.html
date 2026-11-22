@@ -669,10 +669,10 @@ main #form-msg { margin-top: 0; color: var(--err); }
           </div>
         </fieldset>
 
-        <fieldset class="f"><legend>ふりがな<span class="req">必須</span></legend>
+        <fieldset class="f"><legend>フリガナ<span class="req">必須</span></legend>
           <div class="row2">
-            <label class="sub"><span>せい</span><input type="text" id="f-sei-k" name="sei_kana" autocomplete="off" placeholder="例）やまだ" required></label>
-            <label class="sub"><span>めい</span><input type="text" id="f-mei-k" name="mei_kana" autocomplete="off" placeholder="例）たろう" required></label>
+            <label class="sub"><span>セイ</span><input type="text" id="f-sei-k" name="sei_kana" autocomplete="off" placeholder="例）ヤマダ" required></label>
+            <label class="sub"><span>メイ</span><input type="text" id="f-mei-k" name="mei_kana" autocomplete="off" placeholder="例）タロウ" required></label>
           </div>
         </fieldset>
 
@@ -866,6 +866,13 @@ main #form-msg { margin-top: 0; color: var(--err); }
     el.addEventListener("focus", () => { el.value = digits(el.value, max); });
     el.addEventListener("blur", () => { el.value = format(digits(el.value, max)); onChange(); });
   }
+
+  /* ---------- フリガナ ---------- */
+  const toKatakana = (s) => s.replace(/[\u3041-\u3096\u309D\u309E]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
+  ["sei_kana", "mei_kana"].forEach((n) => {
+    const el = field(n);
+    el.addEventListener("blur", () => { el.value = toKatakana(el.value); });
+  });
 
   /* ---------- 記入欄の文字数 ---------- */
   document.querySelectorAll("[data-maxlen]").forEach((el) => {
@@ -1128,7 +1135,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
     return {
       website: field("website").value,
       name: pair("sei", "mei"),
-      kana: pair("sei_kana", "mei_kana"),
+      kana: toKatakana(pair("sei_kana", "mei_kana")),
       tel: fmtTel(digits(tel.value, 11)),
       time: text("time"),
       mail: text("mail"),
