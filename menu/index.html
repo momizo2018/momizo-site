@@ -118,7 +118,7 @@
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .93 0 0 0 0 .85 .03 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --bg-page:
     var(--grain),
-    radial-gradient(120% 48% at 50% 0%, var(--accent-16), transparent 72%),
+    radial-gradient(86% 100lvh at 50% 0%, var(--accent-16), transparent),
     var(--night);
 
   color-scheme: dark;
@@ -148,7 +148,7 @@ section[id] { scroll-margin-top: var(--page-group); }
 
 /* ---------- 見出し（光の線：法則4・7） ---------- */
 h1, h2 { font-size: var(--fs-xl); letter-spacing: var(--ls-heading); margin-bottom: var(--gap-section); }
-.page-title h1::after, .sec h2:not(.name)::after, .band h2::after {
+.page-title h1::after, .sec h2:not(.name)::after {
   content: ""; display: block; width: var(--sp-12); height: var(--bw); margin-top: var(--gap-head);
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
   box-shadow: 0 0 var(--sp-3) var(--accent-48);
@@ -203,7 +203,7 @@ a[target="_blank"]:not(.line)::after { content: "\a0↗"; display: inline-block;
 @media (hover: hover) { .dock a:hover { opacity: var(--dim); } }
 
 /* ---------- フッター ---------- */
-.site-foot { margin-top: var(--page-section); padding: var(--page-group) 0 var(--page-group); text-align: center; background: radial-gradient(80% 100% at 50% 100%, var(--accent-08), transparent 70%); }
+.site-foot { margin-top: var(--page-section); padding: 0 0 var(--page-group); text-align: center; background: radial-gradient(80% 100% at 50% 100%, var(--accent-08), transparent 70%); }
 .foot-body { width: min(100% - var(--page-pad) * 2, var(--col)); margin-inline: auto; }
 .foot-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--gap-item); }
 .foot-row .brand { grid-column: 2; }
@@ -335,8 +335,8 @@ html.has-menu { overflow: hidden; }
 
 /* ===== 共通：寄せ ===== */
 /* 法則8 */
-.page-title h1, .page-title .lead, .sec h2:not(.name), .band h2 { text-align: center; }
-.page-title h1::after, .sec h2:not(.name)::after, .band h2::after { margin-inline: auto; }
+.page-title h1, .page-title .lead, .sec h2:not(.name) { text-align: center; }
+.page-title h1::after, .sec h2:not(.name)::after { margin-inline: auto; }
 /* 主に付く文は主にそろえる */
 .page-title p, .sec-note { text-align: center; }
 /* ===== 共通：寄せここまで ===== */
