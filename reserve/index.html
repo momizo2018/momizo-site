@@ -116,6 +116,7 @@
   --pill-pad-s: var(--sp-6) var(--sp-12);             /* 営業状況（380px以下） */
   --tag-pad: var(--sp-4) var(--sp-12);                /* 札 */
   --badge-pad: var(--sp-2) var(--sp-6);               /* 今日の印 */
+  --course-pad: var(--sp-2) var(--sp-10);             /* コースの札 */
 
   /* 部品の大きさ */
   --bar-h: var(--sp-72);     /* 頭の高さ */
@@ -207,6 +208,9 @@
   --number-ls: var(--ls-06);        /* 電話番号 */
   --guide-ls: var(--ls-06);         /* パネルの案内 */
   --sub-ls: var(--ls-06);           /* 箱の小見出し */
+  --course-gap: var(--sp-6);        /* コースの札どうし */
+  --course-top: var(--sp-8);        /* 名前→コースの札 */
+  --course-bg: var(--ink-04);       /* コースの札の面 */
 
   color-scheme: dark;
 }
@@ -391,6 +395,9 @@ body::after {
 .row .name { font-size: var(--name-fs); font-weight: var(--fw-500); letter-spacing: var(--name-ls); line-height: var(--name-lh); }
 .row .role { margin-left: var(--inline-gap); font-size: var(--caption-fs); font-weight: var(--fw-400); letter-spacing: var(--body-ls); color: var(--soft); }
 .row .meta2 { display: block; margin-top: var(--tight-gap); font-size: var(--caption-fs); line-height: var(--caption-lh); color: var(--soft); }
+.row .courses { display: flex; flex-wrap: wrap; gap: var(--course-gap); margin-top: var(--course-top); }
+.row .course { padding: var(--course-pad); border-radius: var(--r-pill); background: var(--course-bg); box-shadow: inset 0 0 0 var(--line) var(--edge); font-size: var(--chip-fs); line-height: var(--ui-lh); letter-spacing: var(--body-ls); color: var(--muted); }
+.sr { position: absolute; width: var(--line); height: var(--line); overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (hover: hover) {
   .row:hover { background: var(--row-hover); }
   .row:hover .arrow { background: var(--accent); color: var(--on-accent); transform: translateX(var(--lift)); }
@@ -440,7 +447,7 @@ body::after {
 <main>
   <div class="wrap hero">
     <p class="eyebrow en rise" style="--i:1">Online Booking</p>
-    <h1 class="rise" style="--i:2"><span>オンラインで、</span><span><span class="gold">24時間</span>予約できます。</span></h1>
+    <h1 class="rise" style="--i:2"><span>オンラインで</span><span><span class="gold">24時間</span>予約できます</span></h1>
     <p class="lead rise" style="--i:3"><span><span>スタッフの指定方法、</span><span>サービス、日時の順に</span></span><span>選択して、予約を確定してください。</span></p>
 
     <div class="hours rise" style="--i:4">
@@ -533,7 +540,8 @@ body::after {
 
   const $ = (id) => document.getElementById(id);
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-  const okUrl = (u) => /^https:\/\/(app|book)\.squareup\.com\/appointments\/[\w\-\/]+$/.test(String(u || ""));
+  /* 使える URL は Square の予約ウィジェットだけ（https://app.squareup.com/appointments/buyer/widget/〇〇/〇〇） */
+  const okUrl = (u) => /^https:\/\/app\.squareup\.com\/appointments\/buyer\/widget\/[\w-]+\/[\w-]+$/.test(String(u || ""));
   const oneLine = (v) => String(v == null ? "" : v).replace(/\s+/g, " ").trim();
 
   $("go-any").href = URL_ANY;
@@ -574,24 +582,21 @@ body::after {
   setInterval(status, 60000);
 
   /* 担当の1行 */
-  function row(href, { name, role, meta, face }) {
+  function row(href, { name, role, meta, courses }) {
     const li = el("li");
     const a = el("a", "row"); a.href = href;
-    if (face) {
-      const f = el("span", "face"); f.setAttribute("aria-hidden", "true");
-      if (face.id) {
-        const img = el("img"); img.alt = ""; img.width = 96; img.height = 96; img.decoding = "async"; img.referrerPolicy = "no-referrer";
-        img.addEventListener("error", () => { img.remove(); f.textContent = face.initial; });
-        img.src = "https://drive.google.com/thumbnail?id=" + face.id + "&sz=w160";
-        f.append(img);
-      } else f.textContent = face.initial;
-      a.append(f);
-    }
     const t = el("span", "text");
     const n = el("span", "name", name);
     if (role) n.append(el("span", "role", role));
     t.append(n);
     if (meta) t.append(el("span", "meta2", meta));
+    /* 予約できるコースは札だけを並べる（読み上げでは「予約可能なサービス」と読む） */
+    if (courses && courses.length) {
+      const c = el("span", "courses");
+      c.append(el("span", "sr", "予約可能なサービス："));
+      courses.forEach((x) => c.append(el("span", "course", x)));
+      t.append(c);
+    }
     const arrow = el("span", "arrow", "→"); arrow.setAttribute("aria-hidden", "true");
     a.append(t, arrow);
     li.append(a);
@@ -602,8 +607,7 @@ body::after {
   function draw(list) {
     const staff = (list || []).map((p) => ({
       name: oneLine(p.name), role: oneLine(p.role), gender: oneLine(p.gender),
-      courses: COURSES.filter((c) => String(p.courses || "").includes(c)).join("・"),
-      photo: (String(p.photo || "").split(/\s+/).find((id) => /^[\w-]{20,}$/.test(id)) || ""),
+      courses: COURSES.filter((c) => String(p.courses || "").includes(c)),
       url: okUrl(p.reserve) ? p.reserve : "",
     })).filter((s) => s.name);
 
@@ -621,7 +625,7 @@ body::after {
       s.append(el("li", "empty", "スタッフの一覧を読み込めませんでした。時間をおいて再度お試しいただくか、お電話でご予約ください。"));
     } else {
       named.forEach((p) => s.append(row(p.url, {
-        name: p.name, role: p.role, meta: p.courses ? "予約可能なサービス：" + p.courses : "",
+        name: p.name, role: p.role, courses: p.courses,
       })));
     }
     $("way-staff").hidden = !!list && !named.length;
