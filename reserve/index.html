@@ -113,9 +113,6 @@ body::after {
 .week .today::after { content: "TODAY"; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); padding: 1px 6px; border-radius: 999px; font-family: var(--latin); font-size: 8.5px; font-weight: 600; letter-spacing: .14em; line-height: 1.5; background: var(--accent); color: var(--on-accent); }
 .week .today.off { opacity: 1; }
 .hours-note { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 20px; margin-top: 18px; font-size: 13px; color: var(--soft); }
-.tel { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-family: var(--latin); letter-spacing: .06em; border-bottom: 1px solid var(--faint); padding-bottom: 1px; transition: color .2s var(--ease), border-color .2s var(--ease); }
-.tel svg { width: 14px; height: 14px; color: var(--accent); }
-@media (hover: hover) { .tel:hover { color: var(--ink); border-color: var(--accent); } }
 
 /* ---------- 段 ---------- */
 .step { padding-bottom: 64px; scroll-margin-top: 20px; }
@@ -300,7 +297,6 @@ body::after {
       </ol>
       <p class="hours-note">
         <span>定休日 火・水（祝日も曜日どおり）</span>
-        <a class="tel" href="tel:0287339178"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l1.6 4.2-2.2 1.4a11 11 0 0 0 6.5 6.5l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/></svg>0287-33-9178</a>
       </p>
     </div>
   </div>
