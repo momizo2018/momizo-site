@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- 公開まで検索に出さない。公開するときにこの1行を消す（規格書 7章） -->
-<meta name="robots" content="noindex">
+<link rel="canonical" href="https://momizo2018.github.io/momizo-site/reserve/">
 <meta name="theme-color" content="#140f0b">
 <meta name="format-detection" content="telephone=no">
 <title>揉蔵 | ご予約</title>
@@ -30,14 +29,14 @@
   /* 色 */
   --ink: #f1e7d6; --muted: #d4c6b0; --soft: #bda98e; --faint: #a08c74;
   --accent: #c9a46c; --accent-hover: #dcb985; --on-accent: #211913;
-  --night: #140f0b; --umber: #28201a;  /* umber はガラスの面のもとの色 */
+  --night: #140f0b;
   --gold-light: #e8cc9c; --gold-shine: #f1dcb4;
   /* 透明度：.04 の倍数（名前の数字が透明度） */
   --ink-04: rgba(241,231,214,.04); --ink-08: rgba(241,231,214,.08); --ink-16: rgba(241,231,214,.16); --ink-24: rgba(241,231,214,.24);
   --gold-08: rgba(201,164,108,.08); --gold-12: rgba(201,164,108,.12); --gold-16: rgba(201,164,108,.16); --gold-20: rgba(201,164,108,.2);
   --gold-28: rgba(201,164,108,.28); --gold-32: rgba(201,164,108,.32); --gold-36: rgba(201,164,108,.36); --gold-48: rgba(201,164,108,.48); --gold-60: rgba(201,164,108,.6);
   --gold-hover-76: rgba(220,185,133,.76);
-  --night-40: rgba(20,15,11,.4); --night-48: rgba(20,15,11,.48); --night-88: rgba(20,15,11,.88); --night-96: rgba(20,15,11,.96);
+  --night-48: rgba(20,15,11,.48); --night-88: rgba(20,15,11,.88); --night-96: rgba(20,15,11,.96);
   --umber-40: rgba(40,32,26,.4); --umber-56: rgba(40,32,26,.56);
   --black-72: rgba(0,0,0,.72);
 
@@ -329,8 +328,8 @@ body::after {
   transition: background-color var(--dur-color) var(--ease), color var(--dur-color) var(--ease);
 }
 .way .ico svg { width: var(--icon); height: var(--icon); }
-.way h3 { font-size: var(--name-fs); font-weight: var(--fw-500); line-height: var(--name-lh); letter-spacing: var(--name-ls); }
-.way p { font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); }
+.way .way-name { display: block; font-size: var(--name-fs); font-weight: var(--fw-500); line-height: var(--name-lh); letter-spacing: var(--name-ls); }
+.way .way-desc { display: block; font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); }
 .way .fee {
   margin-top: auto; padding-top: var(--fee-top); border-top: var(--line) solid var(--edge);
   display: flex; justify-content: space-between; align-items: center; gap: var(--side-gap);
@@ -370,7 +369,7 @@ body::after {
 }
 .way[aria-expanded="true"] .ico { background: var(--accent); color: var(--on-accent); }
 .way[aria-expanded="true"] .arrow { background: var(--accent); color: var(--on-accent); }
-.way[aria-expanded="true"] p { color: var(--muted); }
+.way[aria-expanded="true"] .way-desc { color: var(--muted); }
 
 /* ---------- 担当を選ぶ（下に開く） ---------- */
 .panel {
@@ -458,7 +457,7 @@ body::after {
     <p class="lead rise" style="--i:3"><span>スタッフの選び方を決めると、</span><span>コースと日時を選ぶ画面へ進みます。</span></p>
 
     <div class="hours rise" style="--i:4">
-      <ol class="week" id="week" aria-label="営業時間">
+      <ol class="week" id="week">
         <li data-wd="1"><b>月</b><span class="t">14:00<i aria-hidden="true">|</i><span class="sr">から</span>24:00</span></li>
         <li data-wd="2" class="off"><b>火</b><span class="t">定休</span></li>
         <li data-wd="3" class="off"><b>水</b><span class="t">定休</span></li>
@@ -480,20 +479,20 @@ body::after {
       <a class="way featured" id="go-any" href="">
         <span class="tag">おすすめ</span>
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16.5c.2 1.4.8 2 2.2 2.2-1.4.2-2 .8-2.2 2.3-.2-1.5-.8-2.1-2.2-2.3 1.4-.2 2-.8 2.2-2.2z"/></svg></span>
-        <h3>指定しない</h3>
-        <p>空いているスタッフが担当します。選べる日時がいちばん多い方法です。</p>
+        <span class="way-name">指定しない</span>
+        <span class="way-desc">空いているスタッフが担当します。選べる日時がいちばん多い方法です。</span>
         <span class="fee free">リクエスト料なし<span class="arrow" aria-hidden="true">→</span></span>
       </a>
       <button class="way" id="way-gender" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3 19.5c.6-3.3 2.8-5.2 5.5-5.2s4.9 1.9 5.5 5.2"/><path d="M14.4 14.6c.7-.4 1.4-.6 2.1-.6 2.3 0 4 1.6 4.5 4.5"/></svg></span>
-        <h3>性別で指定する</h3>
-        <p>ご希望の性別のスタッフが担当します。担当スタッフは当店でお決めします。</p>
+        <span class="way-name">性別で指定する</span>
+        <span class="way-desc">ご希望の性別のスタッフが担当します。担当スタッフは当店でお決めします。</span>
         <span class="fee">リクエスト料（¥400）<span class="arrow" aria-hidden="true">↓</span></span>
       </button>
       <button class="way" id="way-staff" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.7-3.8 3.3-6 6.5-6 1.4 0 2.7.4 3.7 1.2"/><path d="M18 13.5l1.1 2.2 2.4.4-1.8 1.7.4 2.4-2.1-1.1-2.1 1.1.4-2.4-1.8-1.7 2.4-.4z"/></svg></span>
-        <h3>名前で指名する</h3>
-        <p>指名したスタッフが担当します。いつものスタッフも、気になるスタッフもお選びいただけます。</p>
+        <span class="way-name">指名する</span>
+        <span class="way-desc">指名したスタッフが担当します。いつものスタッフも、気になるスタッフもお選びいただけます。</span>
         <span class="fee">リクエスト料（¥400）<span class="arrow" aria-hidden="true">↓</span></span>
       </button>
     </div>
