@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#140f0b">
 <meta name="format-detection" content="telephone=no">
 <title>揉蔵 | ご予約</title>
-<meta name="description" content="揉蔵（もみぞう）のWEB予約。担当の決め方を選んで、コースと日時の予約へ進めます。">
+<meta name="description" content="揉蔵（もみぞう）のWEB予約。おまかせでも、指名でも。お好みの担当でご予約いただけます。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://script.google.com">
@@ -23,52 +23,81 @@
   --accent: #c9a46c; --accent-hover: #dcb985; --on-accent: #211913;
   --night: #140f0b;
   --ink-08: rgba(241,231,214,.08); --ink-16: rgba(241,231,214,.16);
+  --glass: rgba(46,36,28,.56);
   --pad: 20px;
+  --w: 960px;
   --ease: cubic-bezier(.61, 1, .88, 1);
   --font: "Inter", "M PLUS 1", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
   color-scheme: dark;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { background: var(--night); -webkit-text-size-adjust: 100%; }
+html { background: var(--night); -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   min-height: 100svh; color: var(--ink);
-  font-family: var(--font); font-size: 16px; line-height: 1.5; letter-spacing: .02em;
+  font-family: var(--font); font-size: 16px; line-height: 1.7; letter-spacing: .02em;
   font-feature-settings: "palt"; -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 12px; }
 [hidden] { display: none !important; }
+.wrap { width: min(100% - var(--pad) * 2, var(--w)); margin: 0 auto; }
 
 /* キービジュアルを奥に透かす（画面に固定） */
 .kv { position: fixed; inset: 0; z-index: -1; background: url("../assets/img/key-sp.webp") center 20% / cover no-repeat; }
-.kv::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,15,11,.62), rgba(20,15,11,.9) 55%, rgba(20,15,11,.96)); }
+.kv::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,15,11,.55), rgba(20,15,11,.88) 50%, rgba(20,15,11,.96)); }
 @media (min-aspect-ratio: 1/1) { .kv { background-image: url("../assets/img/key-2560.webp"); background-position: center 30%; } }
 
-.page { width: min(100% - var(--pad) * 2, 560px); margin: 0 auto; padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
-
 /* ---------- 頭 ---------- */
-.bar { display: flex; align-items: center; height: 64px; padding-top: env(safe-area-inset-top); }
+.bar { display: flex; align-items: center; justify-content: space-between; height: 64px; padding-top: env(safe-area-inset-top); }
 .bar img { height: 32px; width: auto; display: block; }
+.bar .site { font-size: 13px; color: var(--soft); padding: 8px 0; }
+@media (hover: hover) { .bar .site:hover { color: var(--ink); } }
 
-/* ---------- タイトルとキャッチ ---------- */
-.title { text-align: center; padding: 16px 0 20px; }
-.title h1 { font-size: 32px; font-weight: 500; line-height: 1.3; letter-spacing: .08em; text-indent: .08em; }
-.title p { margin-top: 10px; font-size: 18px; font-weight: 500; line-height: 1.5; letter-spacing: .08em; color: var(--accent-hover); }
+/* ---------- 見出しまわり ---------- */
+.hero { text-align: center; padding: 40px 0 48px; }
+.hero .label { font-size: 13px; letter-spacing: .2em; color: var(--accent-hover); }
+.hero h1 { margin: 12px 0 16px; font-size: clamp(24px, 6.4vw, 36px); font-weight: 500; line-height: 1.5; letter-spacing: .06em; }
+.hero h1 span { display: inline-block; }
+.hero .lead { font-size: 15px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 24px; margin-top: 24px; font-size: 14px; color: var(--muted); }
+.meta b { font-weight: 500; color: var(--soft); margin-right: 8px; }
+.meta a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
 
-/* ---------- 段の目印 ---------- */
-.steps { display: flex; justify-content: center; gap: 20px; list-style: none; margin-bottom: 20px; font-size: 13px; color: var(--faint); }
-.steps li { display: flex; align-items: center; gap: 6px; }
-.steps b { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; box-shadow: inset 0 0 0 1px var(--faint); }
-.steps .now { color: var(--ink); }
-.steps .now b { background: var(--accent); color: var(--on-accent); box-shadow: none; }
-.steps .done b { box-shadow: inset 0 0 0 1px var(--accent); color: var(--accent); }
+/* ---------- 段 ---------- */
+.step { padding-bottom: 48px; scroll-margin-top: 16px; }
+.step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.step-head .no { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font-size: 14px; font-weight: 600; }
+.step-head h2 { font-size: 22px; font-weight: 500; line-height: 1.4; letter-spacing: .06em; }
 
-/* ---------- ガラスの箱と行 ---------- */
-.box {
-  padding: 8px 20px; border-radius: 24px;
-  background: rgba(46,36,28,.56); box-shadow: inset 0 1px 0 var(--ink-16);
+/* 決め方のカード（スマホは縦、パソコンは3列） */
+.ways { display: grid; gap: 12px; }
+@media (min-width: 760px) { .ways { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; } }
+.way {
+  position: relative; display: flex; flex-direction: column; gap: 8px; width: 100%;
+  padding: 22px 22px 18px; border-radius: 20px;
+  background: var(--glass); box-shadow: inset 0 1px 0 var(--ink-16), inset 0 0 0 1px var(--ink-08);
   -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  transition: box-shadow .2s var(--ease), background-color .2s var(--ease);
 }
+.way h3 { font-size: 19px; font-weight: 500; line-height: 1.4; letter-spacing: .06em; }
+.way p { font-size: 14px; line-height: 1.7; color: var(--soft); }
+.way .fee { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--ink-08); display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--accent-hover); }
+.way .fee.free { color: var(--muted); }
+.way .fee span[aria-hidden] { color: var(--soft); }
+.way .tag { position: absolute; top: 20px; right: 20px; padding: 2px 10px; border-radius: 999px; font-size: 12px; background: var(--accent); color: var(--on-accent); }
+@media (hover: hover) { .way:hover { box-shadow: inset 0 1px 0 var(--ink-16), inset 0 0 0 1px var(--accent); } }
+.way[aria-expanded="true"] { background: rgba(201,164,108,.16); box-shadow: inset 0 0 0 1.5px var(--accent); }
+
+/* ---------- 担当を選ぶ（下に開く） ---------- */
+.panel {
+  padding: 8px 22px; border-radius: 20px;
+  background: var(--glass); box-shadow: inset 0 1px 0 var(--ink-16);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  animation: in .3s var(--ease);
+}
+@keyframes in { from { opacity: 0; transform: translateY(6px); } }
+.panel-title { padding: 14px 0 6px; font-size: 15px; font-weight: 500; color: var(--muted); }
 .list { list-style: none; }
 .list li + li { border-top: 1px solid var(--ink-08); }
 .row { display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 14px 0; }
@@ -78,96 +107,97 @@ a { color: inherit; text-decoration: none; }
 }
 .row .face img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .row .text { flex: 1; min-width: 0; }
-.row .top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .row .name { font-size: 17px; font-weight: 500; letter-spacing: .06em; }
 .row .role { font-size: 13px; color: var(--soft); margin-left: 8px; letter-spacing: .04em; }
-.row .fee { font-size: 13px; white-space: nowrap; color: var(--accent-hover); }
-.row .fee.free { color: var(--soft); }
-.row .meta { display: block; margin-top: 4px; font-size: 13px; line-height: 1.6; color: var(--soft); }
+.row .meta2 { display: block; margin-top: 2px; font-size: 13px; line-height: 1.6; color: var(--soft); }
 .row .arrow {
   flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
   background: var(--ink-08); transition: background-color .2s var(--ease), color .2s var(--ease);
 }
 @media (hover: hover) { .row:hover .arrow { background: var(--accent); color: var(--on-accent); } }
 .row:active { opacity: .7; }
-.empty { padding: 20px 0; font-size: 14px; line-height: 1.7; color: var(--muted); }
+.empty { padding: 16px 0; font-size: 14px; line-height: 1.7; color: var(--muted); }
+.next { margin-top: 12px; font-size: 13px; color: var(--soft); text-align: center; }
 
-/* ---------- 段の切り替え ---------- */
-.view { animation: in .25s var(--ease); }
-@keyframes in { from { opacity: 0; transform: translateY(6px); } }
-.back { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; padding: 8px 0; font-size: 14px; color: var(--soft); }
-@media (hover: hover) { .back:hover { color: var(--ink); } }
+/* ---------- ご来店の前に ---------- */
+.info { display: grid; gap: 12px; padding-bottom: 48px; }
+@media (min-width: 760px) { .info { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+.info div { padding: 20px 22px; border-radius: 16px; background: rgba(46,36,28,.4); box-shadow: inset 0 0 0 1px var(--ink-08); font-size: 14px; color: var(--soft); }
+.info h3 { margin-bottom: 6px; font-size: 15px; font-weight: 500; color: var(--ink); letter-spacing: .04em; }
+.info a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
 
 /* ---------- 下 ---------- */
-.foot { margin-top: 20px; text-align: center; font-size: 13px; color: var(--soft); }
-.foot a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
+.foot { padding: 24px 0 calc(28px + env(safe-area-inset-bottom)); border-top: 1px solid var(--ink-08); text-align: center; font-size: 12px; color: var(--faint); }
 
-@media (prefers-reduced-motion: reduce) { .view { animation: none; } .row .arrow { transition: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .panel { animation: none; } .way, .row .arrow { transition: none; } }
 </style>
 </head>
 <body>
 <div class="kv" aria-hidden="true"></div>
-<main class="page">
-  <header class="bar">
-    <a href="../" aria-label="揉蔵のサイトへ"><img src="../assets/logo/logo.png" alt="揉蔵" width="462" height="150"></a>
-  </header>
 
-  <div class="title">
-    <h1>ご予約</h1>
-    <p id="catch">まずは、担当の決め方から。</p>
+<header class="wrap bar">
+  <a href="../" aria-label="揉蔵のサイトへ"><img src="../assets/logo/logo.png" alt="揉蔵" width="462" height="150"></a>
+  <a class="site" href="../">サイトを見る</a>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <p class="label">WEB予約</p>
+    <h1><span>おまかせでも、</span><span>指名でも。</span><br><span>お好みの担当で</span><span>ご予約いただけます。</span></h1>
+    <p class="lead">WEB予約は24時間受け付けています。<br>まずは、担当の決め方をお選びください。</p>
+    <p class="meta">
+      <span><b>本日</b><span id="today">営業時間は曜日で異なります</span></span>
+      <span><b>定休日</b>火・水（祝日も曜日どおり）</span>
+      <span><b>電話</b><a href="tel:0287339178">0287-33-9178</a></span>
+    </p>
   </div>
 
-  <ol class="steps" id="steps" aria-label="ご予約の流れ">
-    <li data-step="1"><b>1</b>決め方</li>
-    <li data-step="2"><b>2</b>担当</li>
-    <li data-step="3"><b>3</b>コースと日時</li>
-  </ol>
-
-  <!-- 1. 決め方 -->
-  <section class="view" id="v-way" aria-label="担当の決め方">
-    <div class="box">
-      <ul class="list">
-        <li><a class="row" id="go-any" href="">
-          <span class="text">
-            <span class="top"><span class="name">指定なし</span><span class="fee free">追加料金なし</span></span>
-            <span class="meta">空いている担当が施術します。空きがいちばん多く、ご希望の日時で取りやすくなります。</span>
-          </span>
-          <span class="arrow" aria-hidden="true">→</span>
-        </a></li>
-        <li id="way-gender"><a class="row" href="#gender">
-          <span class="text">
-            <span class="top"><span class="name">性別で指定</span><span class="fee">リクエスト料 ¥400</span></span>
-            <span class="meta">男性・女性のどちらかを選べます。担当はお店で決めます。</span>
-          </span>
-          <span class="arrow" aria-hidden="true">→</span>
-        </a></li>
-        <li id="way-staff"><a class="row" href="#staff">
-          <span class="text">
-            <span class="top"><span class="name">名前で指名</span><span class="fee">リクエスト料 ¥400</span></span>
-            <span class="meta">いつもの担当や、気になるスタッフを選べます。</span>
-          </span>
-          <span class="arrow" aria-hidden="true">→</span>
-        </a></li>
-      </ul>
+  <!-- 1. 予約方法を選ぶ -->
+  <section class="wrap step" id="step1" aria-labelledby="h1-step">
+    <div class="step-head"><span class="no" aria-hidden="true">1</span><h2 id="h1-step">担当の決め方を選ぶ</h2></div>
+    <div class="ways">
+      <a class="way" id="go-any" href="">
+        <span class="tag">おすすめ</span>
+        <h3>指定なし</h3>
+        <p>空いている担当が施術します。空きがいちばん多く、ご希望の日時で取りやすくなります。</p>
+        <span class="fee free">追加料金なし<span aria-hidden="true">→</span></span>
+      </a>
+      <button class="way" id="way-gender" type="button" aria-expanded="false" aria-controls="step2">
+        <h3>性別で指定</h3>
+        <p>男性・女性のどちらかをお選びいただけます。担当はお店で決めます。</p>
+        <span class="fee">リクエスト料 400円<span aria-hidden="true">↓</span></span>
+      </button>
+      <button class="way" id="way-staff" type="button" aria-expanded="false" aria-controls="step2">
+        <h3>名前で指名</h3>
+        <p>いつもの担当や、気になるスタッフをお選びいただけます。</p>
+        <span class="fee">リクエスト料 400円<span aria-hidden="true">↓</span></span>
+      </button>
     </div>
   </section>
 
-  <!-- 2. 担当（性別） -->
-  <section class="view" id="v-gender" aria-label="性別を選ぶ" hidden>
-    <div class="box"><ul class="list" id="gender-list"></ul></div>
-    <a class="back" href="#">← 決め方を選び直す</a>
+  <!-- 2. 担当を選ぶ（性別・名前を選んだときだけ開く） -->
+  <section class="wrap step" id="step2" aria-labelledby="h2-step" hidden>
+    <div class="step-head"><span class="no" aria-hidden="true">2</span><h2 id="h2-step">担当を選ぶ</h2></div>
+    <div class="panel" id="p-gender" hidden>
+      <p class="panel-title">ご希望の性別をお選びください。</p>
+      <ul class="list" id="gender-list"></ul>
+    </div>
+    <div class="panel" id="p-staff" hidden>
+      <p class="panel-title">指名するスタッフをお選びください。</p>
+      <ul class="list" id="staff-list"><li class="empty">スタッフを読み込んでいます…</li></ul>
+    </div>
+    <p class="next">次の画面で、コースと日時をお選びいただけます。</p>
   </section>
 
-  <!-- 2. 担当（名前）：スタッフのシートから作る -->
-  <section class="view" id="v-staff" aria-label="担当を選ぶ" hidden>
-    <div class="box"><ul class="list" id="staff-list"><li class="empty">スタッフを読み込んでいます…</li></ul></div>
-    <a class="back" href="#">← 決め方を選び直す</a>
-  </section>
-
-  <footer class="foot">
-    <p>お電話でもご予約いただけます：<a href="tel:0287339178">0287-33-9178</a></p>
-  </footer>
+  <!-- ご来店の前に -->
+  <div class="wrap info">
+    <div><h3>お支払い</h3>現金のほか、クレジットカード、PayPay・d払い・楽天ペイ・au PAY などがご利用いただけます。</div>
+    <div><h3>お電話でのご予約</h3><a href="tel:0287339178">0287-33-9178</a><br>当日のご予約も承ります。</div>
+    <div><h3>駐車場</h3>無料駐車場がございます。<br>栃木県大田原市本町1丁目2701-11</div>
+  </div>
 </main>
+
+<footer class="wrap foot">© 揉蔵 momizo relaxation salon</footer>
 
 <script>
 (() => {
@@ -182,8 +212,9 @@ a { color: inherit; text-decoration: none; }
   const URL_GENDER = { "男性": "", "女性": "" };
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=staff";
   const CACHE_KEY = "momizo-reserve-staff-1";
-  const FEE = "リクエスト料 ¥400";
   const COURSES = ["ボディ", "ヘッド", "フット", "フル"];
+  /* 営業時間（日曜=0）。祝日も曜日どおり */
+  const HOURS = ["10:00 – 22:00", "14:00 – 24:00", "", "", "14:00 – 24:00", "14:00 – 22:00", "10:00 – 22:00"];
   /* ============================================================ */
 
   const $ = (id) => document.getElementById(id);
@@ -193,11 +224,17 @@ a { color: inherit; text-decoration: none; }
 
   $("go-any").href = URL_ANY;
 
-  /* 1行を作る：face は写真のID（なければ頭文字） */
-  function row(href, { name, role, fee, meta, face }) {
+  /* 本日の営業（日本時間の曜日で） */
+  try {
+    const wd = ["日", "月", "火", "水", "木", "金", "土"].indexOf(new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", weekday: "short" }).format(new Date()));
+    if (wd >= 0) $("today").textContent = HOURS[wd] ? HOURS[wd] + " 営業" : "定休日";
+  } catch (e) {}
+
+  /* 担当の1行 */
+  function row(href, { name, role, meta, face }) {
     const li = el("li");
     const a = el("a", "row"); a.href = href;
-    if (face !== undefined) {
+    if (face) {
       const f = el("span", "face"); f.setAttribute("aria-hidden", "true");
       if (face.id) {
         const img = el("img"); img.alt = ""; img.width = 96; img.height = 96; img.decoding = "async"; img.referrerPolicy = "no-referrer";
@@ -208,12 +245,10 @@ a { color: inherit; text-decoration: none; }
       a.append(f);
     }
     const t = el("span", "text");
-    const top = el("span", "top");
     const n = el("span", "name", name);
     if (role) n.append(el("span", "role", role));
-    top.append(n, el("span", "fee", fee));
-    t.append(top);
-    if (meta) t.append(el("span", "meta", meta));
+    t.append(n);
+    if (meta) t.append(el("span", "meta2", meta));
     const arrow = el("span", "arrow", "→"); arrow.setAttribute("aria-hidden", "true");
     a.append(t, arrow);
     li.append(a);
@@ -229,33 +264,50 @@ a { color: inherit; text-decoration: none; }
       url: okUrl(p.reserve) ? p.reserve : "",
     })).filter((s) => s.name);
 
-    // 性別：URL があり、その性別のスタッフがいるときだけ（読み込めないときは URL だけで決める）
     const g = $("gender-list"); g.replaceChildren();
     Object.entries(URL_GENDER).forEach(([sex, url]) => {
       if (!okUrl(url)) return;
       if (list && !staff.some((s) => s.gender === sex)) return;
-      g.append(row(url, { name: sex + "スタッフ", fee: FEE, meta: sex + "の担当が施術します" }));
+      g.append(row(url, { name: sex + "スタッフ", meta: sex + "の担当が施術します" }));
     });
     $("way-gender").hidden = !g.children.length;
 
-    // 個人：予約のURLがある人だけ
     const s = $("staff-list"); s.replaceChildren();
     const named = staff.filter((p) => p.url);
     if (!list) {
       s.append(el("li", "empty", "スタッフの一覧を読み込めませんでした。時間をおいて開き直すか、お電話でご予約ください。"));
     } else {
       named.forEach((p) => s.append(row(p.url, {
-        name: p.name, role: p.role, fee: "¥400", meta: p.courses ? "担当コース：" + p.courses : "",
+        name: p.name, role: p.role, meta: p.courses ? "担当コース：" + p.courses : "",
         face: { id: p.photo, initial: p.name.charAt(0) },
       })));
     }
     $("way-staff").hidden = !!list && !named.length;
-    show();
+    if (open && $(open === "gender" ? "way-gender" : "way-staff").hidden) close();
   }
+
+  /* 決め方を選ぶと、下に担当の選択肢が開く */
+  let open = "";
+  function choose(kind) {
+    open = kind;
+    $("way-gender").setAttribute("aria-expanded", String(kind === "gender"));
+    $("way-staff").setAttribute("aria-expanded", String(kind === "staff"));
+    $("p-gender").hidden = kind !== "gender";
+    $("p-staff").hidden = kind !== "staff";
+    $("step2").hidden = false;
+    requestAnimationFrame(() => $("step2").scrollIntoView({ block: "start" }));
+  }
+  function close() {
+    open = "";
+    ["way-gender", "way-staff"].forEach((id) => $(id).setAttribute("aria-expanded", "false"));
+    $("step2").hidden = true;
+  }
+  $("way-gender").addEventListener("click", () => choose("gender"));
+  $("way-staff").addEventListener("click", () => choose("staff"));
 
   /* 読み込み：前回の一覧を先に出し、新しい一覧が来たら差し替える */
   let shown = null;
-  const paint = (list) => { const sig = JSON.stringify(list); if (sig === shown) return; shown = sig; draw(list); };
+  const paint = (l) => { const sig = JSON.stringify(l); if (sig === shown) return; shown = sig; draw(l); };
   try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); if (Array.isArray(c)) paint(c); } catch (e) {}
   const ctrl = new AbortController();
   setTimeout(() => ctrl.abort(), 8000);
@@ -267,29 +319,6 @@ a { color: inherit; text-decoration: none; }
       paint(d.staff);
     })
     .catch(() => { if (shown === null) { shown = "fail"; draw(null); } });
-
-  /* 段の切り替え：#gender / #staff で2段目。スマホの戻るでも戻れる */
-  const views = { "": "v-way", gender: "v-gender", staff: "v-staff" };
-  const catches = { "": "まずは、担当の決め方から。", gender: "ご希望の性別を選んでください。", staff: "担当を選んでください。" };
-  const steps = [...document.querySelectorAll("#steps li")];
-  function show() {
-    let k = location.hash.slice(1);
-    if (!(k in views) || (k === "gender" && $("way-gender").hidden) || (k === "staff" && $("way-staff").hidden)) k = "";
-    Object.entries(views).forEach(([h, id]) => { $(id).hidden = h !== k; });
-    $("catch").textContent = catches[k];
-    const now = k ? 2 : 1;
-    steps.forEach((li) => {
-      const n = +li.dataset.step;
-      li.className = n === now ? "now" : n < now ? "done" : "";
-      if (n === now) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");
-    });
-  }
-  window.addEventListener("hashchange", show);
-  document.querySelectorAll(".back").forEach((a) => a.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (location.hash) history.back();
-  }));
-  show();
 })();
 </script>
 </body>
