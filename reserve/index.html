@@ -45,7 +45,7 @@
   --font: "Inter", "M PLUS 1", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
   --latin: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* 文字の大きさ：11〜18px は1px刻み、それより上は 22・30、題だけ画面幅で伸びる */
+  /* 文字の大きさ：11〜16px は1px刻み、その上は 18・22・30、下は 9。題だけ画面幅で伸びる */
   --fs-9: 9px; --fs-11: 11px; --fs-12: 12px; --fs-13: 13px; --fs-14: 14px; --fs-15: 15px; --fs-16: 16px; --fs-18: 18px;
   --fs-22: 22px; --fs-30: 30px; --fs-fluid: clamp(26px, 7vw, 46px);
   /* 太さ */
@@ -459,13 +459,13 @@ body::after {
 
     <div class="hours rise" style="--i:4">
       <ol class="week" id="week" aria-label="営業時間">
-        <li data-wd="1"><b>月</b><span class="t">14:00<i aria-label="から">|</i>24:00</span></li>
+        <li data-wd="1"><b>月</b><span class="t">14:00<i aria-hidden="true">|</i><span class="sr">から</span>24:00</span></li>
         <li data-wd="2" class="off"><b>火</b><span class="t">定休</span></li>
         <li data-wd="3" class="off"><b>水</b><span class="t">定休</span></li>
-        <li data-wd="4"><b>木</b><span class="t">14:00<i aria-label="から">|</i>24:00</span></li>
-        <li data-wd="5"><b>金</b><span class="t">14:00<i aria-label="から">|</i>22:00</span></li>
-        <li data-wd="6"><b>土</b><span class="t">10:00<i aria-label="から">|</i>22:00</span></li>
-        <li data-wd="0"><b>日</b><span class="t">10:00<i aria-label="から">|</i>22:00</span></li>
+        <li data-wd="4"><b>木</b><span class="t">14:00<i aria-hidden="true">|</i><span class="sr">から</span>24:00</span></li>
+        <li data-wd="5"><b>金</b><span class="t">14:00<i aria-hidden="true">|</i><span class="sr">から</span>22:00</span></li>
+        <li data-wd="6"><b>土</b><span class="t">10:00<i aria-hidden="true">|</i><span class="sr">から</span>22:00</span></li>
+        <li data-wd="0"><b>日</b><span class="t">10:00<i aria-hidden="true">|</i><span class="sr">から</span>22:00</span></li>
       </ol>
       <p class="hours-note">
         <span>定休日 火・水（祝日も曜日どおりに営業）</span>
