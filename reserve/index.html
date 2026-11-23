@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#140f0b">
 <meta name="format-detection" content="telephone=no">
 <title>揉蔵 | ご予約</title>
-<meta name="description" content="揉蔵（もみぞう）のWEB予約。おまかせでも、指名でも。お好みのスタッフでご予約いただけます。">
+<meta name="description" content="揉蔵（もみぞう）のオンライン予約。24時間予約できます。スタッフの指名方法、サービス、日時の順に選択して、予約を確定してください。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://script.google.com">
@@ -284,9 +284,9 @@ body::after {
 
 <main>
   <div class="wrap hero">
-    <p class="eyebrow en rise" style="--i:1">Web Reservation</p>
-    <h1 class="rise" style="--i:2"><span>おまかせでも、</span><span class="gold">指名でも。</span><br><span>お好みのスタッフで</span><span>ご予約いただけます。</span></h1>
-    <p class="lead rise" style="--i:3"><span>WEB予約は24時間受け付けています。</span><br><span>まずは、スタッフの指定方法を</span><span>お選びください。</span></p>
+    <p class="eyebrow en rise" style="--i:1">Online Booking</p>
+    <h1 class="rise" style="--i:2"><span>オンラインで、</span><span><span class="gold">24時間</span>予約できます。</span></h1>
+    <p class="lead rise" style="--i:3"><span>スタッフの指名方法、サービス、日時の順に選択して、</span><span>予約を確定してください。</span><br><span>予約時の前払いはありません。</span></p>
 
     <div class="hours rise" style="--i:4">
       <ol class="week" id="week" aria-label="営業時間">
@@ -307,25 +307,25 @@ body::after {
 
   <!-- 1. 予約方法を選ぶ -->
   <section class="wrap step rise" style="--i:5" id="step1" aria-labelledby="h1-step">
-    <div class="step-head"><span class="no" aria-hidden="true">01</span><h2 id="h1-step">スタッフの指定方法を選ぶ</h2></div>
+    <div class="step-head"><span class="no" aria-hidden="true">01</span><h2 id="h1-step">スタッフの指名方法を選択</h2></div>
     <div class="ways">
       <a class="way featured" id="go-any" href="">
         <span class="tag">おすすめ</span>
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16.5c.2 1.4.8 2 2.2 2.2-1.4.2-2 .8-2.2 2.3-.2-1.5-.8-2.1-2.2-2.3 1.4-.2 2-.8 2.2-2.2z"/></svg></span>
-        <h3>スタッフを指定しない</h3>
-        <p>空いているスタッフが担当します。空きがいちばん多く、ご希望の日時で予約しやすくなります。</p>
-        <span class="fee free">追加料金なし<span class="go" aria-hidden="true">→</span></span>
+        <h3>指名なし</h3>
+        <p>予約可能なスタッフが担当します。空き時間がいちばん多く、ご希望の日時で予約しやすくなります。</p>
+        <span class="fee free">リクエスト料なし<span class="go" aria-hidden="true">→</span></span>
       </a>
       <button class="way" id="way-gender" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3 19.5c.6-3.3 2.8-5.2 5.5-5.2s4.9 1.9 5.5 5.2"/><path d="M14.4 14.6c.7-.4 1.4-.6 2.1-.6 2.3 0 4 1.6 4.5 4.5"/></svg></span>
-        <h3>スタッフを性別で指定する</h3>
-        <p>男性・女性のどちらかをお選びいただけます。担当するスタッフは当店でお決めします。</p>
+        <h3>スタッフの性別を指定</h3>
+        <p>男性・女性のどちらかを選択できます。担当スタッフは当店で割り当てます。</p>
         <span class="fee">リクエスト料（¥400）<span class="go" aria-hidden="true">↓</span></span>
       </button>
       <button class="way" id="way-staff" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.7-3.8 3.3-6 6.5-6 1.4 0 2.7.4 3.7 1.2"/><path d="M18 13.5l1.1 2.2 2.4.4-1.8 1.7.4 2.4-2.1-1.1-2.1 1.1.4-2.4-1.8-1.7 2.4-.4z"/></svg></span>
-        <h3>スタッフを直接指名する</h3>
-        <p>いつものスタッフや、気になるスタッフをお選びいただけます。</p>
+        <h3>スタッフを指名</h3>
+        <p>いつものスタッフや、気になるスタッフを選択できます。</p>
         <span class="fee">リクエスト料（¥400）<span class="go" aria-hidden="true">↓</span></span>
       </button>
     </div>
@@ -333,24 +333,24 @@ body::after {
 
   <!-- 2. スタッフを選ぶ（性別・名前を選んだときだけ開く） -->
   <section class="wrap step" id="step2" aria-labelledby="h2-step" hidden>
-    <div class="step-head"><span class="no" aria-hidden="true">02</span><h2 id="h2-step">スタッフを選ぶ</h2></div>
+    <div class="step-head"><span class="no" aria-hidden="true">02</span><h2 id="h2-step">スタッフを選択</h2></div>
     <div class="panel" id="p-gender" hidden>
-      <p class="panel-title">ご希望の性別をお選びください。</p>
+      <p class="panel-title">ご希望のスタッフの性別を選択してください。</p>
       <ul class="list" id="gender-list"></ul>
     </div>
     <div class="panel" id="p-staff" hidden>
-      <p class="panel-title">指名するスタッフをお選びください。</p>
+      <p class="panel-title">指名するスタッフを選択してください。</p>
       <ul class="list" id="staff-list"><li class="empty">スタッフを読み込んでいます…</li></ul>
     </div>
-    <p class="next">次の画面で、サービスと日時をお選びいただけます。</p>
+    <p class="next">次の画面で、サービスと日時を選択して予約を確定します。</p>
   </section>
 
   <!-- ご来店の前に -->
   <section class="wrap before rise" style="--i:6" aria-labelledby="h-before">
     <h2 class="label en" id="h-before"><span lang="en">Before your visit</span></h2>
     <div class="info">
-      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18M7 15h3"/></svg>お支払い</h3>お支払いは予約当日にお願いします。ご予約時のお支払いはありません。現金のほか、クレジットカード、PayPay・d払い・楽天ペイ・au PAY などがご利用いただけます。</div>
-      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>キャンセル・変更</h3>ご予約の変更やキャンセルは、ご予約の1時間前までにお願いします。締め切り後は、お電話でご連絡ください。</div>
+      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18M7 15h3"/></svg>お支払い</h3>お支払いはご来店時にお願いします。予約時の前払いはありません。現金のほか、クレジットカード、PayPay・d払い・楽天ペイ・au PAY などをご利用いただけます。</div>
+      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>キャンセル・変更</h3>予約の変更・キャンセルは、予約時間の1時間前までにお願いします。キャンセル受付期限を過ぎた場合は、お電話でご連絡ください。</div>
       <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l1.6 4.2-2.2 1.4a11 11 0 0 0 6.5 6.5l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/></svg>お電話でのご予約</h3><a class="big" href="tel:0287339178">0287-33-9178</a><br>当日のご予約も承ります。</div>
     </div>
   </section>
@@ -464,10 +464,10 @@ body::after {
     const s = $("staff-list"); s.replaceChildren();
     const named = staff.filter((p) => p.url);
     if (!list) {
-      s.append(el("li", "empty", "スタッフの一覧を読み込めませんでした。時間をおいて開き直すか、お電話でご予約ください。"));
+      s.append(el("li", "empty", "スタッフの一覧を読み込めませんでした。時間をおいて再度お試しいただくか、お電話でご予約ください。"));
     } else {
       named.forEach((p) => s.append(row(p.url, {
-        name: p.name, role: p.role, meta: p.courses ? "担当コース：" + p.courses : "",
+        name: p.name, role: p.role, meta: p.courses ? "予約可能なサービス：" + p.courses : "",
         face: { id: p.photo, initial: p.name.charAt(0) },
       })));
     }
