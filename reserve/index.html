@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#140f0b">
 <meta name="format-detection" content="telephone=no">
 <title>揉蔵 | ご予約</title>
-<meta name="description" content="揉蔵（もみぞう）のWEB予約。おまかせでも、指名でも。お好みの担当でご予約いただけます。">
+<meta name="description" content="揉蔵（もみぞう）のWEB予約。おまかせでも、指名でも。お好みのスタッフでご予約いただけます。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://script.google.com">
@@ -51,17 +51,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- 頭 ---------- */
 .bar { display: flex; align-items: center; justify-content: space-between; height: 64px; padding-top: env(safe-area-inset-top); }
 .bar img { height: 32px; width: auto; display: block; }
-.bar .site { font-size: 13px; color: var(--soft); padding: 8px 0; }
-@media (hover: hover) { .bar .site:hover { color: var(--ink); } }
+.status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font-size: 13px; line-height: 1.4; color: var(--muted); background: rgba(20,15,11,.48); box-shadow: inset 0 0 0 1px var(--ink-16); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
+.status.open { color: var(--ink); }
+.status.open::before { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 
 /* ---------- 見出しまわり ---------- */
 .hero { text-align: center; padding: 40px 0 48px; }
-.hero .label { font-size: 13px; letter-spacing: .2em; color: var(--accent-hover); }
-.hero h1 { margin: 12px 0 16px; font-size: clamp(24px, 6.4vw, 36px); font-weight: 500; line-height: 1.5; letter-spacing: .06em; }
-.hero h1 span { display: inline-block; }
+.hero h1 { margin: 0 0 16px; font-size: clamp(24px, 6.4vw, 36px); font-weight: 500; line-height: 1.5; letter-spacing: .06em; }
+.hero h1 span, .hero .lead span { display: inline-block; }
 .hero .lead { font-size: 15px; color: var(--muted); }
 .meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 24px; margin-top: 24px; font-size: 14px; color: var(--muted); }
 .meta b { font-weight: 500; color: var(--soft); margin-right: 8px; }
+.meta i { font-style: normal; display: inline-block; }
+.meta i + i { margin-left: 12px; }
 .meta a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
 
 /* ---------- 段 ---------- */
@@ -137,16 +140,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 <header class="wrap bar">
   <a href="../" aria-label="揉蔵のサイトへ"><img src="../assets/logo/logo.png" alt="揉蔵" width="462" height="150"></a>
-  <a class="site" href="../">サイトを見る</a>
+  <p class="status" id="status" aria-live="polite">営業時間は曜日で異なります</p>
 </header>
 
 <main>
   <div class="wrap hero">
-    <p class="label">WEB予約</p>
-    <h1><span>おまかせでも、</span><span>指名でも。</span><br><span>お好みの担当で</span><span>ご予約いただけます。</span></h1>
-    <p class="lead">WEB予約は24時間受け付けています。<br>まずは、担当の決め方をお選びください。</p>
+    <h1><span>おまかせでも、</span><span>指名でも。</span><br><span>お好みのスタッフで</span><span>ご予約いただけます。</span></h1>
+    <p class="lead"><span>WEB予約は24時間受け付けています。</span><br><span>まずは、スタッフの指定方法を</span><span>お選びください。</span></p>
     <p class="meta">
-      <span><b>本日</b><span id="today">営業時間は曜日で異なります</span></span>
+      <span><b>営業時間</b><i>月・木 14:00 – 24:00</i><i>金 14:00 – 22:00</i><i>土・日 10:00 – 22:00</i></span>
       <span><b>定休日</b>火・水（祝日も曜日どおり）</span>
       <span><b>電話</b><a href="tel:0287339178">0287-33-9178</a></span>
     </p>
@@ -154,30 +156,30 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
   <!-- 1. 予約方法を選ぶ -->
   <section class="wrap step" id="step1" aria-labelledby="h1-step">
-    <div class="step-head"><span class="no" aria-hidden="true">1</span><h2 id="h1-step">担当の決め方を選ぶ</h2></div>
+    <div class="step-head"><span class="no" aria-hidden="true">1</span><h2 id="h1-step">スタッフの指定方法を選ぶ</h2></div>
     <div class="ways">
       <a class="way" id="go-any" href="">
         <span class="tag">おすすめ</span>
-        <h3>指定なし</h3>
-        <p>空いている担当が施術します。空きがいちばん多く、ご希望の日時で取りやすくなります。</p>
+        <h3>スタッフを指定しない</h3>
+        <p>空いているスタッフが担当します。空きがいちばん多く、ご希望の日時で予約しやすくなります。</p>
         <span class="fee free">追加料金なし<span aria-hidden="true">→</span></span>
       </a>
       <button class="way" id="way-gender" type="button" aria-expanded="false" aria-controls="step2">
-        <h3>性別で指定</h3>
-        <p>男性・女性のどちらかをお選びいただけます。担当はお店で決めます。</p>
-        <span class="fee">リクエスト料 400円<span aria-hidden="true">↓</span></span>
+        <h3>スタッフを性別で指定する</h3>
+        <p>男性・女性のどちらかをお選びいただけます。担当するスタッフは当店でお決めします。</p>
+        <span class="fee">リクエスト料（¥400）<span aria-hidden="true">↓</span></span>
       </button>
       <button class="way" id="way-staff" type="button" aria-expanded="false" aria-controls="step2">
-        <h3>名前で指名</h3>
-        <p>いつもの担当や、気になるスタッフをお選びいただけます。</p>
-        <span class="fee">リクエスト料 400円<span aria-hidden="true">↓</span></span>
+        <h3>スタッフを直接指名する</h3>
+        <p>いつものスタッフや、気になるスタッフをお選びいただけます。</p>
+        <span class="fee">リクエスト料（¥400）<span aria-hidden="true">↓</span></span>
       </button>
     </div>
   </section>
 
-  <!-- 2. 担当を選ぶ（性別・名前を選んだときだけ開く） -->
+  <!-- 2. スタッフを選ぶ（性別・名前を選んだときだけ開く） -->
   <section class="wrap step" id="step2" aria-labelledby="h2-step" hidden>
-    <div class="step-head"><span class="no" aria-hidden="true">2</span><h2 id="h2-step">担当を選ぶ</h2></div>
+    <div class="step-head"><span class="no" aria-hidden="true">2</span><h2 id="h2-step">スタッフを選ぶ</h2></div>
     <div class="panel" id="p-gender" hidden>
       <p class="panel-title">ご希望の性別をお選びください。</p>
       <ul class="list" id="gender-list"></ul>
@@ -186,14 +188,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       <p class="panel-title">指名するスタッフをお選びください。</p>
       <ul class="list" id="staff-list"><li class="empty">スタッフを読み込んでいます…</li></ul>
     </div>
-    <p class="next">次の画面で、コースと日時をお選びいただけます。</p>
+    <p class="next">次の画面で、サービスと日時をお選びいただけます。</p>
   </section>
 
   <!-- ご来店の前に -->
   <div class="wrap info">
-    <div><h3>お支払い</h3>現金のほか、クレジットカード、PayPay・d払い・楽天ペイ・au PAY などがご利用いただけます。</div>
+    <div><h3>お支払い</h3>お支払いは予約当日にお願いします。ご予約時のお支払いはありません。現金のほか、クレジットカード、PayPay・d払い・楽天ペイ・au PAY などがご利用いただけます。</div>
+    <div><h3>キャンセル・変更</h3>ご予約の変更やキャンセルは、ご予約の1時間前までにお願いします。締め切り後は、お電話でご連絡ください。</div>
     <div><h3>お電話でのご予約</h3><a href="tel:0287339178">0287-33-9178</a><br>当日のご予約も承ります。</div>
-    <div><h3>駐車場</h3>無料駐車場がございます。<br>栃木県大田原市本町1丁目2701-11</div>
   </div>
 </main>
 
@@ -213,8 +215,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=staff";
   const CACHE_KEY = "momizo-reserve-staff-1";
   const COURSES = ["ボディ", "ヘッド", "フット", "フル"];
-  /* 営業時間（日曜=0）。祝日も曜日どおり */
-  const HOURS = ["10:00 – 22:00", "14:00 – 24:00", "", "", "14:00 – 24:00", "14:00 – 22:00", "10:00 – 22:00"];
+  /* 営業時間（日曜=0。[開店, 閉店]、定休日は null）。祝日も曜日どおり */
+  const HOURS = [["10:00", "22:00"], ["14:00", "24:00"], null, null, ["14:00", "24:00"], ["14:00", "22:00"], ["10:00", "22:00"]];
   /* ============================================================ */
 
   const $ = (id) => document.getElementById(id);
@@ -224,11 +226,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
   $("go-any").href = URL_ANY;
 
-  /* 本日の営業（日本時間の曜日で） */
-  try {
-    const wd = ["日", "月", "火", "水", "木", "金", "土"].indexOf(new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", weekday: "short" }).format(new Date()));
-    if (wd >= 0) $("today").textContent = HOURS[wd] ? HOURS[wd] + " 営業" : "定休日";
-  } catch (e) {}
+  /* いまの営業の状態（日本時間で、1分ごとに更新） */
+  const min = (hm) => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
+  function status() {
+    try {
+      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Tokyo", weekday: "short", hour: "numeric", minute: "numeric", hourCycle: "h23" })
+        .formatToParts(new Date()).map((x) => [x.type, x.value]));
+      const wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(parts.weekday);
+      const now = Number(parts.hour) * 60 + Number(parts.minute);
+      const h = HOURS[wd], st = $("status");
+      let text, open = false;
+      if (!h) text = "本日は定休日です";
+      else if (now < min(h[0])) text = "本日 " + h[0] + "から営業";
+      else if (now < min(h[1])) { text = "営業中　" + h[1] + "まで"; open = true; }
+      else text = "本日の営業は終了しました";
+      st.textContent = text;
+      st.classList.toggle("open", open);
+    } catch (e) {}
+  }
+  status();
+  setInterval(status, 60000);
 
   /* 担当の1行 */
   function row(href, { name, role, meta, face }) {
@@ -268,7 +285,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     Object.entries(URL_GENDER).forEach(([sex, url]) => {
       if (!okUrl(url)) return;
       if (list && !staff.some((s) => s.gender === sex)) return;
-      g.append(row(url, { name: sex + "スタッフ", meta: sex + "の担当が施術します" }));
+      g.append(row(url, { name: sex + "スタッフ", meta: sex + "スタッフが担当します" }));
     });
     $("way-gender").hidden = !g.children.length;
 
