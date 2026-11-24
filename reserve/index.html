@@ -335,9 +335,12 @@ body::after {
 .way .way-desc { word-break: auto-phrase; }
 .way .fee {
   margin-top: auto; padding-top: var(--fee-top); border-top: var(--line) solid var(--edge);
-  align-self: stretch; display: flex; justify-content: center; align-items: center; gap: var(--side-gap);
+  /* 料金の文字だけで中央。矢印の丸は右に添える（中央の計算に入れない） */
+  align-self: stretch; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--side-gap);
   font-size: var(--text-fs); color: var(--accent-hover);
 }
+.way .fee-text { grid-column: 2; }
+.way .fee .arrow { grid-column: 3; justify-self: start; }
 .way .fee.free { color: var(--muted); }
 .arrow {
   flex: none; width: var(--arrow); height: var(--arrow); border-radius: 50%; display: grid; place-items: center;
@@ -487,19 +490,19 @@ body::after {
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16.5c.2 1.4.8 2 2.2 2.2-1.4.2-2 .8-2.2 2.3-.2-1.5-.8-2.1-2.2-2.3 1.4-.2 2-.8 2.2-2.2z"/></svg></span>
         <span class="way-name">指定しない</span>
         <span class="way-desc"><span>空いているスタッフが担当します。</span><span>選べる日時がいちばん多い方法です。</span></span>
-        <span class="fee free">リクエスト料なし<span class="arrow" aria-hidden="true">→</span></span>
+        <span class="fee free"><span class="fee-text">リクエスト料なし</span><span class="arrow" aria-hidden="true">→</span></span>
       </a>
       <button class="way" id="way-gender" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3 19.5c.6-3.3 2.8-5.2 5.5-5.2s4.9 1.9 5.5 5.2"/><path d="M14.4 14.6c.7-.4 1.4-.6 2.1-.6 2.3 0 4 1.6 4.5 4.5"/></svg></span>
         <span class="way-name">性別で指定する</span>
         <span class="way-desc"><span>ご希望の性別のスタッフが担当します。</span><span>担当スタッフは当店でお決めします。</span></span>
-        <span class="fee">リクエスト料（¥400）<span class="arrow" aria-hidden="true">↓</span></span>
+        <span class="fee"><span class="fee-text">リクエスト料（¥400）</span><span class="arrow" aria-hidden="true">↓</span></span>
       </button>
       <button class="way" id="way-staff" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.7-3.8 3.3-6 6.5-6 1.4 0 2.7.4 3.7 1.2"/><path d="M18 13.5l1.1 2.2 2.4.4-1.8 1.7.4 2.4-2.1-1.1-2.1 1.1.4-2.4-1.8-1.7 2.4-.4z"/></svg></span>
         <span class="way-name">指名する</span>
         <span class="way-desc"><span>指名したスタッフが担当します。</span><span>いつものスタッフも、気になるスタッフもお選びいただけます。</span></span>
-        <span class="fee">リクエスト料（¥400）<span class="arrow" aria-hidden="true">↓</span></span>
+        <span class="fee"><span class="fee-text">リクエスト料（¥400）</span><span class="arrow" aria-hidden="true">↓</span></span>
       </button>
     </div>
   </section>
