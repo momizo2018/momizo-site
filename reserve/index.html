@@ -62,7 +62,7 @@
   /* 行間 */
   --lh-1: 1; --lh-14: 1.4; --lh-15: 1.5; --lh-18: 1.8; --lh-19: 1.9;
   /* 字間 */
-  --ls-0: 0; --ls-02: .02em; --ls-04: .04em; --ls-06: .06em; --ls-08: .08em; --ls-14: .14em; --ls-28: .28em;
+  --ls-0: 0; --ls-02: .02em; --ls-06: .06em; --ls-08: .08em; --ls-14: .14em; --ls-28: .28em;
 
   /* 長さ：2の倍数。24までは2刻み、その上は 28・32・40・56・64 */
   --sp-2: 2px; --sp-4: 4px; --sp-6: 6px; --sp-8: 8px; --sp-10: 10px; --sp-12: 12px; --sp-14: 14px; --sp-16: 16px;
@@ -90,15 +90,12 @@
   --rule-color: var(--ink-16);        /* 飾りの線 */
   --card-edge-hi: var(--ink-24); --card-edge-lo: var(--ink-04); --card-edge-gold: var(--gold-28); /* カード・パネルの縁 */
   --cursor-glow: var(--gold-20);      /* カーソルの光 */
-  --featured-glow: var(--gold-12); --featured-edge-hi: var(--gold-hover-76); --featured-edge-lo: var(--gold-12); --featured-edge-end: var(--gold-48); /* おすすめのカード */
+  --featured-glow: var(--gold-12); --featured-edge-hi: var(--gold-hover-76); --featured-edge-lo: var(--gold-12); --featured-edge-end: var(--gold-48); /* 指定しないのカード（指定する人は多くが常連なので、初めての方の入口として目立たせる） */
   --selected-end: var(--gold-08);     /* 選んだカードの面の下側 */
   --pulse-color: var(--gold-60);      /* 営業中の点の広がり */
   --shine-1: var(--gold-light); --shine-2: var(--gold-shine); /* 題の金の文字の光沢 */
   --arrow-bg: var(--ink-08);          /* 矢印の丸 */
   --row-hover: var(--ink-04); --row-press: var(--ink-08); /* スタッフの行に触れた・押した */
-  --stamp-ink: var(--accent-hover);   /* おすすめのスタンプの外の輪と文字 */
-  --stamp-ring: var(--gold-48);       /* おすすめのスタンプの内の輪（外より薄く） */
-  --stamp-bg: var(--night-48);        /* おすすめのスタンプの面（カードの縁をまたいでも読めるように薄く暗く） */
   --hover-shadow: 0 var(--sp-18) var(--sp-40) calc(var(--sp-18) * -1) var(--black-72); /* 触れたカードの影 */
 
   /* 文字（大きさ / 太さ / 行間 / 字間） */
@@ -114,7 +111,6 @@
   --caption-fs: var(--fs-13);                                                            /* 営業状況・役職・補足 */
   --chip-fs: var(--fs-12);       --chip-ls: var(--ls-08);                                /* 札・時刻・定休 */
   --label-fs: var(--fs-11);      --label-ls: var(--ls-28);                               /* 英字の小見出し */
-  --stamp-ls: var(--ls-04);      /* おすすめのスタンプの文字 */
   --time-fs-s: var(--fs-11);     /* 時刻（380px以下） */
   --status-fs-s: var(--fs-12);   /* 営業状況（380px以下） */
   --tiny-fs: var(--fs-9);        --tiny-ls: var(--ls-14);                                /* 今日の印・時刻の区切り */
@@ -186,8 +182,6 @@
   --dot-s: var(--sp-6);      /* 補足の頭の点 */
   --rule: var(--sp-28);      /* 英字の小見出しの両脇の線 */
   --glow-size: 420px;        /* カーソルの光の大きさ */
-  --stamp-size: var(--sp-64);  /* おすすめのスタンプの直径 */
-  --stamp-ring-gap: var(--sp-4); /* スタンプの二重の輪の間 */
 
   /* 角丸（大きい面ほど丸く） */
   --r-card: var(--sp-22);  /* カード・パネル・ご来店の前にの面 */
@@ -203,7 +197,6 @@
   /* 不透明度 */
   --op-dim: .8;    /* 触れたロゴ・補足の頭の点 */
   --op-off: .56;   /* 定休日の曜日 */
-  --op-stamp: .92;  /* おすすめのスタンプ（少しかすれた押し跡に） */
   --op-grain: .08; /* 粒子 */
 
   /* 動き */
@@ -218,7 +211,6 @@
   --rise-s: var(--sp-10);     /* 入ってくる距離（パネル・行） */
   --lift: var(--sp-4);        /* 触れたときに浮く・ずれる距離 */
   --press: .99;               /* 押したときの縮み */
-  --stamp-rotate: -12deg;      /* おすすめのスタンプの傾き（手で押した感じ） */
 
   color-scheme: dark;
 }
@@ -352,16 +344,6 @@ body::after {
   flex: none; width: var(--arrow); height: var(--arrow); border-radius: 50%; display: grid; place-items: center;
   font-family: var(--latin); font-size: var(--sub-fs); color: var(--ink); background: var(--arrow-bg);
   transition: background-color var(--dur-color) var(--ease), color var(--dur-color) var(--ease), transform var(--dur-move) var(--ease-out);
-}
-/* おすすめ：中央のカードにあとから押したスタンプ。塗らずに金の細い二重の輪と文字だけ。右上の角に傾けて押す */
-.way .tag {
-  position: absolute; top: calc(var(--stamp-size) / -4); right: calc(var(--stamp-size) / -8);
-  display: grid; place-items: center; width: var(--stamp-size); height: var(--stamp-size); border-radius: 50%;
-  font-size: var(--label-fs); font-weight: var(--fw-500); line-height: var(--solo-lh); letter-spacing: var(--stamp-ls); white-space: nowrap;
-  color: var(--stamp-ink); background: var(--stamp-bg);
-  box-shadow: inset 0 0 0 var(--line) var(--stamp-ink), inset 0 0 0 var(--stamp-ring-gap) var(--stamp-bg), inset 0 0 0 calc(var(--stamp-ring-gap) + var(--line)) var(--stamp-ring);
-  transform: rotate(var(--stamp-rotate)); opacity: var(--op-stamp);
-  -webkit-backdrop-filter: blur(var(--blur-chip)); backdrop-filter: blur(var(--blur-chip));
 }
 .way.featured {
   background:
@@ -506,7 +488,6 @@ body::after {
     <div class="step-head"><span class="no" aria-hidden="true">01</span><h2 id="h1-step">スタッフの選び方</h2></div>
     <div class="ways">
       <a class="way featured" id="go-any" href="">
-        <span class="tag">おすすめ</span>
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16.5c.2 1.4.8 2 2.2 2.2-1.4.2-2 .8-2.2 2.3-.2-1.5-.8-2.1-2.2-2.3 1.4-.2 2-.8 2.2-2.2z"/></svg></span>
         <span class="way-name">指定しない</span>
         <span class="way-desc">空いているスタッフが担当します。選べる日時がいちばん多い方法です。</span>
