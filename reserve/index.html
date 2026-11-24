@@ -44,7 +44,7 @@
   /* 透明度：.04 の倍数（名前の数字が透明度） */
   --ink-04: rgba(241,231,214,.04); --ink-08: rgba(241,231,214,.08); --ink-16: rgba(241,231,214,.16); --ink-24: rgba(241,231,214,.24);
   --gold-08: rgba(201,164,108,.08); --gold-12: rgba(201,164,108,.12); --gold-16: rgba(201,164,108,.16); --gold-20: rgba(201,164,108,.2);
-  --gold-28: rgba(201,164,108,.28); --gold-32: rgba(201,164,108,.32); --gold-36: rgba(201,164,108,.36); --gold-48: rgba(201,164,108,.48); --gold-60: rgba(201,164,108,.6);
+  --gold-28: rgba(201,164,108,.28); --gold-32: rgba(201,164,108,.32); --gold-48: rgba(201,164,108,.48); --gold-60: rgba(201,164,108,.6);
   --gold-hover-76: rgba(220,185,133,.76);
   --night-48: rgba(20,15,11,.48); --night-88: rgba(20,15,11,.88); --night-96: rgba(20,15,11,.96);
   --umber-40: rgba(40,32,26,.4); --umber-56: rgba(40,32,26,.56);
@@ -62,7 +62,7 @@
   /* 行間 */
   --lh-1: 1; --lh-14: 1.4; --lh-15: 1.5; --lh-18: 1.8; --lh-19: 1.9;
   /* 字間 */
-  --ls-0: 0; --ls-02: .02em; --ls-06: .06em; --ls-08: .08em; --ls-14: .14em; --ls-28: .28em;
+  --ls-0: 0; --ls-02: .02em; --ls-04: .04em; --ls-06: .06em; --ls-08: .08em; --ls-14: .14em; --ls-28: .28em;
 
   /* 長さ：2の倍数。24までは2刻み、その上は 28・32・40・56・64 */
   --sp-2: 2px; --sp-4: 4px; --sp-6: 6px; --sp-8: 8px; --sp-10: 10px; --sp-12: 12px; --sp-14: 14px; --sp-16: 16px;
@@ -76,15 +76,30 @@
 
   /* ===== 2. 役割の値 ===== */
 
-  /* 面 */
+  /* 面・色 */
   --glass: var(--umber-56);            /* カード・パネル */
   --glass-weak: var(--umber-40);       /* 読むだけの面（ご来店の前に） */
   --chip-bg: var(--night-48);          /* 写真の上の小さな面（営業状況・曜日） */
-  --edge: var(--ink-08);               /* 箱・曜日の縁、区切りの線 */
+  --edge: var(--ink-08);               /* 面・曜日の縁、区切りの線 */
   --glow-soft: var(--gold-16);         /* 金の面（今日・絵の欄・選んだカード）、天井の灯り、カーソルの光 */
   --glow-line: var(--gold-32);         /* 金の縁（営業中・絵の欄・触れたカード） */
   --blur-card: 18px;                   /* カード・パネル */
   --blur-chip: 12px;                   /* 営業状況・曜日 */
+  --shade-top: var(--night-48); --shade-mid: var(--night-88); --shade-bottom: var(--night-96); /* 写真の上の幕 */
+  --edge-strong: var(--ink-16);       /* 営業状況の縁 */
+  --rule-color: var(--ink-16);        /* 飾りの線 */
+  --card-edge-hi: var(--ink-24); --card-edge-lo: var(--ink-04); --card-edge-gold: var(--gold-28); /* カード・パネルの縁 */
+  --cursor-glow: var(--gold-20);      /* カーソルの光 */
+  --featured-glow: var(--gold-12); --featured-edge-hi: var(--gold-hover-76); --featured-edge-lo: var(--gold-12); --featured-edge-end: var(--gold-48); /* おすすめのカード */
+  --selected-end: var(--gold-08);     /* 選んだカードの面の下側 */
+  --pulse-color: var(--gold-60);      /* 営業中の点の広がり */
+  --shine-1: var(--gold-light); --shine-2: var(--gold-shine); /* 題の金の文字の光沢 */
+  --arrow-bg: var(--ink-08);          /* 矢印の丸 */
+  --row-hover: var(--ink-04); --row-press: var(--ink-08); /* スタッフの行に触れた・押した */
+  --stamp-ink: var(--accent-hover);   /* おすすめのスタンプの外の輪と文字 */
+  --stamp-ring: var(--gold-48);       /* おすすめのスタンプの内の輪（外より薄く） */
+  --stamp-bg: var(--night-48);        /* おすすめのスタンプの面（カードの縁をまたいでも読めるように薄く暗く） */
+  --hover-shadow: 0 var(--sp-18) var(--sp-40) calc(var(--sp-18) * -1) var(--black-72); /* 触れたカードの影 */
 
   /* 文字（大きさ / 太さ / 行間 / 字間） */
   --title-fs: var(--fs-fluid);   --title-lh: var(--lh-15);  --title-ls: var(--ls-08);   /* ページの題 */
@@ -94,14 +109,18 @@
   --name-fs: var(--fs-18);       --name-lh: var(--lh-14);    --name-ls: var(--ls-06);    /* 選ぶものの名前（カード・スタッフ） */
   --body-fs: var(--fs-16);       --body-lh: var(--lh-18);    --body-ls: var(--ls-02);    /* 本文の基準 */
   --lead-fs: var(--fs-15);       --lead-lh: var(--lh-19);                                /* 題の下の説明 */
-  --sub-fs: var(--fs-15);                                                               /* 小見出し（箱）・曜日・矢印 */
-  --text-fs: var(--fs-14);       --text-lh: var(--lh-18);                                /* 説明（カード・箱）・料金・案内・著作権表示 */
+  --sub-fs: var(--fs-15);                                                               /* 小見出し（ご来店の前に）・曜日・矢印 */
+  --text-fs: var(--fs-14);       --text-lh: var(--lh-18);                                /* 説明（カード・ご来店の前に）・料金・案内・著作権表示 */
   --caption-fs: var(--fs-13);                                                            /* 営業状況・役職・補足 */
   --chip-fs: var(--fs-12);       --chip-ls: var(--ls-08);                                /* 札・時刻・定休 */
   --label-fs: var(--fs-11);      --label-ls: var(--ls-28);                               /* 英字の小見出し */
+  --stamp-ls: var(--ls-04);      /* おすすめのスタンプの文字 */
   --time-fs-s: var(--fs-11);     /* 時刻（380px以下） */
   --status-fs-s: var(--fs-12);   /* 営業状況（380px以下） */
   --tiny-fs: var(--fs-9);        --tiny-ls: var(--ls-14);                                /* 今日の印・時刻の区切り */
+  --solo-lh: var(--lh-1);   /* 1行で高さを詰める部品（曜日・番号・印・著作権表示） */
+  --ui-lh: var(--lh-14);    /* 1行で読む小さな文字（営業状況・時刻） */
+  --num-ls: var(--ls-0);    /* 数字・著作権表示 */
 
   /* 並び */
   --page-pad: var(--sp-20);      /* 画面の端→中身 */
@@ -110,10 +129,38 @@
   --section-gap: var(--sp-64);   /* 段・まとまりの下 */
   --head-gap: var(--sp-24);      /* 段の見出し→中身 */
   --label-gap: var(--sp-18);     /* 英字の小見出し→中身 */
-  --list-gap: var(--sp-14);      /* 並べたカード・箱どうし（スマホ） */
-  --list-gap-wide: var(--sp-18); /* 並べたカード・箱どうし（パソコン） */
+  --list-gap: var(--sp-14);      /* 並べたカードどうし（960px未満） */
+  --list-gap-wide: var(--sp-18); /* 並べたカードどうし（960px以上） */
   --inline-gap: var(--sp-10);    /* 絵→文字、名前→役職、点→文 */
   --rule-gap: var(--sp-14);      /* 文字→飾りの線 */
+  --hero-top: var(--sp-56);         /* 頭→題 */
+  --stack-gap: var(--sp-22);        /* 題のまとまりの中（英字の小見出し→題→説明） */
+  --band-top: var(--sp-40);         /* 説明→営業日の帯 */
+  --side-gap: var(--sp-12);         /* 左右に並べた要素の間（ロゴ↔営業状況、料金↔矢印） */
+  --side-gap-l: var(--sp-16);       /* 番号↔見出し、スタッフの文字↔矢印 */
+  --cell-gap: var(--sp-6);          /* 曜日どうし、曜日の中 */
+  --cell-gap-s: var(--sp-4);        /* 曜日どうし（380px以下） */
+  --cell-pad: var(--sp-12) var(--sp-2); /* 曜日の内側 */
+  --cell-off-pad: var(--sp-8) 0;    /* 「定休」の上下 */
+  --badge-offset: var(--sp-8);      /* 今日の印が上にはみ出す量 */
+  --note-gap: var(--sp-8) var(--sp-20); /* 定休日の補足の折り返し */
+  --ico-gap: var(--sp-6);           /* 絵の欄→名前（card-gap に足す） */
+  --fee-top: var(--sp-16);          /* 区切りの線→料金 */
+  --panel-title-pad: var(--sp-14) 0 var(--sp-8); /* パネルの案内 */
+  --sub-gap: var(--sp-8);           /* ご来店の前にの小見出し→本文 */
+  --note-top: var(--sp-16);         /* パネル→次の画面の案内 */
+  --foot-top: var(--sp-28); --foot-bottom: var(--sp-32); /* 下の内側 */
+  --band-note-top: var(--sp-18);    /* 営業日の帯→定休日の補足 */
+  --empty-pad: var(--sp-18) 0;      /* 読み込み中・失敗の文 */
+  --row-gap: var(--sp-4);           /* スタッフの行の上下の外側 */
+  --number-gap: var(--sp-4) 0;      /* 電話番号の上下 */
+  --number-ls: var(--ls-06);        /* 電話番号 */
+  --guide-ls: var(--ls-06);         /* パネルの案内 */
+  --sub-ls: var(--ls-06);           /* ご来店の前にの小見出し */
+  --info-body-w: 560px;             /* ご来店の前にの本文の最大幅（中央寄せで1行が長くなりすぎないように） */
+  --course-gap: var(--sp-6);        /* コースの札どうし */
+  --course-top: var(--sp-8);        /* 名前→コースの札 */
+  --course-bg: var(--ink-04);       /* コースの札の面 */
 
   /* 部品の内側 */
   --card-pad: var(--sp-24) var(--sp-24) var(--sp-20); /* カード（下だけ料金の行の分を詰める） */
@@ -124,7 +171,6 @@
   --row-pad: var(--sp-12);                            /* スタッフの行 */
   --pill-pad: var(--sp-8) var(--sp-16);               /* 営業状況 */
   --pill-pad-s: var(--sp-6) var(--sp-12);             /* 営業状況（380px以下） */
-  --tag-pad: var(--sp-4) var(--sp-12);                /* 札 */
   --badge-pad: var(--sp-2) var(--sp-6);               /* 今日の印 */
   --course-pad: var(--sp-2) var(--sp-10);             /* コースの札 */
 
@@ -134,12 +180,14 @@
   --row-h: var(--sp-72);     /* スタッフの行の最小の高さ */
   --ico: var(--sp-44);       /* カードの絵の欄 */
   --icon: var(--sp-22);      /* カードの絵 */
-  --icon-s: var(--sp-18);    /* 箱の見出しの絵 */
+  --icon-s: var(--sp-18);    /* ご来店の前にの見出しの絵 */
   --arrow: var(--sp-36);     /* 矢印の丸（カード・スタッフの行） */
   --dot: var(--sp-8);        /* 営業状況の点、点の広がり */
   --dot-s: var(--sp-6);      /* 補足の頭の点 */
   --rule: var(--sp-28);      /* 英字の小見出しの両脇の線 */
   --glow-size: 420px;        /* カーソルの光の大きさ */
+  --stamp-size: var(--sp-64);  /* おすすめのスタンプの直径 */
+  --stamp-ring-gap: var(--sp-4); /* スタンプの二重の輪の間 */
 
   /* 角丸（大きい面ほど丸く） */
   --r-card: var(--sp-22);  /* カード・パネル・ご来店の前にの面 */
@@ -155,6 +203,7 @@
   /* 不透明度 */
   --op-dim: .8;    /* 触れたロゴ・補足の頭の点 */
   --op-off: .56;   /* 定休日の曜日 */
+  --op-stamp: .92;  /* おすすめのスタンプ（少しかすれた押し跡に） */
   --op-grain: .08; /* 粒子 */
 
   /* 動き */
@@ -169,57 +218,7 @@
   --rise-s: var(--sp-10);     /* 入ってくる距離（パネル・行） */
   --lift: var(--sp-4);        /* 触れたときに浮く・ずれる距離 */
   --press: .99;               /* 押したときの縮み */
-
-
-  /* 色の役割（写真・縁・光） */
-  --shade-top: var(--night-48); --shade-mid: var(--night-88); --shade-bottom: var(--night-96); /* 写真の上の幕 */
-  --edge-strong: var(--ink-16);       /* 営業状況の縁 */
-  --rule-color: var(--ink-16);        /* 飾りの線 */
-  --card-edge-hi: var(--ink-24); --card-edge-lo: var(--ink-04); --card-edge-gold: var(--gold-28); /* カード・パネルの縁 */
-  --cursor-glow: var(--gold-20);      /* カーソルの光 */
-  --featured-glow: var(--gold-12); --featured-edge-hi: var(--gold-hover-76); --featured-edge-lo: var(--gold-12); --featured-edge-end: var(--gold-48); /* おすすめのカード */
-  --selected-end: var(--gold-08);     /* 選んだカードの面の下側 */
-  --pulse-color: var(--gold-60);      /* 営業中の点の広がり */
-  --shine-1: var(--gold-light); --shine-2: var(--gold-shine); /* 題の金の文字の光沢 */
-  --arrow-bg: var(--ink-08);          /* 矢印の丸 */
-  --row-hover: var(--ink-04); --row-press: var(--ink-08); /* スタッフの行に触れた・押した */
-  --tag-shadow: 0 var(--sp-4) var(--sp-18) var(--gold-36);                       /* おすすめの札の光 */
-  --hover-shadow: 0 var(--sp-18) var(--sp-40) calc(var(--sp-18) * -1) var(--black-72); /* 触れたカードの影 */
-
-  /* 行間・字間の役割 */
-  --solo-lh: var(--lh-1);   /* 1行で高さを詰める部品（曜日・番号・印・著作権表示） */
-  --ui-lh: var(--lh-14);    /* 1行で読む小さな文字（営業状況・時刻） */
-  --num-ls: var(--ls-0);    /* 数字・著作権表示 */
-
-  /* 並びの役割（追加） */
-  --hero-top: var(--sp-56);         /* 頭→題 */
-  --stack-gap: var(--sp-22);        /* 題のまとまりの中（英字の小見出し→題→説明） */
-  --band-top: var(--sp-40);         /* 説明→営業日の帯 */
-  --side-gap: var(--sp-12);         /* 左右に並べた要素の間（ロゴ↔営業状況、料金↔矢印） */
-  --side-gap-l: var(--sp-16);       /* 番号↔見出し、スタッフの文字↔矢印 */
-  --cell-gap: var(--sp-6);          /* 曜日どうし、曜日の中 */
-  --cell-gap-s: var(--sp-4);        /* 曜日どうし（380px以下） */
-  --cell-pad: var(--sp-12) var(--sp-2); /* 曜日の内側 */
-  --cell-off-pad: var(--sp-8) 0;    /* 「定休」の上下 */
-  --badge-offset: var(--sp-8);      /* 今日の印が上にはみ出す量 */
-  --note-gap: var(--sp-8) var(--sp-20); /* 定休日の補足の折り返し */
-  --ico-gap: var(--sp-6);           /* 絵の欄→名前（card-gap に足す） */
-  --fee-top: var(--sp-16);          /* 区切りの線→料金 */
-  --panel-title-pad: var(--sp-14) 0 var(--sp-8); /* パネルの案内 */
-  --sub-gap: var(--sp-8);           /* 箱の小見出し→本文 */
-  --note-top: var(--sp-16);         /* パネル→次の画面の案内 */
-  --foot-top: var(--sp-28); --foot-bottom: var(--sp-32); /* 下の内側 */
-  --band-note-top: var(--sp-18);    /* 営業日の帯→定休日の補足 */
-  --empty-pad: var(--sp-18) 0;      /* 読み込み中・失敗の文 */
-  --row-gap: var(--sp-4);           /* スタッフの行の上下の外側 */
-  --number-gap: var(--sp-4) 0;      /* 電話番号の上下 */
-  --number-ls: var(--ls-06);        /* 電話番号 */
-  --guide-ls: var(--ls-06);         /* パネルの案内 */
-  --sub-ls: var(--ls-06);           /* 箱の小見出し */
-  --info-body-w: 560px;             /* ご来店の前にの本文の最大幅（中央寄せで1行が長くなりすぎないように） */
-  --course-gap: var(--sp-6);        /* コースの札どうし */
-  --course-top: var(--sp-8);        /* 名前→コースの札 */
-  --course-bg: var(--ink-04);       /* コースの札の面 */
+  --stamp-rotate: -12deg;      /* おすすめのスタンプの傾き（手で押した感じ） */
 
   color-scheme: dark;
 }
@@ -239,7 +238,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .en { font-family: var(--latin); font-feature-settings: normal; text-transform: uppercase; letter-spacing: var(--label-ls); }
 
 /* キービジュアルを奥に透かす（画面に固定）＋ 金の灯り ＋ 粒子 */
-/* 高さはアドレスバーが隠れたときの大きさに固定（スクロールで背景が伸び縮みしないように） */
+/* 高さは下の小さな処理が px で固定する（--kv-h）。処理が動かないときは 100lvh */
 .kv { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100lvh; height: var(--kv-h, 100lvh); z-index: -2; background: url("../assets/img/key-sp.webp") center 20% / cover no-repeat; }
 .kv::after {
   content: ""; position: absolute; inset: 0;
@@ -283,7 +282,7 @@ body::after {
   background: linear-gradient(100deg, var(--shine-1) 0%, var(--accent) 45%, var(--shine-2) 70%, var(--accent) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-/* 中央寄せの文は両端揃えにし、最後の行だけ中央に置く（行の幅をそろえる） */
+/* 中央寄せの文は両端揃えにし、最後の行だけ中央に置く（行の幅をそろえる。規格書 4.0） */
 .hero .lead { text-align: justify; text-align-last: center; font-size: var(--lead-fs); line-height: var(--lead-lh); color: var(--muted); }
 
 /* 営業日の帯（今日に印がつく） */
@@ -313,12 +312,12 @@ body::after {
 .step-head h2 { font-size: var(--heading-fs); font-weight: var(--fw-500); line-height: var(--heading-lh); letter-spacing: var(--heading-ls); }
 .step-head::after { content: ""; flex: 1; align-self: center; height: var(--line); background: linear-gradient(90deg, var(--rule-color), transparent); }
 
-/* 決め方のカード（スマホは縦、パソコンは横並び） */
+/* 指定方法のカード（960px 未満は縦、960px 以上は横並び） */
 .ways { display: grid; gap: var(--list-gap); }
 @media (min-width: 960px) { .ways { grid-auto-flow: column; grid-auto-columns: 1fr; gap: var(--list-gap-wide); } }
 .way {
   position: relative; isolation: isolate;
-  display: flex; flex-direction: column; gap: var(--card-gap); width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: var(--card-gap); width: 100%; text-align: center; /* カードの中は中央 */
   padding: var(--card-pad); border-radius: var(--r-card); border: var(--line) solid transparent;
   background:
     linear-gradient(var(--glass), var(--glass)) padding-box,
@@ -338,10 +337,8 @@ body::after {
 }
 .way .ico svg { width: var(--icon); height: var(--icon); }
 .way .way-name { display: block; font-size: var(--name-fs); font-weight: var(--fw-500); line-height: var(--name-lh); letter-spacing: var(--name-ls); }
-.way .way-desc { display: block; font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); }
-/* カードの中は中央 */
-.way { align-items: center; text-align: center; }
-.way .way-desc { text-align: justify; text-align-last: center; }
+/* 中央寄せの文は両端揃えにし、最後の行だけ中央に置く */
+.way .way-desc { display: block; font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); text-align: justify; text-align-last: center; }
 .way .fee {
   margin-top: auto; padding-top: var(--fee-top); border-top: var(--line) solid var(--edge);
   /* 料金の文字だけで中央。矢印の丸は右に添える（中央の計算に入れない） */
@@ -356,10 +353,15 @@ body::after {
   font-family: var(--latin); font-size: var(--sub-fs); color: var(--ink); background: var(--arrow-bg);
   transition: background-color var(--dur-color) var(--ease), color var(--dur-color) var(--ease), transform var(--dur-move) var(--ease-out);
 }
+/* おすすめ：中央のカードにあとから押したスタンプ。塗らずに金の細い二重の輪と文字だけ。右上の角に傾けて押す */
 .way .tag {
-  position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; padding: var(--tag-pad); border-radius: var(--r-pill);
-  font-size: var(--chip-fs); font-weight: var(--fw-500); letter-spacing: var(--chip-ls); background: var(--accent); color: var(--on-accent);
-  box-shadow: var(--tag-shadow);
+  position: absolute; top: calc(var(--stamp-size) / -4); right: calc(var(--stamp-size) / -8);
+  display: grid; place-items: center; width: var(--stamp-size); height: var(--stamp-size); border-radius: 50%;
+  font-size: var(--label-fs); font-weight: var(--fw-500); line-height: var(--solo-lh); letter-spacing: var(--stamp-ls); white-space: nowrap;
+  color: var(--stamp-ink); background: var(--stamp-bg);
+  box-shadow: inset 0 0 0 var(--line) var(--stamp-ink), inset 0 0 0 var(--stamp-ring-gap) var(--stamp-bg), inset 0 0 0 calc(var(--stamp-ring-gap) + var(--line)) var(--stamp-ring);
+  transform: rotate(var(--stamp-rotate)); opacity: var(--op-stamp);
+  -webkit-backdrop-filter: blur(var(--blur-chip)); backdrop-filter: blur(var(--blur-chip));
 }
 .way.featured {
   background:
@@ -386,7 +388,7 @@ body::after {
 .way[aria-expanded="true"] .arrow { background: var(--accent); color: var(--on-accent); }
 .way[aria-expanded="true"] .way-desc { color: var(--muted); }
 
-/* ---------- 担当を選ぶ（下に開く） ---------- */
+/* ---------- 担当スタッフを選ぶ（下に開く） ---------- */
 .panel {
   padding: var(--panel-pad); border-radius: var(--r-card); border: var(--line) solid transparent;
   background:
@@ -410,7 +412,6 @@ body::after {
 .row .text { flex: 1; min-width: 0; }
 .row .name { font-size: var(--name-fs); font-weight: var(--fw-500); letter-spacing: var(--name-ls); line-height: var(--name-lh); }
 .row .role { margin-left: var(--inline-gap); font-size: var(--caption-fs); font-weight: var(--fw-400); letter-spacing: var(--body-ls); color: var(--soft); }
-.row .meta2 { display: block; margin-top: var(--tight-gap); font-size: var(--caption-fs); line-height: var(--caption-lh); color: var(--soft); }
 .row .courses { display: flex; flex-wrap: wrap; gap: var(--course-gap); margin-top: var(--course-top); }
 .row .course { padding: var(--course-pad); border-radius: var(--r-pill); background: var(--course-bg); box-shadow: inset 0 0 0 var(--line) var(--edge); font-size: var(--chip-fs); line-height: var(--ui-lh); letter-spacing: var(--body-ls); color: var(--muted); }
 .sr { position: absolute; width: var(--line); height: var(--line); overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -425,16 +426,15 @@ body::after {
 
 /* ---------- ご来店の前に ---------- */
 .before { padding-bottom: var(--section-gap); }
-/* 区画の見出し：ページの題の英字の小見出しと同じ形で中央 */
+/* 区画の見出し：ページの題の英字の小見出し（.eyebrow）と同じ形で中央 */
 .before .label { display: flex; align-items: center; justify-content: center; gap: var(--rule-gap); margin-bottom: var(--label-gap); font-size: var(--label-fs); font-weight: var(--fw-500); color: var(--accent); }
 .before .label::before, .before .label::after { content: ""; width: var(--rule); height: var(--line); background: linear-gradient(90deg, transparent, var(--accent)); }
 .before .label::after { transform: scaleX(-1); }
 /* 1枚の面に3行。行どうしは線で区切る */
 .info { padding: 0 var(--info-pad-x); border-radius: var(--r-card); background: var(--glass-weak); box-shadow: inset 0 0 0 var(--line) var(--edge); }
-.info > div { padding: var(--info-row-pad); font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); }
-.info > div + div { border-top: var(--line) solid var(--edge); }
 /* 行の中は中央。本文は幅を絞る */
-.info > div { text-align: center; }
+.info > div { padding: var(--info-row-pad); font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); text-align: center; }
+.info > div + div { border-top: var(--line) solid var(--edge); }
 .info .body { max-width: var(--info-body-w); margin-inline: auto; text-align: justify; text-align-last: center; }
 /* 見出しは文字だけで中央。絵は文字の左に添える（中央の計算に入れない） */
 .info h3 { position: relative; width: fit-content; margin-inline: auto; margin-bottom: var(--sub-gap); font-size: var(--sub-fs); font-weight: var(--fw-500); color: var(--ink); letter-spacing: var(--sub-ls); }
@@ -616,15 +616,14 @@ body::after {
   status();
   setInterval(status, 60000);
 
-  /* 担当の1行 */
-  function row(href, { name, role, meta, courses }) {
+  /* スタッフの1行（名前・役職・担当できるコースの札・矢印） */
+  function row(href, { name, role, courses }) {
     const li = el("li");
     const a = el("a", "row"); a.href = href;
     const t = el("span", "text");
     const n = el("span", "name", name);
     if (role) n.append(el("span", "role", role));
     t.append(n);
-    if (meta) t.append(el("span", "meta2", meta));
     /* 担当できるコースは札だけを並べる（読み上げでは「担当できるコース」と読む） */
     if (courses && courses.length) {
       const c = el("span", "courses");
@@ -667,7 +666,7 @@ body::after {
     if (open && $(open === "gender" ? "way-gender" : "way-staff").hidden) close();
   }
 
-  /* 決め方を選ぶと、下に担当の選択肢が開く */
+  /* 指定方法を選ぶと、下に担当スタッフの選択肢が開く */
   let open = "";
   function choose(kind) {
     open = kind;
