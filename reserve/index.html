@@ -269,12 +269,13 @@ body::after {
 .eyebrow::before, .eyebrow::after { content: ""; width: var(--rule); height: var(--line); background: linear-gradient(90deg, transparent, var(--accent)); }
 .eyebrow::after { transform: scaleX(-1); }
 .hero h1 { margin: 0 0 var(--stack-gap); font-size: var(--title-fs); font-weight: var(--fw-500); line-height: var(--title-lh); letter-spacing: var(--title-ls); text-wrap: balance; }
-.hero h1 span, .hero .lead span { display: inline-block; }
+.hero h1 span { display: inline-block; }
 .hero h1 .gold {
   background: linear-gradient(100deg, var(--shine-1) 0%, var(--accent) 45%, var(--shine-2) 70%, var(--accent) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.hero .lead { font-size: var(--lead-fs); line-height: var(--lead-lh); color: var(--muted); }
+/* 文は改行を指定せず自然に折り返す。行の長さだけそろえる */
+.hero .lead { text-wrap: balance; font-size: var(--lead-fs); line-height: var(--lead-lh); color: var(--muted); }
 
 /* 営業日の帯（今日に印がつく） */
 .hours { margin: var(--band-top) auto 0; max-width: var(--band-w); }
@@ -329,10 +330,9 @@ body::after {
 .way .ico svg { width: var(--icon); height: var(--icon); }
 .way .way-name { display: block; font-size: var(--name-fs); font-weight: var(--fw-500); line-height: var(--name-lh); letter-spacing: var(--name-ls); }
 .way .way-desc { display: block; font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); }
-/* カードの中は中央。説明は文ごとにまとめて折り返す */
+/* カードの中は中央 */
 .way { align-items: center; text-align: center; }
-.way .way-desc span { display: inline-block; }
-.way .way-desc { word-break: auto-phrase; }
+.way .way-desc { text-wrap: balance; }
 .way .fee {
   margin-top: auto; padding-top: var(--fee-top); border-top: var(--line) solid var(--edge);
   /* 料金の文字だけで中央。矢印の丸は右に添える（中央の計算に入れない） */
@@ -424,10 +424,9 @@ body::after {
 .info { padding: 0 var(--info-pad-x); border-radius: var(--r-card); background: var(--glass-weak); box-shadow: inset 0 0 0 var(--line) var(--edge); }
 .info > div { padding: var(--info-row-pad); font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); }
 .info > div + div { border-top: var(--line) solid var(--edge); }
-/* 行の中は中央。本文は幅を絞り、文ごとにまとめて折り返す */
+/* 行の中は中央。本文は幅を絞る */
 .info > div { text-align: center; }
-.info .body { max-width: var(--info-body-w); margin-inline: auto; word-break: auto-phrase; }
-.info .body > span { display: inline-block; }
+.info .body { max-width: var(--info-body-w); margin-inline: auto; text-wrap: balance; }
 /* 見出しは文字だけで中央。絵は文字の左に添える（中央の計算に入れない） */
 .info h3 { position: relative; width: fit-content; margin-inline: auto; margin-bottom: var(--sub-gap); font-size: var(--sub-fs); font-weight: var(--fw-500); color: var(--ink); letter-spacing: var(--sub-ls); }
 .info h3 svg { position: absolute; top: 50%; right: calc(100% + var(--inline-gap)); transform: translateY(-50%); width: var(--icon-s); height: var(--icon-s); color: var(--accent); }
@@ -463,7 +462,7 @@ body::after {
   <div class="wrap hero">
     <p class="eyebrow en rise" style="--i:1">Online Booking</p>
     <h1 class="rise" style="--i:2"><span>オンラインで</span><span><span class="gold">24時間</span>予約できます</span></h1>
-    <p class="lead rise" style="--i:3"><span>スタッフの選び方を決めると、</span><span>コースと日時を選ぶ画面へ進みます。</span></p>
+    <p class="lead rise" style="--i:3">スタッフの選び方を決めると、コースと日時を選ぶ画面へ進みます。</p>
 
     <div class="hours rise" style="--i:4">
       <ol class="week" id="week">
@@ -489,19 +488,19 @@ body::after {
         <span class="tag">おすすめ</span>
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16.5c.2 1.4.8 2 2.2 2.2-1.4.2-2 .8-2.2 2.3-.2-1.5-.8-2.1-2.2-2.3 1.4-.2 2-.8 2.2-2.2z"/></svg></span>
         <span class="way-name">指定しない</span>
-        <span class="way-desc"><span>空いているスタッフが担当します。</span><span>選べる日時がいちばん多い方法です。</span></span>
+        <span class="way-desc">空いているスタッフが担当します。選べる日時がいちばん多い方法です。</span>
         <span class="fee free"><span class="fee-text">リクエスト料なし</span><span class="arrow" aria-hidden="true">→</span></span>
       </a>
       <button class="way" id="way-gender" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3 19.5c.6-3.3 2.8-5.2 5.5-5.2s4.9 1.9 5.5 5.2"/><path d="M14.4 14.6c.7-.4 1.4-.6 2.1-.6 2.3 0 4 1.6 4.5 4.5"/></svg></span>
         <span class="way-name">性別で指定する</span>
-        <span class="way-desc"><span>ご希望の性別のスタッフが担当します。</span><span>担当スタッフは当店でお決めします。</span></span>
+        <span class="way-desc">ご希望の性別のスタッフが担当します。担当スタッフは当店でお決めします。</span>
         <span class="fee"><span class="fee-text">リクエスト料（¥400）</span><span class="arrow" aria-hidden="true">↓</span></span>
       </button>
       <button class="way" id="way-staff" type="button" aria-expanded="false" aria-controls="step2">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.7-3.8 3.3-6 6.5-6 1.4 0 2.7.4 3.7 1.2"/><path d="M18 13.5l1.1 2.2 2.4.4-1.8 1.7.4 2.4-2.1-1.1-2.1 1.1.4-2.4-1.8-1.7 2.4-.4z"/></svg></span>
         <span class="way-name">指名する</span>
-        <span class="way-desc"><span>指名したスタッフが担当します。</span><span>いつものスタッフも、気になるスタッフもお選びいただけます。</span></span>
+        <span class="way-desc">指名したスタッフが担当します。いつものスタッフも、気になるスタッフもお選びいただけます。</span>
         <span class="fee"><span class="fee-text">リクエスト料（¥400）</span><span class="arrow" aria-hidden="true">↓</span></span>
       </button>
     </div>
@@ -525,9 +524,9 @@ body::after {
   <section class="wrap before rise" style="--i:6" aria-labelledby="h-before">
     <h2 class="label en" id="h-before"><span lang="en">Before your visit</span></h2>
     <div class="info">
-      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18M7 15h3"/></svg>お支払い</h3><div class="body"><span>ご来店時にお願いします。</span><span>ご予約時の前払いはありません。</span><span>現金のほか、クレジットカード、電子マネー（交通系IC・iD・QUICPay）、QRコード決済（PayPay・d払い・楽天ペイ・au PAY）をご利用いただけます。</span></div></div>
-      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>変更・キャンセル</h3><div class="body"><span>ご来店の1時間前まで承ります。</span><span>それ以降はお電話でご連絡ください。</span></div></div>
-      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l1.6 4.2-2.2 1.4a11 11 0 0 0 6.5 6.5l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/></svg>お電話でのご予約</h3><div class="body"><a class="big" href="tel:0287339178">0287-33-9178</a><br><span>当日のご予約も承ります。</span></div></div>
+      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18M7 15h3"/></svg>お支払い</h3><div class="body">ご来店時にお願いします。ご予約時の前払いはありません。現金のほか、クレジットカード、電子マネー（交通系IC・iD・QUICPay）、QRコード決済（PayPay・d払い・楽天ペイ・au PAY）をご利用いただけます。</div></div>
+      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>変更・キャンセル</h3><div class="body">ご来店の1時間前まで承ります。それ以降はお電話でご連絡ください。</div></div>
+      <div><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l1.6 4.2-2.2 1.4a11 11 0 0 0 6.5 6.5l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/></svg>お電話でのご予約</h3><div class="body"><a class="big" href="tel:0287339178">0287-33-9178</a><br>当日のご予約も承ります。</div></div>
     </div>
   </section>
 </main>
