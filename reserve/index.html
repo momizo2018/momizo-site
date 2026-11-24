@@ -196,7 +196,6 @@
   --note-gap: var(--sp-8) var(--sp-20); /* 定休日の補足の折り返し */
   --ico-gap: var(--sp-6);           /* 絵の欄→名前（card-gap に足す） */
   --fee-top: var(--sp-16);          /* 区切りの線→料金 */
-  --tag-inset: var(--sp-22);        /* 札の位置（カードの右上から） */
   --panel-title-pad: var(--sp-14) 0 var(--sp-8); /* パネルの案内 */
   --sub-gap: var(--sp-8);           /* 箱の小見出し→本文 */
   --note-top: var(--sp-16);         /* パネル→次の画面の案内 */
@@ -306,9 +305,9 @@ body::after {
 
 /* 決め方のカード（スマホは縦、パソコンは横並び） */
 .ways { display: grid; gap: var(--list-gap); }
-@media (min-width: 760px) { .ways { grid-auto-flow: column; grid-auto-columns: 1fr; gap: var(--list-gap-wide); } }
+@media (min-width: 960px) { .ways { grid-auto-flow: column; grid-auto-columns: 1fr; gap: var(--list-gap-wide); } }
 .way {
-  position: relative; isolation: isolate; overflow: hidden;
+  position: relative; isolation: isolate;
   display: flex; flex-direction: column; gap: var(--card-gap); width: 100%;
   padding: var(--card-pad); border-radius: var(--r-card); border: var(--line) solid transparent;
   background:
@@ -346,7 +345,7 @@ body::after {
   transition: background-color var(--dur-color) var(--ease), color var(--dur-color) var(--ease), transform var(--dur-move) var(--ease-out);
 }
 .way .tag {
-  position: absolute; top: var(--tag-inset); right: var(--tag-inset); padding: var(--tag-pad); border-radius: var(--r-pill);
+  position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; padding: var(--tag-pad); border-radius: var(--r-pill);
   font-size: var(--chip-fs); font-weight: var(--fw-500); letter-spacing: var(--chip-ls); background: var(--accent); color: var(--on-accent);
   box-shadow: var(--tag-shadow);
 }
