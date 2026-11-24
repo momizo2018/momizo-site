@@ -231,7 +231,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* キービジュアルを奥に透かす（画面に固定）＋ 金の灯り ＋ 粒子 */
 /* 高さはアドレスバーが隠れたときの大きさに固定（スクロールで背景が伸び縮みしないように） */
-.kv { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100lvh; z-index: -2; background: url("../assets/img/key-sp.webp") center 20% / cover no-repeat; }
+.kv { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100lvh; height: var(--kv-h, 100lvh); z-index: -2; background: url("../assets/img/key-sp.webp") center 20% / cover no-repeat; }
 .kv::after {
   content: ""; position: absolute; inset: 0;
   background:
@@ -452,6 +452,18 @@ body::after {
 </head>
 <body>
 <div class="kv" aria-hidden="true"></div>
+<script>
+/* 背景の高さを、開いた時点の画面の高さ（バーが隠れたときを含めた大きいほう）で px に固定する。
+   LINE などアプリ内のブラウザは、スクロールでバーが出入りすると 100vh・100lvh まで変わり、背景が伸び縮みするため。
+   幅が変わったとき（画面の向きを変えたとき）だけ測り直す。 */
+(() => {
+  const root = document.documentElement;
+  let w = innerWidth;
+  const set = () => root.style.setProperty("--kv-h", Math.max(innerHeight, screen.height || 0) + "px");
+  set();
+  addEventListener("resize", () => { if (innerWidth !== w) { w = innerWidth; set(); } }, { passive: true });
+})();
+</script>
 
 <header class="wrap bar rise">
   <a href="../" aria-label="揉蔵のサイトへ"><img src="../assets/logo/logo.png" alt="揉蔵" width="462" height="150"></a>
