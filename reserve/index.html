@@ -274,8 +274,8 @@ body::after {
   background: linear-gradient(100deg, var(--shine-1) 0%, var(--accent) 45%, var(--shine-2) 70%, var(--accent) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-/* 文は改行を指定せず自然に折り返す。行の長さだけそろえる */
-.hero .lead { text-wrap: balance; font-size: var(--lead-fs); line-height: var(--lead-lh); color: var(--muted); }
+/* 中央寄せの文は両端揃えにし、最後の行だけ中央に置く（行の幅をそろえる） */
+.hero .lead { text-align: justify; text-align-last: center; font-size: var(--lead-fs); line-height: var(--lead-lh); color: var(--muted); }
 
 /* 営業日の帯（今日に印がつく） */
 .hours { margin: var(--band-top) auto 0; max-width: var(--band-w); }
@@ -332,7 +332,7 @@ body::after {
 .way .way-desc { display: block; font-size: var(--text-fs); line-height: var(--text-lh); color: var(--soft); }
 /* カードの中は中央 */
 .way { align-items: center; text-align: center; }
-.way .way-desc { text-wrap: balance; }
+.way .way-desc { text-align: justify; text-align-last: center; }
 .way .fee {
   margin-top: auto; padding-top: var(--fee-top); border-top: var(--line) solid var(--edge);
   /* 料金の文字だけで中央。矢印の丸は右に添える（中央の計算に入れない） */
@@ -426,7 +426,7 @@ body::after {
 .info > div + div { border-top: var(--line) solid var(--edge); }
 /* 行の中は中央。本文は幅を絞る */
 .info > div { text-align: center; }
-.info .body { max-width: var(--info-body-w); margin-inline: auto; text-wrap: balance; }
+.info .body { max-width: var(--info-body-w); margin-inline: auto; text-align: justify; text-align-last: center; }
 /* 見出しは文字だけで中央。絵は文字の左に添える（中央の計算に入れない） */
 .info h3 { position: relative; width: fit-content; margin-inline: auto; margin-bottom: var(--sub-gap); font-size: var(--sub-fs); font-weight: var(--fw-500); color: var(--ink); letter-spacing: var(--sub-ls); }
 .info h3 svg { position: absolute; top: 50%; right: calc(100% + var(--inline-gap)); transform: translateY(-50%); width: var(--icon-s); height: var(--icon-s); color: var(--accent); }
