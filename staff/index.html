@@ -128,6 +128,7 @@
 
 /* ---------- 土台 ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }   /* hidden を付けたものは、部品の display によらず出さない */
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--night); }
 body {
   font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
@@ -337,8 +338,6 @@ html.has-menu { overflow: hidden; }
 .lead { font-size: var(--fs-lg); font-weight: var(--fw-medium); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); color: var(--ink-2); }
 .lead + p { margin-top: var(--gap-head); }
 /* ===== 共通：ページの題ここまで ===== */
-/* ===== 共通：ふわっと出す ===== */
-/* ===== 共通：ふわっと出すここまで ===== */
 
 /* ===== 共通：値の区切り ===== */
 /* 値どうしを機能の線で区切る（法則4） */
@@ -440,6 +439,20 @@ html.has-menu { overflow: hidden; }
 </nav>
 
 <script>
+/* ===== 共通：Apps Script の URL ===== */
+/* シートの読み込みと応募の送信の送り先。Apps Script を出し直して URL が変わったら、ここだけ直す */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec";
+/* ===== 共通：Apps Script の URLここまで ===== */
+/* ===== 共通：日本時間 ===== */
+/* 日本時間のいま。ymd は "2026-11-28"、y・m・d は数、min は0時からの分。見ている端末の時間帯の設定によらない */
+const jstNow = () => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    .formatToParts(new Date()).map((x) => [x.type, x.value]));
+  return { ymd: p.year + "-" + p.month + "-" + p.day, y: Number(p.year), m: Number(p.month), d: Number(p.day), min: Number(p.hour) * 60 + Number(p.minute) };
+};
+/* ===== 共通：日本時間ここまで ===== */
+</script>
+<script>
 /* ===== 共通：三本線のメニュー ===== */
 (() => {
   const btn = document.getElementById("menu-btn");
@@ -519,7 +532,6 @@ phButtons(document);
 <script>
 /* ===== 共通：シートの読み込み ===== */
 const loadSheet = (type, key, show, fail) => {
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=" + type;
   let shown = null;
   const draw = (list) => {
     const sig = JSON.stringify(list);
@@ -532,7 +544,7 @@ const loadSheet = (type, key, show, fail) => {
   if (Array.isArray(cached)) draw(cached);
   const ctrl = new AbortController();
   setTimeout(() => ctrl.abort(), 8000);
-  fetch(ENDPOINT, { signal: ctrl.signal })
+  fetch(GAS_URL + "?type=" + type, { signal: ctrl.signal })
     .then((r) => r.json())
     .then((d) => {
       if (!d || !d.ok || !Array.isArray(d[type])) throw new Error("bad response");
@@ -554,7 +566,7 @@ const loadSheet = (type, key, show, fail) => {
   const courses = (v) => { const s = String(v || ""); return COURSES.filter((c) => s.includes(c)).map((c) => c + "コース"); };
   const career = (v) => {
     const y = parseInt(String(v || "").replace(/[０-９]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 0xFEE0)), 10);
-    const now = new Date().getFullYear();
+    const now = jstNow().y;
     if (!(y >= 1950 && y <= now)) return "";
     return now - y < 1 ? "施術歴1年未満" : "施術歴" + (now - y) + "年";
   };

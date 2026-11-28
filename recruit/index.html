@@ -124,6 +124,7 @@
 
 /* ---------- 土台 ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }   /* hidden を付けたものは、部品の display によらず出さない */
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--night); }
 body {
   font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
@@ -300,6 +301,13 @@ html.has-menu { overflow: hidden; }
 @media (hover: hover) { .line:hover { background-color: var(--accent-16); } .line:hover .line-arrow { background: var(--accent); color: var(--on-accent); } }
 .maplink { margin-top: var(--gap-list); }
 /* ===== 共通：項目と内容の表・地図・線のボタンここまで ===== */
+/* ===== 共通：営業時間の表 ===== */
+/* 4.29。data-state：loading（確認中の文）・list（表）・error（読み込めなかった文）。届いた中身は dur-base で置く（3.13） */
+.hours-box:not([data-state="loading"]) .hours-wait, .hours-box:not([data-state="list"]) .hours, .hours-box:not([data-state="error"]) .hours-error { display: none; }
+.hours-box .hours, .hours-error { animation: lamp-on var(--dur-base) var(--ease) both; }
+.hours .sp { color: var(--accent-hover); }   /* 特別営業時間の日 */
+.hours-wait, .hours-error { color: var(--muted); }
+/* ===== 共通：営業時間の表ここまで ===== */
 
 /* ===== 共通：特徴の札 ===== */
 .tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--gap-item); }
@@ -397,7 +405,7 @@ html.has-menu { overflow: hidden; }
 .info .mapbox { margin-top: var(--gap-list); }
 /* ---------- 強調の文 ---------- */
 .hl { margin-top: var(--gap-list); padding: var(--pad-part); border: var(--bw) solid transparent; border-radius: var(--r-md); background: var(--accent-08); color: var(--ink-2); }
-.info + .hl { margin-top: var(--gap-head); }
+.info + .hl, .hours-box + .hl { margin-top: var(--gap-head); }
 
 /* ---------- 応募フォーム ---------- */
 .form { display: grid; gap: var(--gap-block); }
@@ -645,12 +653,11 @@ main #form-msg { margin-top: 0; color: var(--err); }
             <div><dt>スタッフ用の設備</dt><dd>冷蔵庫、電子レンジ、トースター、電気ケトル、Wi-Fiなどを自由にお使いいただけます。</dd></div>
           </dl>
           <h3>営業時間</h3>
-          <dl class="info rows hours">
-            <div><dt>月・木</dt><dd>14:00 – 24:00</dd></div>
-            <div><dt>金</dt><dd>14:00 – 22:00</dd></div>
-            <div><dt>土・日</dt><dd>10:00 – 22:00</dd></div>
-            <div><dt>火・水</dt><dd>定休日（祝日も曜日どおり）</dd></div>
-          </dl>
+          <div class="hours-box" id="hours-box" data-state="loading" aria-live="polite">
+            <p class="hours-wait">営業時間を確認中…</p>
+            <p class="hours-error" id="hours-error"></p>
+            <dl class="info rows hours" id="hours-list"></dl>
+          </div>
           <p class="hl">営業日・営業時間は、スタッフの業務枠に合わせて曜日ごとに決めています。</p>
       </div>
     </div>
@@ -797,6 +804,24 @@ main #form-msg { margin-top: 0; color: var(--err); }
 </nav>
 
 <script>
+/* ===== 共通：Apps Script の URL ===== */
+/* シートの読み込みと応募の送信の送り先。Apps Script を出し直して URL が変わったら、ここだけ直す */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec";
+/* ===== 共通：Apps Script の URLここまで ===== */
+/* ===== 共通：店の電話 ===== */
+const SHOP_TEL = { text: "0287-33-9178", href: "tel:0287339178" };
+const telLink = () => { const a = document.createElement("a"); a.href = SHOP_TEL.href; a.textContent = SHOP_TEL.text; return a; };
+/* ===== 共通：店の電話ここまで ===== */
+/* ===== 共通：日本時間 ===== */
+/* 日本時間のいま。ymd は "2026-11-28"、y・m・d は数、min は0時からの分。見ている端末の時間帯の設定によらない */
+const jstNow = () => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    .formatToParts(new Date()).map((x) => [x.type, x.value]));
+  return { ymd: p.year + "-" + p.month + "-" + p.day, y: Number(p.year), m: Number(p.month), d: Number(p.day), min: Number(p.hour) * 60 + Number(p.minute) };
+};
+/* ===== 共通：日本時間ここまで ===== */
+</script>
+<script>
 /* ===== 共通：三本線のメニュー ===== */
 (() => {
   const btn = document.getElementById("menu-btn");
@@ -845,7 +870,6 @@ main #form-msg { margin-top: 0; color: var(--err); }
   "use strict";
 
   /* ---------- 設定 ---------- */
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec";
   const ZIP_API = "https://zipcloud.ibsnet.co.jp/api/search?zipcode=";
   const TRIM_REQUIRED = ["sei", "mei", "call_time", "exp"];
   const DAYS = ["月", "火", "水", "木", "金", "土", "日"];
@@ -917,30 +941,33 @@ main #form-msg { margin-top: 0; color: var(--err); }
   const birth = $("f-birth");
   const ageOut = $("age-out");
 
+  /* 日付は日本時間で数える（「共通：日本時間」）。日付どうしの比べは "yyyymmdd" の数で行う */
+  const ymdNum = (y, mo, d) => y * 10000 + mo * 100 + d;
+  const todayNum = () => { const t = jstNow(); return ymdNum(t.y, t.m, t.d); };
   function parseBirth(d) {
     const m = /^(\d{4})(\d{2})(\d{2})$/.exec(d);
     if (!m) return null;
-    const y = +m[1], mo = +m[2], dd = +m[3], t = new Date(y, mo - 1, dd);
-    if (t.getFullYear() !== y || t.getMonth() !== mo - 1 || t.getDate() !== dd || t > new Date()) return null;
+    const y = +m[1], mo = +m[2], dd = +m[3], t = new Date(Date.UTC(y, mo - 1, dd));
+    if (t.getUTCFullYear() !== y || t.getUTCMonth() !== mo - 1 || t.getUTCDate() !== dd || ymdNum(y, mo, dd) > todayNum()) return null;
     return { y, mo, d: dd };
   }
   function calcAge(d) {
     const b = parseBirth(d);
     if (!b) return null;
-    const t = new Date();
-    let age = t.getFullYear() - b.y;
-    if (t.getMonth() + 1 < b.mo || (t.getMonth() + 1 === b.mo && t.getDate() < b.d)) age--;
+    const t = jstNow();
+    let age = t.y - b.y;
+    if (t.m < b.mo || (t.m === b.mo && t.d < b.d)) age--;
     return age;
   }
+  /* 満15歳に達した日（誕生日の前日）以後の最初の3月31日まで（労働基準法）なら true */
   function beforeGraduation(d) {
     const b = parseBirth(d);
     if (!b) return false;
-    const r = new Date(b.y + 15, b.mo - 1, b.d);
-    r.setDate(r.getDate() - 1);
-    let y = r.getFullYear();
-    if (r > new Date(y, 2, 31)) y++;
-    const t = new Date();
-    return new Date(t.getFullYear(), t.getMonth(), t.getDate()) < new Date(y, 3, 1);
+    const r = new Date(Date.UTC(b.y + 15, b.mo - 1, b.d));
+    r.setUTCDate(r.getUTCDate() - 1);
+    let y = r.getUTCFullYear();
+    if (r.getUTCMonth() > 2) y++;
+    return todayNum() < ymdNum(y, 4, 1);
   }
   function updateAge() {
     const d = digits(birth.value), a = calcAge(d);
@@ -1163,7 +1190,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 
   /* ---------- 送信 ---------- */
   const TIMEOUT_MS = 35000;
-  const TEL = '<a href="tel:0287339178">0287-33-9178</a>';
+  const TEL = '<a href="' + SHOP_TEL.href + '">' + SHOP_TEL.text + '</a>';
   const DONE_HTML =
     '<div class="done" role="status"><h3>ご応募ありがとうございました</h3>' +
     '<p>内容を確認のうえ、ご入力いただいたメールアドレスまたはお電話でご連絡します。<br>' +
@@ -1195,7 +1222,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
     try {
-      const r = await fetch(ENDPOINT, {
+      const r = await fetch(GAS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body,
@@ -1249,6 +1276,113 @@ main #form-msg { margin-top: 0; color: var(--err); }
       msg.innerHTML = UNKNOWN_HTML;
     }
   });
+})();
+</script>
+<script>
+/* ===== 共通：シートの読み込み ===== */
+const loadSheet = (type, key, show, fail) => {
+  let shown = null;
+  const draw = (list) => {
+    const sig = JSON.stringify(list);
+    if (sig === shown) return;
+    shown = sig;
+    show(list);
+  };
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+  if (Array.isArray(cached)) draw(cached);
+  const ctrl = new AbortController();
+  setTimeout(() => ctrl.abort(), 8000);
+  fetch(GAS_URL + "?type=" + type, { signal: ctrl.signal })
+    .then((r) => r.json())
+    .then((d) => {
+      if (!d || !d.ok || !Array.isArray(d[type])) throw new Error("bad response");
+      try { localStorage.setItem(key, JSON.stringify(d[type])); } catch (e) {}
+      draw(d[type]);
+    })
+    .catch(() => { if (shown === null) fail(); });
+};
+/* ===== 共通：シートの読み込みここまで ===== */
+/* ===== 共通：営業時間 ===== */
+/* シートの「営業時間」「特別営業時間」から、日ごとの営業時間を出す（ページに営業時間は書かない）。
+   その日の営業時間は、特別営業時間があればそちらを優先し、なければ曜日の通常の営業時間。
+   7曜日がそろっていない一覧は使わない（null を返す） */
+const hoursModel = (list) => {
+  if (!Array.isArray(list)) return null;
+  const week = [], special = {};
+  const okHm = (v) => /^\d{2}:\d{2}$/.test(v || "");
+  list.forEach((r) => {
+    if (!r) return;
+    const h = okHm(r.open) && okHm(r.close) && r.open < r.close ? [r.open, r.close] : null;
+    if (!h && (r.open || r.close)) return;
+    if (Number.isInteger(r.wd) && r.wd >= 0 && r.wd < 7) week[r.wd] = h;
+    else if (/^\d{4}-\d{2}-\d{2}$/.test(r.date || "")) special[r.date] = { h, note: String(r.note || "").replace(/\s+/g, " ").trim() };
+  });
+  for (let wd = 0; wd < 7; wd++) if (week[wd] === undefined) return null;
+  /* 日付は "yyyy-mm-dd" の文字で扱い、曜日や足し算は UTC の 0時で計算する（時差でずれないように） */
+  const parse = (ymd) => new Date(ymd + "T00:00:00Z");
+  const add = (ymd, n) => { const d = parse(ymd); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const wdOf = (ymd) => parse(ymd).getUTCDay();
+  /* その日の営業時間：h は [開店, 閉店]（休みは null）、special は特別営業時間の日か、note はシートのメモ */
+  const day = (ymd) => {
+    const sp = special[ymd];
+    return sp ? { ymd, wd: wdOf(ymd), h: sp.h, special: true, note: sp.note } : { ymd, wd: wdOf(ymd), h: week[wdOf(ymd)], special: false, note: "" };
+  };
+  const min = (hm) => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
+  /* 今日から n 日ぶんの営業時間 */
+  const days = (from, n) => Array.from({ length: n }, (_, i) => day(add(from, i)));
+  /* いまの状態：state は open（営業中）・before（開店前）・after（閉店後）・closed（休み）。next は次に開く日（14日先まで。なければ null） */
+  const status = (t) => {
+    const today = day(t.ymd);
+    let state = "closed";
+    if (today.h) state = t.min < min(today.h[0]) ? "before" : t.min < min(today.h[1]) ? "open" : "after";
+    let next = null;
+    if (state === "after" || state === "closed") {
+      for (let n = 1; n <= 14 && !next; n++) { const d = day(add(t.ymd, n)); if (d.h) next = Object.assign(d, { n }); }
+    }
+    return { state, today, next };
+  };
+  /* 通常の営業時間を、同じ時刻の曜日ごとにまとめる（月曜から順。休みの組は最後） */
+  const groups = () => {
+    const out = [];
+    [1, 2, 3, 4, 5, 6, 0].forEach((wd) => {
+      const h = week[wd], key = h ? h.join("-") : "";
+      const g = out.find((x) => x.key === key);
+      if (g) g.wds.push(wd); else out.push({ key, h, wds: [wd] });
+    });
+    return out.filter((g) => g.h).concat(out.filter((g) => !g.h));
+  };
+  return { day, days, status, groups };
+};
+const WD = ["日", "月", "火", "水", "木", "金", "土"];
+/* "2026-12-31" → "12月31日（木）" */
+const mdText = (ymd) => {
+  const [, m, d] = ymd.split("-").map(Number);
+  return m + "月" + d + "日（" + WD[new Date(ymd + "T00:00:00Z").getUTCDay()] + "）";
+};
+/* シートを読めず、前回の営業時間もないときの文 */
+const hoursFail = (el) => el.replaceChildren("営業時間を読み込めませんでした。お電話（", telLink(), "）でご確認ください。");
+/* ===== 共通：営業時間ここまで ===== */
+
+/* ---------- 営業時間の表（通常の営業時間を曜日でまとめる。特別営業時間は出さない） ---------- */
+(() => {
+  const box = document.getElementById("hours-box");
+  const dl = document.getElementById("hours-list");
+  let ok = false;
+  const fail = () => { hoursFail(document.getElementById("hours-error")); box.dataset.state = "error"; };
+  loadSheet("hours", "momizo-hours", (list) => {
+    const m = hoursModel(list);
+    if (!m) { if (!ok) fail(); return; }
+    ok = true;
+    dl.replaceChildren(...m.groups().map((g) => {
+      const div = document.createElement("div"), t = document.createElement("dt"), d = document.createElement("dd");
+      t.textContent = g.wds.map((w) => WD[w]).join("・");
+      d.textContent = g.h ? g.h.join(" – ") : "定休日";
+      div.append(t, d);
+      return div;
+    }));
+    box.dataset.state = "list";
+  }, fail);
 })();
 </script>
 <script>

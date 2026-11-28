@@ -139,14 +139,12 @@
   --cell-pad: var(--sp-12) var(--sp-2); /* 曜日の内側 */
   --cell-off-pad: var(--sp-8) 0;    /* 「定休」の上下 */
   --badge-offset: var(--sp-8);      /* 今日の印が上にはみ出す量 */
-  --note-gap: var(--sp-8) var(--sp-20); /* 定休日の補足の折り返し */
   --ico-gap: var(--sp-6);           /* 絵の欄→名前（card-gap に足す） */
   --fee-top: var(--sp-16);          /* 区切りの線→料金 */
   --panel-title-pad: var(--sp-14) 0 var(--sp-8); /* パネルの案内 */
   --sub-gap: var(--sp-8);           /* ご来店の前にの小見出し→本文 */
   --note-top: var(--sp-16);         /* パネル→次の画面の案内 */
   --foot-top: var(--sp-28); --foot-bottom: var(--sp-32); /* 下の内側 */
-  --band-note-top: var(--sp-18);    /* 営業日の帯→定休日の補足 */
   --empty-pad: var(--sp-18) 0;      /* 読み込み中・失敗の文 */
   --row-gap: var(--sp-4);           /* スタッフの行の上下の外側 */
   --number-gap: var(--sp-4) 0;      /* 電話番号の上下 */
@@ -277,7 +275,7 @@ body::after {
 /* 中央寄せの文は両端揃えにし、最後の行だけ中央に置く（行の幅をそろえる。規格書 4.0） */
 .hero .lead { text-align: justify; text-align-last: center; font-size: var(--lead-fs); line-height: var(--lead-lh); color: var(--muted); }
 
-/* 営業日の帯（今日に印がつく） */
+/* 営業日の帯（今日から7日分。左端の今日に印がつく） */
 .hours { margin: var(--band-top) auto 0; max-width: var(--band-w); }
 .week { list-style: none; display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--cell-gap); }
 .week li {
@@ -295,7 +293,8 @@ body::after {
 .week .today b { color: var(--accent-hover); }
 .week .today::after { content: "TODAY"; position: absolute; top: calc(var(--badge-offset) * -1); left: 50%; transform: translateX(-50%); padding: var(--badge-pad); border-radius: var(--r-pill); font-family: var(--latin); font-size: var(--tiny-fs); font-weight: var(--fw-600); letter-spacing: var(--tiny-ls); line-height: var(--solo-lh); background: var(--accent); color: var(--on-accent); }
 .week .today.off { opacity: 1; }
-.hours-note { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--note-gap); margin-top: var(--band-note-top); font-size: var(--caption-fs); color: var(--soft); }
+.week .sp .t { color: var(--accent-hover); }   /* 特別営業時間の日 */
+.hours-msg { font-size: var(--caption-fs); color: var(--soft); }   /* 帯のかわりに出す文（読み込む前・読み込めないとき） */
 
 /* ---------- 段 ---------- */
 .step { padding-bottom: var(--section-gap); scroll-margin-top: var(--page-pad); }
@@ -468,18 +467,8 @@ body::after {
     <p class="lead rise" style="--i:3">スタッフの選び方を決めると、コースと日時を選ぶ画面へ進みます。</p>
 
     <div class="hours rise" style="--i:4">
-      <ol class="week" id="week">
-        <li data-wd="1"><b>月</b><span class="t">14:00<i aria-hidden="true">|</i><span class="sr">から</span>24:00</span></li>
-        <li data-wd="2" class="off"><b>火</b><span class="t">定休</span></li>
-        <li data-wd="3" class="off"><b>水</b><span class="t">定休</span></li>
-        <li data-wd="4"><b>木</b><span class="t">14:00<i aria-hidden="true">|</i><span class="sr">から</span>24:00</span></li>
-        <li data-wd="5"><b>金</b><span class="t">14:00<i aria-hidden="true">|</i><span class="sr">から</span>22:00</span></li>
-        <li data-wd="6"><b>土</b><span class="t">10:00<i aria-hidden="true">|</i><span class="sr">から</span>22:00</span></li>
-        <li data-wd="0"><b>日</b><span class="t">10:00<i aria-hidden="true">|</i><span class="sr">から</span>22:00</span></li>
-      </ol>
-      <p class="hours-note">
-        <span>定休日 火・水（祝日も曜日どおりに営業）</span>
-      </p>
+      <ol class="week" id="week" hidden></ol>
+      <p class="hours-msg" id="hours-msg" aria-live="polite">営業時間を確認中</p>
     </div>
   </div>
 
@@ -536,6 +525,155 @@ body::after {
 <footer class="wrap foot"><p lang="en">&copy; 2026 relaxation salon momizo</p></footer>
 
 <script>
+/* ===== 共通：Apps Script の URL ===== */
+/* シートの読み込みと応募の送信の送り先。Apps Script を出し直して URL が変わったら、ここだけ直す */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec";
+/* ===== 共通：Apps Script の URLここまで ===== */
+/* ===== 共通：店の電話 ===== */
+const SHOP_TEL = { text: "0287-33-9178", href: "tel:0287339178" };
+const telLink = () => { const a = document.createElement("a"); a.href = SHOP_TEL.href; a.textContent = SHOP_TEL.text; return a; };
+/* ===== 共通：店の電話ここまで ===== */
+/* ===== 共通：日本時間 ===== */
+/* 日本時間のいま。ymd は "2026-11-28"、y・m・d は数、min は0時からの分。見ている端末の時間帯の設定によらない */
+const jstNow = () => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    .formatToParts(new Date()).map((x) => [x.type, x.value]));
+  return { ymd: p.year + "-" + p.month + "-" + p.day, y: Number(p.year), m: Number(p.month), d: Number(p.day), min: Number(p.hour) * 60 + Number(p.minute) };
+};
+/* ===== 共通：日本時間ここまで ===== */
+/* ===== 共通：シートの読み込み ===== */
+const loadSheet = (type, key, show, fail) => {
+  let shown = null;
+  const draw = (list) => {
+    const sig = JSON.stringify(list);
+    if (sig === shown) return;
+    shown = sig;
+    show(list);
+  };
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+  if (Array.isArray(cached)) draw(cached);
+  const ctrl = new AbortController();
+  setTimeout(() => ctrl.abort(), 8000);
+  fetch(GAS_URL + "?type=" + type, { signal: ctrl.signal })
+    .then((r) => r.json())
+    .then((d) => {
+      if (!d || !d.ok || !Array.isArray(d[type])) throw new Error("bad response");
+      try { localStorage.setItem(key, JSON.stringify(d[type])); } catch (e) {}
+      draw(d[type]);
+    })
+    .catch(() => { if (shown === null) fail(); });
+};
+/* ===== 共通：シートの読み込みここまで ===== */
+/* ===== 共通：営業時間 ===== */
+/* シートの「営業時間」「特別営業時間」から、日ごとの営業時間を出す（ページに営業時間は書かない）。
+   その日の営業時間は、特別営業時間があればそちらを優先し、なければ曜日の通常の営業時間。
+   7曜日がそろっていない一覧は使わない（null を返す） */
+const hoursModel = (list) => {
+  if (!Array.isArray(list)) return null;
+  const week = [], special = {};
+  const okHm = (v) => /^\d{2}:\d{2}$/.test(v || "");
+  list.forEach((r) => {
+    if (!r) return;
+    const h = okHm(r.open) && okHm(r.close) && r.open < r.close ? [r.open, r.close] : null;
+    if (!h && (r.open || r.close)) return;
+    if (Number.isInteger(r.wd) && r.wd >= 0 && r.wd < 7) week[r.wd] = h;
+    else if (/^\d{4}-\d{2}-\d{2}$/.test(r.date || "")) special[r.date] = { h, note: String(r.note || "").replace(/\s+/g, " ").trim() };
+  });
+  for (let wd = 0; wd < 7; wd++) if (week[wd] === undefined) return null;
+  /* 日付は "yyyy-mm-dd" の文字で扱い、曜日や足し算は UTC の 0時で計算する（時差でずれないように） */
+  const parse = (ymd) => new Date(ymd + "T00:00:00Z");
+  const add = (ymd, n) => { const d = parse(ymd); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const wdOf = (ymd) => parse(ymd).getUTCDay();
+  /* その日の営業時間：h は [開店, 閉店]（休みは null）、special は特別営業時間の日か、note はシートのメモ */
+  const day = (ymd) => {
+    const sp = special[ymd];
+    return sp ? { ymd, wd: wdOf(ymd), h: sp.h, special: true, note: sp.note } : { ymd, wd: wdOf(ymd), h: week[wdOf(ymd)], special: false, note: "" };
+  };
+  const min = (hm) => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
+  /* 今日から n 日ぶんの営業時間 */
+  const days = (from, n) => Array.from({ length: n }, (_, i) => day(add(from, i)));
+  /* いまの状態：state は open（営業中）・before（開店前）・after（閉店後）・closed（休み）。next は次に開く日（14日先まで。なければ null） */
+  const status = (t) => {
+    const today = day(t.ymd);
+    let state = "closed";
+    if (today.h) state = t.min < min(today.h[0]) ? "before" : t.min < min(today.h[1]) ? "open" : "after";
+    let next = null;
+    if (state === "after" || state === "closed") {
+      for (let n = 1; n <= 14 && !next; n++) { const d = day(add(t.ymd, n)); if (d.h) next = Object.assign(d, { n }); }
+    }
+    return { state, today, next };
+  };
+  /* 通常の営業時間を、同じ時刻の曜日ごとにまとめる（月曜から順。休みの組は最後） */
+  const groups = () => {
+    const out = [];
+    [1, 2, 3, 4, 5, 6, 0].forEach((wd) => {
+      const h = week[wd], key = h ? h.join("-") : "";
+      const g = out.find((x) => x.key === key);
+      if (g) g.wds.push(wd); else out.push({ key, h, wds: [wd] });
+    });
+    return out.filter((g) => g.h).concat(out.filter((g) => !g.h));
+  };
+  return { day, days, status, groups };
+};
+const WD = ["日", "月", "火", "水", "木", "金", "土"];
+/* "2026-12-31" → "12月31日（木）" */
+const mdText = (ymd) => {
+  const [, m, d] = ymd.split("-").map(Number);
+  return m + "月" + d + "日（" + WD[new Date(ymd + "T00:00:00Z").getUTCDay()] + "）";
+};
+/* シートを読めず、前回の営業時間もないときの文 */
+const hoursFail = (el) => el.replaceChildren("営業時間を読み込めませんでした。お電話（", telLink(), "）でご確認ください。");
+/* ===== 共通：営業時間ここまで ===== */
+
+/* 営業状況と営業日の帯を、シートの営業時間で書く（規格書 6.3） */
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  let list = null, shown = null;
+
+  function paint() {
+    const m = hoursModel(list);
+    if (!m) return;
+    const t = jstNow();
+    /* 営業状況（規格書 5.7） */
+    const { state, today } = m.status(t);
+    const st = $("status");
+    st.textContent = state === "open" ? "営業中 " + today.h[1] + " まで"
+      : state === "before" ? "本日 " + today.h[0] + " から営業"
+      : state === "after" ? "本日の営業は終了"
+      : today.special ? "本日は休業" : "本日は定休日";
+    st.classList.toggle("open", state === "open");
+    /* 営業日の帯：今日から7日分（左端が今日）。特別営業時間の日は印を付ける */
+    const days = m.days(t.ymd, 7);
+    const sig = JSON.stringify(days);
+    if (sig === shown) return;
+    shown = sig;
+    $("week").replaceChildren(...days.map((d, i) => {
+      const li = el("li");
+      const cell = el("span", "t");
+      if (d.h) { const bar = el("i", "", "|"); bar.setAttribute("aria-hidden", "true"); cell.append(d.h[0], bar, el("span", "sr", "から"), d.h[1]); }
+      else cell.textContent = d.special ? "休業" : "定休";
+      if (d.special) cell.append(el("span", "sr", "（特別営業時間）"));
+      li.append(el("b", "", WD[d.wd]), cell);
+      li.classList.toggle("off", !d.h);
+      li.classList.toggle("sp", d.special);
+      if (i === 0) { li.classList.add("today"); li.setAttribute("aria-current", "date"); }
+      return li;
+    }));
+    $("week").hidden = false;
+    $("hours-msg").hidden = true;
+  }
+  const fail = () => { $("status").hidden = true; hoursFail($("hours-msg")); };
+
+  /* 7曜日のそろった一覧だけを使う。そろっていなければ前のまま（前もなければ失敗の文） */
+  loadSheet("hours", "momizo-hours", (l) => { if (hoursModel(l)) { list = l; paint(); } else if (list === null) fail(); }, fail);
+  /* 開店・閉店の時刻と日付の変わり目に合わせて、1分ごとに確かめ直す */
+  setInterval(paint, 60000);
+})();
+</script>
+<script>
 (() => {
   "use strict";
 
@@ -546,12 +684,8 @@ body::after {
      ============================================================ */
   const URL_ANY = "https://app.squareup.com/appointments/buyer/widget/l7kndrt6e71t7j/LZPVZXQ5CZ1A5";
   const URL_GENDER = { "男性": "https://app.squareup.com/appointments/buyer/widget/lzpg3epqw8aauu/LZPVZXQ5CZ1A5", "女性": "https://app.squareup.com/appointments/buyer/widget/t6bc2audg5xjer/LZPVZXQ5CZ1A5" };
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbymfb-1zaPmaks9vQk_cmBJg2P-YCuKZFA8bLx5pZIbiTHPu_sgtex6ePEetcoQa9Bh/exec?type=staff";
   const CACHE_KEY = "momizo-reserve-staff-1";
   const COURSES = ["ボディ", "ヘッド", "フット", "フル"];
-  /* 営業時間（日曜=0。[開店, 閉店]、定休日は null）。祝日も曜日どおり。
-     変えたときは、上の HTML の曜日の帯（id="week"）も合わせて直す */
-  const HOURS = [["10:00", "22:00"], ["14:00", "24:00"], null, null, ["14:00", "24:00"], ["14:00", "22:00"], ["10:00", "22:00"]];
   /* ============================================================ */
 
   const $ = (id) => document.getElementById(id);
@@ -571,31 +705,6 @@ body::after {
     w.style.setProperty("--my", (e.clientY - r.top) + "px");
   }));
 
-  /* いまの営業の状態（日本時間で、1分ごとに更新） */
-  const min = (hm) => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
-  function status() {
-    try {
-      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Tokyo", weekday: "short", hour: "numeric", minute: "numeric", hourCycle: "h23" })
-        .formatToParts(new Date()).map((x) => [x.type, x.value]));
-      const wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(parts.weekday);
-      const now = Number(parts.hour) * 60 + Number(parts.minute);
-      const h = HOURS[wd], st = $("status");
-      let text, open = false;
-      if (!h) text = "本日は定休日";
-      else if (now < min(h[0])) text = "本日 " + h[0] + " から営業";
-      else if (now < min(h[1])) { text = "営業中 " + h[1] + " まで"; open = true; }
-      else text = "本日の営業は終了";
-      st.textContent = text;
-      st.classList.toggle("open", open);
-      document.querySelectorAll("#week li").forEach((li) => {
-        const today = Number(li.dataset.wd) === wd;
-        li.classList.toggle("today", today);
-        if (today) li.setAttribute("aria-current", "date"); else li.removeAttribute("aria-current");
-      });
-    } catch (e) {}
-  }
-  status();
-  setInterval(status, 60000);
 
   /* スタッフの1行（名前・役職・担当できるコースの札・矢印） */
   function row(href, { name, role, courses }) {
@@ -666,20 +775,8 @@ body::after {
   $("way-gender").addEventListener("click", () => choose("gender"));
   $("way-staff").addEventListener("click", () => choose("staff"));
 
-  /* 読み込み：前回の一覧を先に出し、新しい一覧が来たら差し替える */
-  let shown = null;
-  const paint = (l) => { const sig = JSON.stringify(l); if (sig === shown) return; shown = sig; draw(l); };
-  try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); if (Array.isArray(c)) paint(c); } catch (e) {}
-  const ctrl = new AbortController();
-  setTimeout(() => ctrl.abort(), 8000);
-  fetch(ENDPOINT, { signal: ctrl.signal })
-    .then((r) => r.json())
-    .then((d) => {
-      if (!d || !d.ok || !Array.isArray(d.staff)) throw new Error("bad response");
-      try { localStorage.setItem(CACHE_KEY, JSON.stringify(d.staff)); } catch (e) {}
-      paint(d.staff);
-    })
-    .catch(() => { if (shown === null) { shown = "fail"; draw(null); } });
+  /* 読み込み：前回の一覧を先に出し、新しい一覧が来たら差し替える（「共通：シートの読み込み」） */
+  loadSheet("staff", CACHE_KEY, draw, () => draw(null));
 })();
 </script>
 </body>
