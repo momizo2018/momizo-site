@@ -305,7 +305,6 @@ html.has-menu { overflow: hidden; }
 /* 4.29。data-state：loading（確認中の文）・list（表）・error（読み込めなかった文）。届いた中身は dur-base で置く（3.13） */
 .hours-box:not([data-state="loading"]) .hours-wait, .hours-box:not([data-state="list"]) .hours, .hours-box:not([data-state="error"]) .hours-error { display: none; }
 .hours-box .hours, .hours-error { animation: lamp-on var(--dur-base) var(--ease) both; }
-.hours .sp { color: var(--accent-hover); }   /* 特別営業時間の日 */
 .hours-wait, .hours-error { color: var(--muted); }
 /* ===== 共通：営業時間の表ここまで ===== */
 
@@ -1342,15 +1341,14 @@ const hoursModel = (list) => {
     }
     return { state, today, next };
   };
-  /* 通常の営業時間を、同じ時刻の曜日ごとにまとめる（月曜から順。休みの組は最後） */
+  /* 通常の営業時間を月曜から順に並べ、続いた曜日で時刻が同じものを1つにまとめる */
   const groups = () => {
     const out = [];
     [1, 2, 3, 4, 5, 6, 0].forEach((wd) => {
-      const h = week[wd], key = h ? h.join("-") : "";
-      const g = out.find((x) => x.key === key);
-      if (g) g.wds.push(wd); else out.push({ key, h, wds: [wd] });
+      const h = week[wd], key = h ? h.join("-") : "", last = out[out.length - 1];
+      if (last && last.key === key) last.wds.push(wd); else out.push({ key, h, wds: [wd] });
     });
-    return out.filter((g) => g.h).concat(out.filter((g) => !g.h));
+    return out;
   };
   return { day, days, status, groups };
 };

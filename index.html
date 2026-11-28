@@ -335,7 +335,6 @@ html.has-menu { overflow: hidden; }
 /* 4.29。data-state：loading（確認中の文）・list（表）・error（読み込めなかった文）。届いた中身は dur-base で置く（3.13） */
 .hours-box:not([data-state="loading"]) .hours-wait, .hours-box:not([data-state="list"]) .hours, .hours-box:not([data-state="error"]) .hours-error { display: none; }
 .hours-box .hours, .hours-error { animation: lamp-on var(--dur-base) var(--ease) both; }
-.hours .sp { color: var(--accent-hover); }   /* 特別営業時間の日 */
 .hours-wait, .hours-error { color: var(--muted); }
 /* ===== 共通：営業時間の表ここまで ===== */
 
@@ -383,9 +382,9 @@ html.has-menu { overflow: hidden; }
 
 
 /* ===== このページだけ：トップ ===== */
-/* ---------- 灯る点（お知らせ・営業状況の印） ---------- */
-.notice h2::before, .topbar p::before { content: ""; flex: none; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
-.notice[data-state="list"] h2::before, .topbar[data-open] p::before { background: var(--accent); box-shadow: 0 0 var(--sp-2) var(--accent); }
+/* ---------- 灯る点（お知らせ・営業状況・営業時間の今日の印） ---------- */
+.notice h2::before, .topbar p::before, .hours-week > [aria-current]::before { content: ""; flex: none; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
+.notice[data-state="list"] h2::before, .topbar[data-open] p::before, .hours-week > [data-open]::before { background: var(--accent); box-shadow: 0 0 var(--sp-2) var(--accent); }
 
 /* ---------- 営業状況のバー ---------- */
 /* 幅は固有値 */
@@ -456,8 +455,15 @@ html.has-menu { overflow: hidden; }
 /* ---------- 営業時間・アクセス ---------- */
 .access { display: grid; gap: var(--gap-section); }
 .info .pay { display: block; margin-top: var(--gap-item); font-size: var(--fs-sm); color: var(--muted); }
-/* 営業時間の表（今日から7日分）：読み込み中は7行分の空きを取る（4.22） */
-.hours-box[data-state="loading"] { min-height: calc((var(--fs-sm) + var(--fs-md)) * var(--lh-text) * 7 + var(--gap-tight) * 7 + var(--gap-block) * 6); }
+/* ---------- 営業時間の表（今日から7日分。4.29） ---------- */
+/* 灯る点の欄・曜日の欄（day-col）・時刻の3列。行どうし gap-list。読み込み中は7行分の空きを取る（4.22） */
+.hours-week { display: grid; gap: var(--gap-list); }
+.hours-week > div { display: grid; grid-template-columns: var(--sp-2) var(--day-col) 1fr; column-gap: var(--gap-item); }
+.hours-week > div::before { content: ""; align-self: start; margin-top: calc((var(--fs-md) * var(--lh-ui) - var(--sp-2)) / 2); }
+.hours-week dt { font-size: var(--fs-md); line-height: var(--lh-ui); letter-spacing: var(--ls-heading); color: var(--ink-2); }   /* 選ぶ言葉 */
+.hours-week dd { font-size: var(--fs-md); line-height: var(--lh-ui); color: var(--ink-2); }   /* 1行で読む文字 */
+.hours-week small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); line-height: var(--lh-text); color: var(--soft); }   /* 補足 */
+.hours-box[data-state="loading"] { min-height: calc(var(--fs-md) * var(--lh-ui) * 7 + var(--gap-list) * 6); }
 .info .pay b { display: block; font-weight: var(--fw-regular); letter-spacing: var(--ls-heading); color: var(--soft); }
 
 /* ---------- 印 ---------- */
@@ -593,7 +599,7 @@ html.has-menu { overflow: hidden; }
       <div class="hours-box" id="hours-box" data-state="loading" aria-live="polite">
         <p class="hours-wait">営業時間を確認中…</p>
         <p class="hours-error" id="hours-error"></p>
-        <dl class="info rows hours" id="hours-list"></dl>
+        <dl class="hours hours-week" id="hours-list"></dl>
       </div>
     </div>
   </section>
@@ -830,15 +836,14 @@ const hoursModel = (list) => {
     }
     return { state, today, next };
   };
-  /* 通常の営業時間を、同じ時刻の曜日ごとにまとめる（月曜から順。休みの組は最後） */
+  /* 通常の営業時間を月曜から順に並べ、続いた曜日で時刻が同じものを1つにまとめる */
   const groups = () => {
     const out = [];
     [1, 2, 3, 4, 5, 6, 0].forEach((wd) => {
-      const h = week[wd], key = h ? h.join("-") : "";
-      const g = out.find((x) => x.key === key);
-      if (g) g.wds.push(wd); else out.push({ key, h, wds: [wd] });
+      const h = week[wd], key = h ? h.join("-") : "", last = out[out.length - 1];
+      if (last && last.key === key) last.wds.push(wd); else out.push({ key, h, wds: [wd] });
     });
-    return out.filter((g) => g.h).concat(out.filter((g) => !g.h));
+    return out;
   };
   return { day, days, status, groups };
 };
@@ -926,18 +931,19 @@ const hoursFail = (el) => el.replaceChildren("営業時間を読み込めませ�
     bar.classList.add("on");
   };
 
-  /* 営業時間の表：今日から7日分。特別営業時間の日は置き換えて、メモを（ ）に添える */
+  /* 営業時間の表：今日から7日分（曜日だけ。今日は灯る点、営業中なら点く）。特別営業時間の日は置き換えて、下にメモを添える */
   const paintTable = (m, t) => {
+    const open = m.status(t).state === "open";
     const days = m.days(t.ymd, 7);
-    const sig = JSON.stringify(days);
+    const sig = JSON.stringify([days, open]);
     if (sig === shown) return;
     shown = sig;
     dl.replaceChildren(...days.map((d) => {
       const div = document.createElement("div"), dt = document.createElement("dt"), dd = document.createElement("dd");
-      dt.textContent = (d.ymd === t.ymd ? "本日 " : "") + mdText(d.ymd);
-      dd.textContent = (d.h ? d.h.join(" – ") : d.special ? "休業" : "定休日") + (d.special && d.note ? "（" + d.note + "）" : "");
-      if (d.special) dd.className = "sp";
-      if (d.ymd === t.ymd) div.setAttribute("aria-current", "date");
+      dt.textContent = WD[d.wd] + "曜日";
+      dd.textContent = d.h ? d.h.join(" – ") : d.special ? "休業" : "定休日";
+      if (d.special) { const note = document.createElement("small"); note.textContent = d.note || "特別営業時間"; dd.append(note); }
+      if (d.ymd === t.ymd) { div.setAttribute("aria-current", "date"); if (open) div.dataset.open = ""; }
       div.append(dt, dd);
       return div;
     }));

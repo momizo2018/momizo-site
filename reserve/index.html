@@ -604,15 +604,14 @@ const hoursModel = (list) => {
     }
     return { state, today, next };
   };
-  /* 通常の営業時間を、同じ時刻の曜日ごとにまとめる（月曜から順。休みの組は最後） */
+  /* 通常の営業時間を月曜から順に並べ、続いた曜日で時刻が同じものを1つにまとめる */
   const groups = () => {
     const out = [];
     [1, 2, 3, 4, 5, 6, 0].forEach((wd) => {
-      const h = week[wd], key = h ? h.join("-") : "";
-      const g = out.find((x) => x.key === key);
-      if (g) g.wds.push(wd); else out.push({ key, h, wds: [wd] });
+      const h = week[wd], key = h ? h.join("-") : "", last = out[out.length - 1];
+      if (last && last.key === key) last.wds.push(wd); else out.push({ key, h, wds: [wd] });
     });
-    return out.filter((g) => g.h).concat(out.filter((g) => !g.h));
+    return out;
   };
   return { day, days, status, groups };
 };
